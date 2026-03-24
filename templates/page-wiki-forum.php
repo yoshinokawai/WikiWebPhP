@@ -133,7 +133,7 @@ get_header();
 </div>
 <!-- Sidebar -->
 <aside class="w-80 flex flex-col gap-6">
-<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-xl font-bold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('community-forum'); ?>'" class="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-xl font-bold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
 <span class="material-symbols-outlined text-lg">add</span>
                     Start New Topic
                 </button>

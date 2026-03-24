@@ -109,7 +109,7 @@ get_header();
 <h3 class="text-xl font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-orange-500">trending_up</span> Trending Now
                         </h3>
-<a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+<a class="text-primary text-sm font-bold hover:underline" href="<?php echo vtwiki_page_url('recent-changes'); ?>">View All</a>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div class="group relative overflow-hidden rounded-xl aspect-[16/9] cursor-pointer">
@@ -284,7 +284,7 @@ get_header();
 </div>
 </div>
 </div>
-<a class="block text-center mt-6 text-sm font-bold text-primary hover:underline" href="#">View Leaderboard</a>
+<a class="block text-center mt-6 text-sm font-bold text-primary hover:underline" href="<?php echo vtwiki_page_url('editor-hub'); ?>">View Leaderboard</a>
 </div>
 <!-- Ad/Promotional -->
 <div class="rounded-xl overflow-hidden relative group cursor-pointer h-48">

@@ -25,10 +25,10 @@ get_header();
                                     </p>
 </div>
 <div class="flex gap-3 z-10">
-<button class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:brightness-110 transition-all shadow-lg shadow-primary/30">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:brightness-110 transition-all shadow-lg shadow-primary/30">
                                         Explore All
                                     </button>
-<button class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-white/10 backdrop-blur-md text-white border border-white/20 text-base font-bold hover:bg-white/20 transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('help-center'); ?>'" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-white/10 backdrop-blur-md text-white border border-white/20 text-base font-bold hover:bg-white/20 transition-all">
                                         Agency FAQ
                                     </button>
 </div>
@@ -95,7 +95,7 @@ get_header();
 <p class="text-lg font-bold text-slate-800 dark:text-slate-200">Idol, Gaming</p>
 </div>
 </div>
-<button class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
 </div>
 </div>
 <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
@@ -126,7 +126,7 @@ get_header();
 <p class="text-lg font-bold text-slate-800 dark:text-slate-200">Variety, Chat</p>
 </div>
 </div>
-<button class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
 </div>
 </div>
 <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
@@ -156,7 +156,7 @@ get_header();
 <p class="text-lg font-bold text-slate-800 dark:text-slate-200">Streamer-led</p>
 </div>
 </div>
-<button class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
 </div>
 </div>
 <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
@@ -185,7 +185,7 @@ get_header();
 <p class="text-lg font-bold text-slate-800 dark:text-slate-200">Gaming, Variety</p>
 </div>
 </div>
-<button class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
 </div>
 </div>
 <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
@@ -213,7 +213,7 @@ get_header();
 <p class="text-lg font-bold text-slate-800 dark:text-slate-200">Entertainment</p>
 </div>
 </div>
-<button class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
 </div>
 </div>
 <div class="flex flex-col items-center justify-center bg-primary/5 border-2 border-dashed border-primary/30 rounded-xl p-8 text-center gap-4 hover:bg-primary/10 transition-colors group cursor-pointer">
@@ -224,7 +224,7 @@ get_header();
 <h3 class="text-lg font-bold text-slate-900 dark:text-white">Submit Agency</h3>
 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Help us grow our database by submitting a missing agency.</p>
 </div>
-<button class="mt-2 text-primary font-bold text-sm underline decoration-2 underline-offset-4">Contribution Portal</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="mt-2 text-primary font-bold text-sm underline decoration-2 underline-offset-4">Contribution Portal</button>
 </div>
 </div>
 </div>

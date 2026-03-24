@@ -124,28 +124,28 @@ get_header();
 <span class="material-symbols-outlined text-primary">bolt</span> Quick Links
                         </h3>
 <div class="flex flex-col gap-2">
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="<?php echo vtwiki_page_url('recent-changes'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">history</span>
 <span class="font-medium">Recent Changes</span>
 </div>
 <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
 </a>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="<?php echo vtwiki_page_url('community-forum'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">forum</span>
 <span class="font-medium">Community Forum</span>
 </div>
 <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
 </a>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="<?php echo vtwiki_page_url('help-center'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">mail</span>
 <span class="font-medium">Contact Us</span>
 </div>
 <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
 </a>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 text-slate-700 transition-colors group" href="<?php echo vtwiki_page_url('help-center'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary/60 group-hover:text-primary">help</span>
 <span class="font-medium">Editor FAQ</span>
@@ -156,7 +156,7 @@ get_header();
 <div class="mt-8 p-4 bg-primary rounded-xl text-white">
 <p class="text-sm font-bold mb-2">Become a Contributor</p>
 <p class="text-xs opacity-90 mb-4">Join over 2,000 active editors documenting VTuber history.</p>
-<button class="w-full py-2 bg-white text-primary rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all">Sign Up to Edit</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('register'); ?>'" class="w-full py-2 bg-white text-primary rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all">Sign Up to Edit</button>
 </div>
 </div>
 </div>

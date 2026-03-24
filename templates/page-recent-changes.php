@@ -37,7 +37,7 @@ get_header();
 </div>
 <div class="flex-1">
 <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-<a class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary transition-colors" href="#">Gawr Gura: 2024 Concert Tour</a>
+<a class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary transition-colors" href="<?php echo vtwiki_page_url('explore'); ?>">Gawr Gura: 2024 Concert Tour</a>
 <span class="text-xs text-slate-400">14:22</span>
 </div>
 <div class="flex items-center gap-2 mb-2">
@@ -60,7 +60,7 @@ get_header();
 </div>
 <div class="flex-1">
 <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-<a class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary transition-colors" href="#">Hololive Gen 3: Records</a>
+<a class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary transition-colors" href="<?php echo vtwiki_page_url('agencies'); ?>">Hololive Gen 3: Records</a>
 <span class="text-xs text-slate-400">13:05</span>
 </div>
 <div class="flex items-center gap-2 mb-2">
@@ -90,7 +90,7 @@ get_header();
 </div>
 <div class="flex-1">
 <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-<a class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary transition-colors" href="#">Talk: Nijisanji EN Graduation</a>
+<a class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary transition-colors" href="<?php echo vtwiki_page_url('wiki-forum'); ?>">Talk: Nijisanji EN Graduation</a>
 <span class="text-xs text-slate-400">22:10</span>
 </div>
 <div class="flex items-center gap-2 mb-2">
@@ -181,7 +181,7 @@ get_header();
 </div>
 </div>
 </div>
-<button class="w-full mt-6 py-2 rounded-lg text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="w-full mt-6 py-2 rounded-lg text-xs font-bold text-primary bg-primary/5 hover:bg-primary/10 transition-all">
                         View Full Leaderboard
                     </button>
 </div>

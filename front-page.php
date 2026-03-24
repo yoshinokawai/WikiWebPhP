@@ -79,40 +79,40 @@ get_header();
 <span class="material-symbols-outlined text-primary">groups</span>
                 Browse by Agency
             </h2>
-<a class="text-sm font-bold text-primary hover:text-primary-dark transition-colors" href="#">View All Agencies</a>
+<a class="text-sm font-bold text-primary hover:text-primary-dark transition-colors" href="<?php echo vtwiki_page_url('agencies'); ?>">View All Agencies</a>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="#">
+<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo vtwiki_page_url('agencies'); ?>">
 <div class="w-16 h-16 mb-3 rounded-full bg-[#2fb4d6]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
 <span class="font-black text-[#2fb4d6] text-xs">HOLO</span>
 </div>
 <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary">Hololive</span>
 </a>
-<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="#">
+<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo vtwiki_page_url('agencies'); ?>">
 <div class="w-16 h-16 mb-3 rounded-full bg-[#ff7300]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
 <span class="font-black text-[#ff7300] text-xs">2434</span>
 </div>
 <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary">Nijisanji</span>
 </a>
-<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="#">
+<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo vtwiki_page_url('agencies'); ?>">
 <div class="w-16 h-16 mb-3 rounded-full bg-[#ff0066]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
 <span class="font-black text-[#ff0066] text-xs">VS</span>
 </div>
 <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary">VShojo</span>
 </a>
-<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="#">
+<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo vtwiki_page_url('agencies'); ?>">
 <div class="w-16 h-16 mb-3 rounded-full bg-[#8a2be2]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
 <span class="font-black text-[#8a2be2] text-xs">PHASE</span>
 </div>
 <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary">Phase</span>
 </a>
-<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="#">
+<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo vtwiki_page_url('agencies'); ?>">
 <div class="w-16 h-16 mb-3 rounded-full bg-[#ffaccf]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
 <span class="font-black text-[#ffaccf] text-xs">IDOL</span>
 </div>
 <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary">Idol Corp</span>
 </a>
-<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="#">
+<a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo vtwiki_page_url('independent'); ?>">
 <div class="w-16 h-16 mb-3 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-slate-500">person_search</span>
 </div>
@@ -127,7 +127,7 @@ get_header();
 <span class="material-symbols-outlined text-primary">newspaper</span>
                     Recent News
                 </h2>
-<a class="text-sm font-bold text-primary hover:text-primary/80" href="#">View All</a>
+<a class="text-sm font-bold text-primary hover:text-primary/80" href="<?php echo vtwiki_page_url('recent-changes'); ?>">View All</a>
 </div>
 <div class="space-y-4">
 <article class="group flex gap-4 p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary/30 hover:shadow-soft transition-all cursor-pointer">
@@ -270,7 +270,7 @@ get_header();
 <div class="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-primary ring-4 ring-background-light dark:ring-background-dark"></div>
 <p class="text-sm text-slate-900 dark:text-white leading-snug">
 <span class="font-bold text-primary">WikiBot</span> updated 
-                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="#">Top 100 List</a>
+                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="<?php echo vtwiki_page_url('explore'); ?>">Top 100 List</a>
 </p>
 <span class="text-xs text-slate-500 mt-1.5 block font-medium">5 minutes ago</span>
 </div>
@@ -278,7 +278,7 @@ get_header();
 <div class="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-slate-300 dark:bg-slate-600 ring-4 ring-background-light dark:ring-background-dark"></div>
 <p class="text-sm text-slate-900 dark:text-white leading-snug">
 <span class="font-bold">User_88</span> commented on 
-                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="#">Selen's Lore</a>
+                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="<?php echo vtwiki_page_url('explore'); ?>">Selen's Lore</a>
 </p>
 <p class="text-xs text-slate-500 italic mt-1.5 line-clamp-2 bg-slate-50 dark:bg-slate-800/50 p-2 rounded border border-slate-100 dark:border-slate-700">"Wait, I thought the dragon form was actually..."</p>
 <span class="text-xs text-slate-400 mt-1 block font-medium">22 minutes ago</span>
@@ -287,7 +287,7 @@ get_header();
 <div class="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-slate-300 dark:bg-slate-600 ring-4 ring-background-light dark:ring-background-dark"></div>
 <p class="text-sm text-slate-900 dark:text-white leading-snug">
 <span class="font-bold">HoloFanJP</span> created page 
-                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="#">ReGLOSS</a>
+                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="<?php echo vtwiki_page_url('explore'); ?>">ReGLOSS</a>
 </p>
 <span class="text-xs text-slate-500 mt-1.5 block font-medium">1 hour ago</span>
 </div>
@@ -295,12 +295,12 @@ get_header();
 <div class="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-slate-300 dark:bg-slate-600 ring-4 ring-background-light dark:ring-background-dark"></div>
 <p class="text-sm text-slate-900 dark:text-white leading-snug">
 <span class="font-bold">ModTeam</span> pinned 
-                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="#">Forum Rules v2</a>
+                        <a class="font-semibold underline decoration-slate-300 hover:text-primary decoration-2" href="<?php echo vtwiki_page_url('guidelines'); ?>">Forum Rules v2</a>
 </p>
 <span class="text-xs text-slate-500 mt-1.5 block font-medium">3 hours ago</span>
 </div>
 </div>
-<button class="w-full py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('community-forum'); ?>'" class="w-full py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                 View More Activity
             </button>
 </div>

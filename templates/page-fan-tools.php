@@ -23,7 +23,7 @@ get_header();
                             Discover community-created resources to empower your VTubing experience. From avatar rigging to stream overlays.
                         </p>
 <div class="mt-8 flex gap-4">
-<button class="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:brightness-110 transition-all flex items-center gap-2">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:brightness-110 transition-all flex items-center gap-2">
 <span class="material-symbols-outlined">add_circle</span>
                                 Submit a Tool
                             </button>
@@ -67,7 +67,7 @@ get_header();
 <span class="material-symbols-outlined text-primary">draw</span>
                                 Avatar Creation
                             </h2>
-<a class="text-primary font-medium hover:underline text-sm" href="#">See all</a>
+<a class="text-primary font-medium hover:underline text-sm" href="<?php echo vtwiki_page_url('explore'); ?>">See all</a>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-primary/10 hover:border-primary/50 transition-all shadow-sm">
@@ -146,7 +146,7 @@ get_header();
 <span class="material-symbols-outlined text-primary">auto_fix_high</span>
                                 Streaming Assets
                             </h2>
-<a class="text-primary font-medium hover:underline text-sm" href="#">See all</a>
+<a class="text-primary font-medium hover:underline text-sm" href="<?php echo vtwiki_page_url('explore'); ?>">See all</a>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-primary/10 hover:border-primary/50 transition-all shadow-sm">

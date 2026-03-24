@@ -122,7 +122,7 @@ get_header();
 <div class="mt-8 text-center">
 <p class="text-slate-600 dark:text-slate-400">
                         Already have an account? 
-                        <a class="text-primary font-bold hover:underline ml-1 inline-flex items-center gap-1" href="#">
+                        <a class="text-primary font-bold hover:underline ml-1 inline-flex items-center gap-1" href="<?php echo vtwiki_page_url('login'); ?>">
                             Back to Login <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </a>
 </p>

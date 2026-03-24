@@ -32,9 +32,9 @@ get_header();
 </div>
 <div class="mt-4 flex flex-wrap justify-center gap-2 text-sm">
 <span class="text-slate-500">Popular:</span>
-<a class="text-primary hover:underline" href="#">Model setup</a>
-<a class="text-primary hover:underline" href="#">OBS settings</a>
-<a class="text-primary hover:underline" href="#">Naming conventions</a>
+<a class="text-primary hover:underline" href="<?php echo vtwiki_page_url('explore'); ?>">Model setup</a>
+<a class="text-primary hover:underline" href="<?php echo vtwiki_page_url('explore'); ?>">OBS settings</a>
+<a class="text-primary hover:underline" href="<?php echo vtwiki_page_url('guidelines'); ?>">Naming conventions</a>
 </div>
 </div>
 </div>
@@ -142,7 +142,7 @@ get_header();
 <span class="material-symbols-outlined text-sm">mail</span>
                                     Contact Form
                                 </a>
-<a class="flex items-center justify-center gap-2 bg-[#5865F2] text-white font-bold py-3 rounded-lg hover:brightness-110 transition-all" href="#">
+<a class="flex items-center justify-center gap-2 bg-[#5865F2] text-white font-bold py-3 rounded-lg hover:brightness-110 transition-all" href="<?php echo vtwiki_page_url('discord'); ?>">
 <span class="material-symbols-outlined text-sm">forum</span>
                                     Join our Discord
                                 </a>

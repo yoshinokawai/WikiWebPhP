@@ -174,7 +174,7 @@ get_header();
 <div class="bg-gradient-to-br from-primary to-purple-700 p-6 rounded-xl text-white">
 <h4 class="font-bold mb-2">Wiki Contributor?</h4>
 <p class="text-sm opacity-90 mb-4">Help us keep the lore accurate. Your contributions make the community better!</p>
-<button class="w-full py-2 bg-white text-primary rounded font-bold text-sm hover:bg-slate-100 transition-colors">Apply for Moderator</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="w-full py-2 bg-white text-primary rounded font-bold text-sm hover:bg-slate-100 transition-colors">Apply for Moderator</button>
 </div>
 </aside>
 </div>

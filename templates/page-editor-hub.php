@@ -20,8 +20,8 @@ get_header();
                                 Join our community of contributors and help the VTuber Wiki grow by sharing your knowledge and expertise.
                             </p>
 <div class="flex flex-wrap justify-center gap-4">
-<button class="bg-white text-primary hover:bg-slate-100 px-8 py-3 rounded-lg font-bold transition-all shadow-md">Start Editing</button>
-<button class="bg-primary/20 border border-white/30 backdrop-blur-sm hover:bg-primary/30 text-white px-8 py-3 rounded-lg font-bold transition-all">Documentation</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('register'); ?>'" class="bg-white text-primary hover:bg-slate-100 px-8 py-3 rounded-lg font-bold transition-all shadow-md">Start Editing</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('guidelines'); ?>'" class="bg-primary/20 border border-white/30 backdrop-blur-sm hover:bg-primary/30 text-white px-8 py-3 rounded-lg font-bold transition-all">Documentation</button>
 </div>
 </div>
 </div>
@@ -36,7 +36,7 @@ get_header();
 <span class="material-symbols-outlined text-primary">assignment</span>
                                     Tasks &amp; Projects
                                 </h2>
-<a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+<a class="text-primary text-sm font-bold hover:underline" href="<?php echo vtwiki_page_url('community-forum'); ?>">View All</a>
 </div>
 <div class="space-y-4">
 <div class="group flex items-center gap-4 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-primary/10 hover:border-primary/40 transition-all shadow-sm">
@@ -82,19 +82,19 @@ get_header();
 <span class="material-symbols-outlined text-4xl text-primary mb-4 group-hover:scale-110 transition-transform">school</span>
 <h3 class="font-bold mb-2">Editor Guide</h3>
 <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Master the basics of wiki syntax and formatting.</p>
-<a class="text-primary font-bold text-sm hover:underline" href="#">Read Guide</a>
+<a class="text-primary font-bold text-sm hover:underline" href="<?php echo vtwiki_page_url('help-center'); ?>">Read Guide</a>
 </div>
 <div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-primary/10 hover:shadow-md transition-all text-center group">
 <span class="material-symbols-outlined text-4xl text-primary mb-4 group-hover:scale-110 transition-transform">view_quilt</span>
 <h3 class="font-bold mb-2">Template Library</h3>
 <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Standardized info-boxes for consistency.</p>
-<a class="text-primary font-bold text-sm hover:underline" href="#">Browse Templates</a>
+<a class="text-primary font-bold text-sm hover:underline" href="<?php echo vtwiki_page_url('help-center'); ?>">Browse Templates</a>
 </div>
 <div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-primary/10 hover:shadow-md transition-all text-center group">
 <span class="material-symbols-outlined text-4xl text-primary mb-4 group-hover:scale-110 transition-transform">image</span>
 <h3 class="font-bold mb-2">Image Policy</h3>
 <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Guidelines on usage and attribution rules.</p>
-<a class="text-primary font-bold text-sm hover:underline" href="#">View Policy</a>
+<a class="text-primary font-bold text-sm hover:underline" href="<?php echo vtwiki_page_url('guidelines'); ?>">View Policy</a>
 </div>
 </div>
 </section>
@@ -186,13 +186,13 @@ get_header();
                             </h3>
 <ul class="space-y-3">
 <li>
-<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="#">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="<?php echo vtwiki_page_url('recent-changes'); ?>">
 <span class="material-symbols-outlined text-lg">history</span>
                                         Recent Changes
                                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="#">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="<?php echo vtwiki_page_url('community-forum'); ?>">
 <span class="material-symbols-outlined text-lg">forum</span>
                                         Community Forum
                                     </a>
@@ -204,7 +204,7 @@ get_header();
                                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="#">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="<?php echo vtwiki_page_url('help-center'); ?>">
 <span class="material-symbols-outlined text-lg">help</span>
                                         Help Desk
                                     </a>

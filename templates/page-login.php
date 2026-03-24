@@ -176,7 +176,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <p class="text-slate-600 dark:text-slate-400 text-sm">
                 Don't have an account?
                 <a class="font-bold text-primary hover:text-primary-dark transition-colors ml-1 inline-flex items-center gap-0.5"
-                   href="<?php echo esc_url( get_page_link( get_page_by_path('register') ) ); ?>">
+                   href="<?php echo vtwiki_page_url('register'); ?>">
                     Create an account
                     <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
                 </a>

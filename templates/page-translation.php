@@ -53,7 +53,7 @@ get_header();
 <div class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-400"></div>
 <div class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-primary flex items-center justify-center text-[10px] text-white font-bold">+12</div>
 </div>
-<button class="bg-primary text-white px-5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="bg-primary text-white px-5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors">
 <span class="material-symbols-outlined text-sm">person_add</span> Join Project
                                     </button>
 </div>
@@ -253,7 +253,7 @@ get_header();
 <span class="text-xs font-bold text-primary">Level 64</span>
 </div>
 </div>
-<button class="w-full mt-6 py-2 border border-primary/20 rounded-lg text-xs font-bold text-primary hover:bg-primary/5 transition-colors">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="w-full mt-6 py-2 border border-primary/20 rounded-lg text-xs font-bold text-primary hover:bg-primary/5 transition-colors">
                         View Full Leaderboard
                     </button>
 </div>
@@ -265,7 +265,7 @@ get_header();
 <span class="material-symbols-outlined text-4xl text-primary mb-2">volunteer_activism</span>
 <h4 class="font-bold text-lg mb-2">Support our Servers</h4>
 <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">The Wiki is community funded. Help us keep the lights on.</p>
-<button class="bg-primary text-white text-xs font-bold px-4 py-2 rounded-lg">Donate Now</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('donate'); ?>'" class="bg-primary text-white text-xs font-bold px-4 py-2 rounded-lg">Donate Now</button>
 </div>
 </div>
 </aside>

@@ -14,9 +14,9 @@ get_header();
 <main class="flex-1 w-full max-w-[1280px] mx-auto px-4 md:px-10 lg:px-20 py-8">
 <!-- Breadcrumbs -->
 <div class="flex items-center gap-2 mb-6 text-sm text-slate-500">
-<a class="hover:text-primary" href="#">VTubers</a>
+<a class="hover:text-primary" href="<?php echo vtwiki_page_url('explore'); ?>">VTubers</a>
 <span class="material-symbols-outlined text-xs">chevron_right</span>
-<a class="hover:text-primary" href="#">Hololive</a>
+<a class="hover:text-primary" href="<?php echo vtwiki_page_url('agencies'); ?>">Hololive</a>
 <span class="material-symbols-outlined text-xs">chevron_right</span>
 <span class="text-primary font-medium">Shiori Novella</span>
 </div>
@@ -75,7 +75,7 @@ get_header();
 <h3 class="text-2xl font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">gallery_thumbnail</span> Official Gallery
                             </h3>
-<a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+<a class="text-primary text-sm font-bold hover:underline" href="<?php echo vtwiki_page_url('explore'); ?>">View All</a>
 </div>
 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
 <div class="aspect-[3/4] rounded-lg bg-cover bg-center border border-primary/10 hover:scale-[1.02] transition-transform cursor-zoom-in" data-alt="Full body official art of Shiori Novella" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJdAibzBsEJTrov5NE4Ik5-AWiX1EuiUlVhurROG0-mqOh6PzLU_eMT6Y06c4Pvetsp9YgqfJkUEDLW4M9T8vXAEaN1HIKKC8rp6gpPvv0RA3mOBsRQmB8hgqjF3vZsiZ9EuiIHHxo_47d8l_b4738r89o3Nm7tz5TCUmIUw27GwVi423SPKrNc1yBWwdKOqzjqEFBF1tR9BEmxYjcYFgWGixsXT84_VhCQkAUuQ9hfv4KSFKt7e3JUa_nuxaBPJe1GqH9Ell18DY')"></div>

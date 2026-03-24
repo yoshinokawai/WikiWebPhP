@@ -25,8 +25,8 @@ get_header();
                                         The ultimate community-driven encyclopedia for Virtual YouTubers. We are dedicated to documenting the history, lore, and milestones of the ever-expanding VTubing universe.
                                     </p>
 <div class="flex gap-4 pt-4">
-<button class="px-6 py-3 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-105 transition-transform">Start Exploring</button>
-<button class="px-6 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-lg hover:bg-slate-50 transition-colors">Join Community</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="px-6 py-3 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-105 transition-transform">Start Exploring</button>
+<button onclick="window.location.href='<?php echo vtwiki_page_url('community-forum'); ?>'" class="px-6 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-lg hover:bg-slate-50 transition-colors">Join Community</button>
 </div>
 </div>
 <div class="w-full md:w-1/3 aspect-square rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/20" data-alt="Stylized purple holographic mascot character illustration">
@@ -132,7 +132,7 @@ get_header();
                             </h3>
 <ul class="space-y-3">
 <li>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="<?php echo vtwiki_page_url('guidelines'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-slate-400 group-hover:text-primary">gavel</span>
 <span class="font-medium">Wiki Guidelines</span>
@@ -141,7 +141,7 @@ get_header();
 </a>
 </li>
 <li>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="<?php echo vtwiki_page_url('community-forum'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-slate-400 group-hover:text-primary">forum</span>
 <span class="font-medium">Community Forum</span>
@@ -150,7 +150,7 @@ get_header();
 </a>
 </li>
 <li>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="<?php echo vtwiki_page_url('help-center'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-slate-400 group-hover:text-primary">mail</span>
 <span class="font-medium">Contact Us</span>
@@ -159,7 +159,7 @@ get_header();
 </a>
 </li>
 <li>
-<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="#">
+<a class="flex items-center justify-between p-3 rounded-lg hover:bg-primary/5 group transition-colors" href="<?php echo vtwiki_page_url('donate'); ?>">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-slate-400 group-hover:text-primary">volunteer_activism</span>
 <span class="font-medium">Support the Project</span>

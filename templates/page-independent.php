@@ -23,10 +23,10 @@ get_header();
                             Discover the incredible talents carving their own paths. From rising stars to industry veterans, explore the diverse world of indie VTubing.
                         </p>
 <div class="flex flex-wrap gap-4">
-<button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold transition-all transform hover:scale-105">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('about'); ?>'" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold transition-all transform hover:scale-105">
                                 Learn More
                             </button>
-<button class="bg-white/50 dark:bg-slate-800/50 backdrop-blur px-8 py-3 rounded-xl font-bold border border-primary/20 hover:bg-white transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('guidelines'); ?>'" class="bg-white/50 dark:bg-slate-800/50 backdrop-blur px-8 py-3 rounded-xl font-bold border border-primary/20 hover:bg-white transition-all">
                                 How to Start
                             </button>
 </div>
@@ -150,7 +150,7 @@ get_header();
 <span class="material-symbols-outlined !text-sm">translate</span>
                             English / German
                         </p>
-<button class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
                             View Profile
                         </button>
 </div>
@@ -169,7 +169,7 @@ get_header();
 <span class="material-symbols-outlined !text-sm">translate</span>
                             English
                         </p>
-<button class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
                             View Profile
                         </button>
 </div>
@@ -188,7 +188,7 @@ get_header();
 <span class="material-symbols-outlined !text-sm">translate</span>
                             English
                         </p>
-<button class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
                             View Profile
                         </button>
 </div>
@@ -207,7 +207,7 @@ get_header();
 <span class="material-symbols-outlined !text-sm">translate</span>
                             English / French
                         </p>
-<button class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
+<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
                             View Profile
                         </button>
 </div>
