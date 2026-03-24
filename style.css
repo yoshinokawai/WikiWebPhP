@@ -1,0 +1,17 @@
+/*
+Theme Name: VTuber Wiki
+Theme URI: https://vtuber-wiki.com
+Author: VTuber Wiki Team
+Author URI: https://vtuber-wiki.com
+Description: A community-driven encyclopedia theme for Virtual YouTubers. Features dark/light mode, responsive design, and custom VTuber post types.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: vtuber-wiki
+Tags: custom-menu, featured-images, full-width-template, theme-options, dark-mode, custom-colors
+*/
+
+/* This file is intentionally minimal — all page styles are loaded via functions.php */
