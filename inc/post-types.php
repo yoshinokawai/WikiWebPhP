@@ -7,18 +7,18 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// ─── Custom Post Type: VTuber ─────────────────────────────────────────────────
+// ─── Custom Post Type: VTuber Wiki ───────────────────────────────────────────
 function vtwiki_register_post_types() {
     $labels = [
-        'name'                  => __( 'VTubers',                'vtuber-wiki' ),
-        'singular_name'         => __( 'VTuber',                 'vtuber-wiki' ),
-        'menu_name'             => __( 'VTubers',                'vtuber-wiki' ),
-        'add_new'               => __( 'Add New',                'vtuber-wiki' ),
+        'name'                  => __( 'Wiki VTubers',           'vtuber-wiki' ),
+        'singular_name'         => __( 'VTuber Wiki',            'vtuber-wiki' ),
+        'menu_name'             => __( 'Wiki VTuber',            'vtuber-wiki' ),
+        'add_new'               => __( 'Add New VTuber',         'vtuber-wiki' ),
         'add_new_item'          => __( 'Add New VTuber',         'vtuber-wiki' ),
         'edit_item'             => __( 'Edit VTuber',            'vtuber-wiki' ),
         'new_item'              => __( 'New VTuber',             'vtuber-wiki' ),
         'view_item'             => __( 'View VTuber',            'vtuber-wiki' ),
-        'search_items'          => __( 'Search VTubers',         'vtuber-wiki' ),
+        'search_items'          => __( 'Search Wiki',            'vtuber-wiki' ),
         'not_found'             => __( 'No VTubers found',       'vtuber-wiki' ),
         'not_found_in_trash'    => __( 'No VTubers in Trash',    'vtuber-wiki' ),
         'all_items'             => __( 'All VTubers',            'vtuber-wiki' ),
@@ -31,7 +31,7 @@ function vtwiki_register_post_types() {
         'show_ui'            => true,
         'show_in_menu'       => true,
         'query_var'          => true,
-        'rewrite'            => [ 'slug' => 'vtuber' ],
+        'rewrite'            => [ 'slug' => 'vtuber-wiki' ],
         'capability_type'    => 'post',
         'has_archive'        => true,
         'hierarchical'       => false,
@@ -41,7 +41,7 @@ function vtwiki_register_post_types() {
         'show_in_rest'       => true, // Enables Gutenberg editor
     ];
 
-    register_post_type( 'vtuber', $args );
+    register_post_type( 'vtuber_wiki', $args );
 
     // ─── Taxonomy: Agency ─────────────────────────────────────────────────────
     $tax_labels = [
@@ -56,7 +56,7 @@ function vtwiki_register_post_types() {
         'menu_name'         => __( 'Agencies',          'vtuber-wiki' ),
     ];
 
-    register_taxonomy( 'vtuber_agency', [ 'vtuber' ], [
+    register_taxonomy( 'vtuber_agency', [ 'vtuber_wiki' ], [
         'hierarchical'      => true,
         'labels'            => $tax_labels,
         'show_ui'           => true,
