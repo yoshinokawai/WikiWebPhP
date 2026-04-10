@@ -43,26 +43,47 @@ function vtwiki_register_post_types() {
 
     register_post_type( 'vtuber_wiki', $args );
 
-    // ─── Taxonomy: Agency ─────────────────────────────────────────────────────
-    $tax_labels = [
-        'name'              => __( 'Agencies',          'vtuber-wiki' ),
-        'singular_name'     => __( 'Agency',            'vtuber-wiki' ),
-        'search_items'      => __( 'Search Agencies',   'vtuber-wiki' ),
-        'all_items'         => __( 'All Agencies',      'vtuber-wiki' ),
-        'edit_item'         => __( 'Edit Agency',       'vtuber-wiki' ),
-        'update_item'       => __( 'Update Agency',     'vtuber-wiki' ),
-        'add_new_item'      => __( 'Add New Agency',    'vtuber-wiki' ),
-        'new_item_name'     => __( 'New Agency Name',   'vtuber-wiki' ),
-        'menu_name'         => __( 'Agencies',          'vtuber-wiki' ),
+    // ─── Custom Post Type: Agency ─────────────────────────────────────────────
+    $agency_labels = [
+        'name'                  => __( 'Agencies',               'vtuber-wiki' ),
+        'singular_name'         => __( 'Agency',                 'vtuber-wiki' ),
+        'menu_name'             => __( 'Agencies',               'vtuber-wiki' ),
+        'add_new'               => __( 'Add New Agency',         'vtuber-wiki' ),
+        'add_new_item'          => __( 'Add New Agency',         'vtuber-wiki' ),
+        'edit_item'             => __( 'Edit Agency',            'vtuber-wiki' ),
+        'all_items'             => __( 'All Agencies',           'vtuber-wiki' ),
     ];
 
-    register_taxonomy( 'vtuber_agency', [ 'vtuber_wiki' ], [
+    $agency_args = [
+        'labels'             => $agency_labels,
+        'public'             => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'query_var'          => true,
+        'rewrite'            => [ 'slug' => 'agency' ],
+        'capability_type'    => 'post',
+        'has_archive'        => true,
+        'hierarchical'       => false,
+        'menu_position'      => 6,
+        'menu_icon'          => 'dashicons-groups',
+        'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
+        'show_in_rest'       => true,
+    ];
+
+    register_post_type( 'vtuber_agency', $agency_args );
+
+    // ─── Taxonomy: Agency Categories (Optional) ───────────────────────────────
+    $tax_labels = [
+        'name'              => __( 'Agency Focus',      'vtuber-wiki' ),
+        'singular_name'     => __( 'Focus',             'vtuber-wiki' ),
+        'menu_name'         => __( 'Focus Categories',  'vtuber-wiki' ),
+    ];
+
+    register_taxonomy( 'vtuber_agency_focus', [ 'vtuber_agency' ], [
         'hierarchical'      => true,
         'labels'            => $tax_labels,
         'show_ui'           => true,
         'show_admin_column' => true,
-        'query_var'         => true,
-        'rewrite'           => [ 'slug' => 'agency' ],
         'show_in_rest'      => true,
     ]);
 }
