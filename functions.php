@@ -88,4 +88,5 @@ add_action( 'wp_enqueue_scripts', 'vtwiki_enqueue_assets' );
 require_once get_template_directory() . '/inc/post-types.php';
 require_once get_template_directory() . '/inc/acf-fields.php';
 require_once get_template_directory() . '/inc/db-setup.php';
+require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/custom-functions.php';

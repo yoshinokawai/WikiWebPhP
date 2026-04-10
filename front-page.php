@@ -1,22 +1,23 @@
 <?php
 /**
  * Template Name: Home Page
- * Template Post Type: page
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
+
 wp_enqueue_style( 'vtwiki-home', get_template_directory_uri() . '/assets/css/home.css', [], wp_get_theme()->get('Version') );
 get_header();
 
-// ─── Queries ──────────────────────────────────────────────────────────────────
-// 1. Spotlight VTuber
-$featured_vtuber = new WP_Query([
+// ─── Data Preparation ─────────────────────────────────────────────────────────
+
+// 1. Spotlight (Featured VTubers)
+$spotlight_query = new WP_Query([
     'post_type'      => 'vtuber_wiki',
-    'posts_per_page' => 1,
+    'posts_per_page' => 5,
     'meta_query'     => [['key' => 'is_featured', 'value' => '1', 'compare' => '=']]
 ]);
-if (!$featured_vtuber->have_posts()) {
-    $featured_vtuber = new WP_Query(['post_type' => 'vtuber_wiki', 'posts_per_page' => 1]);
+if (!$spotlight_query->have_posts()) {
+    $spotlight_query = new WP_Query(['post_type' => 'vtuber_wiki', 'posts_per_page' => 3]);
 }
 
 // 2. Agencies
@@ -30,98 +31,83 @@ $news_query = new WP_Query([
     'post_type'      => 'post',
     'posts_per_page' => 3
 ]);
+
+// 4. Trending (Based on views or latest)
+$trending_query = new WP_Query([
+    'post_type'      => 'vtuber_wiki',
+    'posts_per_page' => 5,
+    'orderby'        => 'meta_value_num',
+    'meta_key'       => 'view_count', // If using custom view count
+    'order'          => 'DESC'
+]);
+if (!$trending_query->have_posts()) {
+    $trending_query = new WP_Query(['post_type' => 'vtuber_wiki', 'posts_per_page' => 5]);
+}
 ?>
 
 <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-    <!-- Section: Spotlight -->
-    <?php if ($featured_vtuber->have_posts()) : $featured_vtuber->the_post(); 
-        $agency_obj = get_field('agency_ref');
-        $artwork = get_field('artwork_link') ?: get_the_post_thumbnail_url(get_the_ID(), 'full');
-        $lore = get_field('lore');
-    ?>
-    <section class="relative overflow-hidden rounded-3xl bg-surface-light dark:bg-surface-dark shadow-soft border border-slate-100 dark:border-slate-800/50 group">
-        <div class="absolute top-0 right-0 w-3/4 h-full bg-gradient-to-l from-primary/10 via-lavender/30 to-transparent dark:from-primary/20 dark:via-purple-900/10 pointer-events-none"></div>
-        <div class="grid lg:grid-cols-12 gap-8 items-center relative z-10 min-h-[480px]">
-            <div class="lg:col-span-7 p-8 lg:p-12 lg:pr-0 flex flex-col justify-center h-full">
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-wider shadow-glow">
-                            <span class="material-symbols-outlined text-[16px] filled">stars</span>
-                            Spotlight
-                        </div>
-                        <span class="text-sm font-semibold text-slate-500">Editor's Choice</span>
-                    </div>
-                    <div>
-                        <h1 class="text-5xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[0.95] mb-4">
-                            <?php the_title(); ?>
-                        </h1>
-                        <div class="flex items-center gap-3 text-lg">
-                            <?php if ($agency_obj) : ?>
-                                <span class="font-bold text-slate-700 dark:text-slate-200"><?php echo esc_html($agency_obj->post_title); ?></span>
-                            <?php else : ?>
-                                <span class="font-bold text-slate-500">Independent</span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <?php if ($lore) : ?>
-                        <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed max-w-xl border-l-4 border-primary/30 pl-4 line-clamp-3">
-                            <?php echo esc_html($lore); ?>
-                        </p>
-                    <?php endif; ?>
-                    <div class="flex flex-wrap gap-4 pt-4">
-                        <a href="<?php the_permalink(); ?>" class="flex items-center gap-2 h-12 px-8 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold shadow-lg hover:scale-105 transition-all">
-                            <span>Read Full Wiki</span>
-                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="lg:col-span-5 relative h-[500px] lg:h-full w-full flex items-end justify-center lg:justify-end">
-                <?php if ($artwork) : ?>
-                    <img src="<?php echo esc_url($artwork); ?>" alt="<?php the_title(); ?>" class="h-full w-auto object-contain drop-shadow-2xl hero-mask relative z-20 transition-transform duration-700 group-hover:scale-105">
-                <?php endif; ?>
-                <div class="absolute bottom-0 right-0 lg:right-10 w-[450px] h-[450px] bg-gradient-to-tr from-indigo-500/20 to-primary/20 rounded-full blur-2xl z-10"></div>
-            </div>
+    
+    <!-- Section: Spotlight Slider -->
+    <section class="relative overflow-hidden rounded-3xl bg-surface-light dark:bg-surface-dark shadow-soft border border-slate-100 dark:border-slate-800/50 group spotlight-slider">
+        <div class="slides-container relative h-full">
+            <?php 
+            $slide_idx = 0;
+            while ($spotlight_query->have_posts()) : $spotlight_query->the_post(); 
+                get_template_part('template-parts/home-spotlight-slide', null, [
+                    'index'     => $slide_idx,
+                    'is_active' => ($slide_idx === 0)
+                ]);
+                $slide_idx++;
+            endwhile; wp_reset_postdata(); 
+            ?>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <button class="slider-btn prev absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/80 dark:bg-slate-800/80 shadow-md flex items-center justify-center text-slate-700 dark:text-white hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100">
+            <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button class="slider-btn next absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/80 dark:bg-slate-800/80 shadow-md flex items-center justify-center text-slate-700 dark:text-white hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100">
+            <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+        
+        <!-- Slider Dots -->
+        <div class="slider-dots absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+            <?php for ($i = 0; $i < $slide_idx; $i++) : ?>
+                <button class="slider-dot w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 transition-all <?php echo ($i === 0 ? 'active' : ''); ?>" data-index="<?php echo $i; ?>"></button>
+            <?php endfor; ?>
         </div>
     </section>
-    <?php wp_reset_postdata(); endif; ?>
 
-    <!-- Section: Agencies -->
+    <!-- Section: Browse by Agency -->
     <section>
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">groups</span>
                 Browse by Agency
             </h2>
-            <a class="text-sm font-bold text-primary hover:text-primary-dark" href="<?php echo get_post_type_archive_link('vtuber_agency'); ?>">View All Agencies</a>
+            <a class="text-sm font-bold text-primary hover:text-primary-dark transition-colors" href="<?php echo get_post_type_archive_link('vtuber_agency'); ?>">View All Agencies</a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <?php while ($agencies_query->have_posts()) : $agencies_query->the_post(); 
-                $logo = get_field('logo_url');
+            <?php 
+            $agency_idx = 0;
+            while ($agencies_query->have_posts()) : $agencies_query->the_post(); 
+                get_template_part('template-parts/home-agency-card', null, ['index' => $agency_idx]);
+                $agency_idx++;
+            endwhile; wp_reset_postdata(); 
             ?>
-            <a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary transition-all" href="<?php the_permalink(); ?>">
-                <div class="w-16 h-16 mb-3 rounded-full bg-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform overflow-hidden">
-                    <?php if ($logo) : ?>
-                        <img src="<?php echo esc_url($logo); ?>" class="w-full h-full object-cover">
-                    <?php else : ?>
-                        <span class="font-black text-primary text-xs"><?php echo substr(get_the_title(), 0, 1); ?></span>
-                    <?php endif; ?>
-                </div>
-                <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary text-sm line-clamp-1"><?php the_title(); ?></span>
-            </a>
-            <?php endwhile; wp_reset_postdata(); ?>
-            
-            <a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-primary transition-all" href="<?php echo get_post_type_archive_link('vtuber_wiki'); ?>">
+            <a class="group flex flex-col items-center justify-center p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300" href="<?php echo get_post_type_archive_link('vtuber_wiki'); ?>">
                 <div class="w-16 h-16 mb-3 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-slate-500">person_search</span>
                 </div>
-                <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary text-sm">All Wiki</span>
+                <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary text-sm">Independent</span>
             </a>
         </div>
     </section>
 
-    <!-- Section: News & Activity -->
+    <!-- Section: Main Content Grid (News | Trending | Activity) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- 1. Recent News (6 cols) -->
         <div class="lg:col-span-6 space-y-6">
             <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -131,42 +117,127 @@ $news_query = new WP_Query([
                 <a class="text-sm font-bold text-primary hover:text-primary/80" href="<?php echo get_permalink(get_option('page_for_posts')); ?>">View All</a>
             </div>
             <div class="space-y-4">
-                <?php while ($news_query->have_posts()) : $news_query->the_post(); ?>
-                <article class="group flex gap-4 p-4 rounded-2xl bg-white dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:border-primary/30 transition-all cursor-pointer">
-                    <div class="w-28 h-28 shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 overflow-hidden relative">
-                        <?php if (has_post_thumbnail()) : the_post_thumbnail('medium', ['class' => 'w-full h-full object-cover group-hover:scale-105 transition-transform']); endif; ?>
-                    </div>
-                    <div class="flex flex-col justify-between flex-1 py-1">
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary transition-colors line-clamp-2">
-                                <?php the_title(); ?>
-                            </h3>
-                        </div>
-                        <div class="flex items-center gap-3 mt-2 text-xs text-slate-500 font-medium">
-                            <span class="flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[14px]">schedule</span> <?php echo human_time_diff(get_the_time('U'), current_time('timestamp')) . ' ago'; ?>
-                            </span>
-                        </div>
-                    </div>
-                </article>
-                <?php endwhile; wp_reset_postdata(); ?>
+                <?php 
+                $news_idx = 0;
+                while ($news_query->have_posts()) : $news_query->the_post(); 
+                    $colors = ['primary', 'blue', 'green'];
+                    get_template_part('template-parts/home-news-item', null, [
+                        'category' => 'Update',
+                        'category_color' => $colors[$news_idx % 3]
+                    ]);
+                    $news_idx++;
+                endwhile; wp_reset_postdata(); 
+                ?>
             </div>
         </div>
-        
-        <!-- Activity Sidebar (Keep Static for now or simulate) -->
+
+        <!-- 2. Trending (3 cols) -->
         <div class="lg:col-span-3 space-y-6">
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white pb-2 border-b border-slate-200">Activity</h2>
-            <div class="relative pl-4 border-l-2 border-slate-200 space-y-8">
-                <div class="relative">
-                    <div class="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-primary"></div>
-                    <p class="text-sm text-slate-900 dark:text-white leading-snug">
-                        <span class="font-bold text-primary">WikiBot</span> updated metadata for 12 VTubers.
-                    </p>
-                    <span class="text-xs text-slate-400 mt-1 block">Just now</span>
-                </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">trending_up</span>
+                    Trending
+                </h2>
             </div>
+            <div class="space-y-3 bg-white dark:bg-surface-dark p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                <?php 
+                $rank = 1;
+                while ($trending_query->have_posts()) : $trending_query->the_post(); 
+                    get_template_part('template-parts/home-trending-item', null, ['rank' => $rank]);
+                    $rank++;
+                endwhile; wp_reset_postdata(); 
+                ?>
+            </div>
+        </div>
+
+        <!-- 3. Activity (3 cols) -->
+        <div class="lg:col-span-3 space-y-6">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">forum</span>
+                    Activity
+                </h2>
+            </div>
+            <div class="space-y-3 overflow-hidden">
+                <?php 
+                // Placeholder Activity Data (to match the source exactly as per plan)
+                $samples = [
+                    ['type' => 'Article', 'action' => 'Created', 'title' => 'Gawr Gura Lore', 'author' => 'Chumbud', 'time' => '2h ago'],
+                    ['type' => 'Community', 'action' => 'Commented', 'title' => 'New Single Released', 'author' => 'Hoshiyomi', 'time' => '5h ago', 'desc' => 'Wait, is that a new outfit too?'],
+                    ['type' => 'Article', 'action' => 'Updated', 'title' => 'Hololive Gen 3', 'author' => 'ModTeam', 'time' => '1d ago', 'detail' => '+12 chars']
+                ];
+                foreach ($samples as $s) {
+                    get_template_part('template-parts/home-activity-item', null, $s);
+                }
+                ?>
+            </div>
+            <a href="#" class="block w-full text-center py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                View More Activity
+            </a>
         </div>
     </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.spotlight-slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    const prevBtn = document.querySelector('.slider-btn.prev');
+    const nextBtn = document.querySelector('.slider-btn.next');
+    let currentIndex = 0;
+    let slideInterval;
+
+    function showSlide(index) {
+        if (!slides.length) return;
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        
+        slides[index].classList.add('active');
+        if (dots[index]) dots[index].classList.add('active');
+        currentIndex = index;
+    }
+
+    function nextSlide() {
+        let next = (currentIndex + 1) % slides.length;
+        showSlide(next);
+    }
+
+    function prevSlide() {
+        let prev = (currentIndex - 1 + slides.length) % slides.length;
+        showSlide(prev);
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        nextSlide();
+        resetInterval();
+    });
+    
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+        prevSlide();
+        resetInterval();
+    });
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            const index = parseInt(dot.getAttribute('data-index'));
+            showSlide(index);
+            resetInterval();
+        });
+    });
+
+    function startInterval() {
+        slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    function resetInterval() {
+        clearInterval(slideInterval);
+        startInterval();
+    }
+
+    if (slides.length > 1) {
+        startInterval();
+    }
+});
+</script>
 
 <?php get_footer(); ?>
