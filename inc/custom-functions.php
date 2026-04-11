@@ -73,6 +73,16 @@ function vtwiki_page_url($slug) {
     if (!$slug) return '#';
     if ($slug === 'home') return home_url('/');
     
+    // Custom Post Type Archives
+    if ($slug === 'agencies') return get_post_type_archive_link('vtuber_agency');
+    if ($slug === 'explore' || $slug === 'independent') return get_post_type_archive_link('vtuber_wiki');
+    
+    // Not implemented yet
+    if ($slug === 'wiki-forum' || $slug === 'community-forum') return home_url('/');
+
     $page = get_page_by_path($slug);
-    return $page ? get_permalink($page->ID) : home_url('/?page=' . $slug); // Fallback to query param if not yet published or slug mismatch
+    if ($page) return get_permalink($page->ID);
+
+    // If still not found, return a fallback
+    return home_url('/?page=' . $slug);
 }

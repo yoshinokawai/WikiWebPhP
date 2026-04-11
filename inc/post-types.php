@@ -88,3 +88,12 @@ function vtwiki_register_post_types() {
     ]);
 }
 add_action( 'init', 'vtwiki_register_post_types' );
+
+/**
+ * Flush rewrite rules on theme activation
+ */
+function vtwiki_rewrite_flush() {
+    vtwiki_register_post_types();
+    flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'vtwiki_rewrite_flush' );
