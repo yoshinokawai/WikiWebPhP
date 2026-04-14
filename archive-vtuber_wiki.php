@@ -16,13 +16,13 @@ get_header();
             <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2">
                 VTuber <span class="text-primary">Wiki</span>
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 font-medium">Khám phá hồ sơ các VTuber trong cộng đồng.</p>
+            <p class="text-slate-500 dark:text-slate-400 font-medium"><?php _e( 'Discover VTuber profiles in the community.', 'vtuber-wiki' ); ?></p>
         </div>
         
         <div class="flex items-center gap-3">
             <form role="search" method="get" class="relative group" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
-                <input type="search" name="s" placeholder="Tìm kiếm VTuber..." 
+                <input type="search" name="s" placeholder="<?php echo esc_attr__( 'Search VTubers...', 'vtuber-wiki' ); ?>" 
                     class="h-11 pl-10 pr-4 rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-sm w-full md:w-64"
                 />
                 <input type="hidden" name="post_type" value="vtuber_wiki" />
@@ -60,7 +60,7 @@ get_header();
                         </div>
 
                         <div class="flex items-center justify-between pt-3 border-t border-slate-50 dark:border-slate-800/50">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">View Profile</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase"><?php _e( 'View Profile', 'vtuber-wiki' ); ?></span>
                             <span class="material-symbols-outlined text-primary text-lg translate-x-0 group-hover:translate-x-1 transition-transform">arrow_forward</span>
                         </div>
                     </div>
@@ -79,8 +79,8 @@ get_header();
     <?php else : ?>
         <div class="text-center py-20 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
             <span class="material-symbols-outlined text-6xl text-slate-300 mb-4">person_off</span>
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Chưa có VTuber nào</h3>
-            <p class="text-slate-500">Hãy là người đầu tiên thêm hồ sơ VTuber vào Wiki!</p>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white"><?php _e( 'No VTubers found', 'vtuber-wiki' ); ?></h3>
+            <p class="text-slate-500"><?php _e( 'Be the first to add a VTuber profile to the Wiki!', 'vtuber-wiki' ); ?></p>
         </div>
     <?php endif; ?>
 </main>

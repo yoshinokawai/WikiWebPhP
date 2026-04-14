@@ -83,9 +83,9 @@ if (!$trending_query->have_posts()) {
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">groups</span>
-                Browse by Agency
+                <?php _e( 'Browse by Agency', 'vtuber-wiki' ); ?>
             </h2>
-            <a class="text-sm font-bold text-primary hover:text-primary-dark transition-colors" href="<?php echo get_post_type_archive_link('vtuber_agency'); ?>">View All Agencies</a>
+            <a class="text-sm font-bold text-primary hover:text-primary-dark transition-colors" href="<?php echo get_post_type_archive_link('vtuber_agency'); ?>"><?php _e( 'View All Agencies', 'vtuber-wiki' ); ?></a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <?php 
@@ -99,7 +99,7 @@ if (!$trending_query->have_posts()) {
                 <div class="w-16 h-16 mb-3 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-slate-500">person_search</span>
                 </div>
-                <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary text-sm">Independent</span>
+                <span class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary text-sm"><?php _e( 'Independent', 'vtuber-wiki' ); ?></span>
             </a>
         </div>
     </section>
@@ -112,9 +112,9 @@ if (!$trending_query->have_posts()) {
             <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">newspaper</span>
-                    Recent News
+                    <?php _e( 'Recent News', 'vtuber-wiki' ); ?>
                 </h2>
-                <a class="text-sm font-bold text-primary hover:text-primary/80" href="<?php echo get_permalink(get_option('page_for_posts')); ?>">View All</a>
+                <a class="text-sm font-bold text-primary hover:text-primary/80" href="<?php echo get_permalink(get_option('page_for_posts')); ?>"><?php _e( 'View All', 'vtuber-wiki' ); ?></a>
             </div>
             <div class="space-y-4">
                 <?php 
@@ -136,7 +136,7 @@ if (!$trending_query->have_posts()) {
             <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">trending_up</span>
-                    Trending
+                    <?php _e( 'Trending', 'vtuber-wiki' ); ?>
                 </h2>
             </div>
             <div class="space-y-3 bg-white dark:bg-surface-dark p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
@@ -155,7 +155,7 @@ if (!$trending_query->have_posts()) {
             <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">forum</span>
-                    Activity
+                    <?php _e( 'Activity', 'vtuber-wiki' ); ?>
                 </h2>
             </div>
             <div class="space-y-3 overflow-hidden">
@@ -172,7 +172,7 @@ if (!$trending_query->have_posts()) {
                 ?>
             </div>
             <a href="#" class="block w-full text-center py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                View More Activity
+                <?php _e( 'View More Activity', 'vtuber-wiki' ); ?>
             </a>
         </div>
     </div>

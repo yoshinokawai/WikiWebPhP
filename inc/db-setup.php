@@ -31,14 +31,16 @@ function vtwiki_create_custom_tables() {
     dbDelta( $sql );
 }
 
-// Hook into theme activation (Note: Theme activation hook is tricky, usually used in functions.php)
-// We will also run it on admin_init if the table doesn't exist for safety.
+// Hook into theme activation
+add_action( 'after_switch_theme', 'vtwiki_create_custom_tables' );
+
+// Also run on admin_init to ensure tables exist if theme was already active
 function vtwiki_ensure_tables_exist() {
     if ( is_admin() ) {
         vtwiki_create_custom_tables();
     }
 }
-add_action( 'after_switch_theme', 'vtwiki_create_custom_tables' );
+add_action( 'admin_init', 'vtwiki_ensure_tables_exist' );
 
 /**
  * Helper to record a donation (using $wpdb).
@@ -65,6 +67,12 @@ function vtwiki_record_donation( $vtuber_id, $donor_name, $amount, $message = ''
 function vtwiki_get_donations( $vtuber_id ) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'vtuber_donations';
+
+    // Check if table exists first to prevent errors
+    $query = $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name );
+    if ( $wpdb->get_var( $query ) !== $table_name ) {
+        return array();
+    }
 
     return $wpdb->get_results(
         $wpdb->prepare( "SELECT * FROM $table_name WHERE vtuber_id = %d ORDER BY donation_date DESC", $vtuber_id )

@@ -40,7 +40,7 @@ while ( have_posts() ) : the_post();
         
         <div class="flex-1 space-y-4 text-center md:text-left">
             <div class="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-                <?php echo esc_html($region ?: 'Global Agency'); ?>
+                <?php echo esc_html($region ?: __( 'Global Agency', 'vtuber-wiki' )); ?>
             </div>
             <h1 class="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight"><?php the_title(); ?></h1>
             <div class="prose prose-slate dark:prose-invert max-w-none">
@@ -49,7 +49,7 @@ while ( have_posts() ) : the_post();
             
             <?php if ($socials) : ?>
                 <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
-                    <span class="text-sm font-bold text-slate-400 uppercase">Connect:</span>
+                    <span class="text-sm font-bold text-slate-400 uppercase"><?php _e( 'Connect:', 'vtuber-wiki' ); ?></span>
                     <p class="text-sm font-medium text-primary"><?php echo esc_html($socials); ?></p>
                 </div>
             <?php endif; ?>
@@ -59,9 +59,9 @@ while ( have_posts() ) : the_post();
     <!-- Talent Directory -->
     <section>
         <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 dark:border-slate-800">
-            <h2 class="text-2xl font-black text-slate-900 dark:text-white">Directory of Talents</h2>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white"><?php _e( 'Directory of Talents', 'vtuber-wiki' ); ?></h2>
             <span class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-300">
-                <?php echo $talents_query->found_posts; ?> VTubers
+                <?php printf( _n( '%d VTuber', '%d VTubers', $talents_query->found_posts, 'vtuber-wiki' ), $talents_query->found_posts ); ?>
             </span>
         </div>
 
@@ -81,7 +81,7 @@ while ( have_posts() ) : the_post();
                             <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">
                                 <?php the_title(); ?>
                             </h3>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Talent</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"><?php _e( 'Active Talent', 'vtuber-wiki' ); ?></span>
                         </div>
                     </article>
                 <?php endwhile; wp_reset_postdata(); ?>
@@ -89,7 +89,7 @@ while ( have_posts() ) : the_post();
         <?php else : ?>
             <div class="text-center py-20 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
                 <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">sentiment_dissatisfied</span>
-                <p class="text-slate-500 font-medium">Chưa có VTuber nào được liên kết với Agency này.</p>
+                <p class="text-slate-500 font-medium"><?php _e( 'No VTubers are linked to this Agency yet.', 'vtuber-wiki' ); ?></p>
             </div>
         <?php endif; ?>
     </section>

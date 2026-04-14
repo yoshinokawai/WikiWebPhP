@@ -47,16 +47,16 @@
 
             <!-- Wiki links -->
             <div class="col-span-1">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-5">Wiki</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-5"><?php _e( 'Wiki', 'vtuber-wiki' ); ?></h3>
                 <ul class="space-y-3">
                     <?php foreach([
-                        ['slug'=>'about',       'label'=>'About Us'],
-                        ['slug'=>'guidelines',  'label'=>'Guidelines'],
-                        ['slug'=>'editor-hub',  'label'=>'Editors Hub'],
-                        ['slug'=>'random-profile','label'=>'Random Page'],
-                        ['slug'=>'translation', 'label'=>'Translation Project'],
-                        ['slug'=>'help-center', 'label'=>'Help Center'],
-                        ['slug'=>'donate',      'label'=>'Donate'],
+                        ['slug'=>'about',       'label'=>__( 'About Us', 'vtuber-wiki' )],
+                        ['slug'=>'guidelines',  'label'=>__( 'Guidelines', 'vtuber-wiki' )],
+                        ['slug'=>'editor-hub',  'label'=>__( 'Editors Hub', 'vtuber-wiki' )],
+                        ['slug'=>'random-profile','label'=>__( 'Random Page', 'vtuber-wiki' )],
+                        ['slug'=>'translation', 'label'=>__( 'Translation Project', 'vtuber-wiki' )],
+                        ['slug'=>'help-center', 'label'=>__( 'Help Center', 'vtuber-wiki' )],
+                        ['slug'=>'donate',      'label'=>__( 'Donate', 'vtuber-wiki' )],
                     ] as $l): ?>
                     <li>
                         <a class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-150 flex items-center gap-1.5 group"
@@ -71,17 +71,17 @@
 
             <!-- Explore links -->
             <div class="col-span-1">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-5">Explore</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-5"><?php _e( 'Explore', 'vtuber-wiki' ); ?></h3>
                 <ul class="space-y-3">
                     <?php foreach([
-                        ['slug'=>'agencies',       'label'=>'Agencies'],
-                        ['slug'=>'independent',    'label'=>'Indie VTubers'],
-                        ['slug'=>'explore',        'label'=>'Explore'],
-                        ['slug'=>'fan-tools',      'label'=>'Fan Tools'],
-                        ['slug'=>'community-forum','label'=>'Community Forum'],
-                        ['slug'=>'wiki-forum',     'label'=>'Wiki Forum'],
-                        ['slug'=>'discord',        'label'=>'Discord'],
-                        ['slug'=>'recent-changes', 'label'=>'Recent Changes'],
+                        ['slug'=>'agencies',       'label'=>__( 'Agencies', 'vtuber-wiki' )],
+                        ['slug'=>'independent',    'label'=>__( 'Indie VTubers', 'vtuber-wiki' )],
+                        ['slug'=>'explore',        'label'=>__( 'Explore', 'vtuber-wiki' )],
+                        ['slug'=>'fan-tools',      'label'=>__( 'Fan Tools', 'vtuber-wiki' )],
+                        ['slug'=>'community-forum','label'=>__( 'Community Forum', 'vtuber-wiki' )],
+                        ['slug'=>'wiki-forum',     'label'=>__( 'Wiki Forum', 'vtuber-wiki' )],
+                        ['slug'=>'discord',        'label'=>__( 'Discord', 'vtuber-wiki' )],
+                        ['slug'=>'recent-changes', 'label'=>__( 'Recent Changes', 'vtuber-wiki' )],
                     ] as $l): ?>
                     <li>
                         <a class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-150 flex items-center gap-1.5 group"
@@ -96,8 +96,8 @@
 
             <!-- Newsletter -->
             <div class="col-span-2 md:col-span-1">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-5">Subscribe</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Get the latest VTuber news delivered to your inbox.</p>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-5"><?php _e( 'Subscribe', 'vtuber-wiki' ); ?></h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4 leading-relaxed"><?php _e( 'Get the latest VTuber news delivered to your inbox.', 'vtuber-wiki' ); ?></p>
                 <form class="space-y-2" onsubmit="return false;">
                     <input
                         class="w-full px-4 py-2.5 text-sm border border-slate-200 dark:border-white/8 rounded-xl bg-slate-50 dark:bg-white/4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-200"
@@ -106,7 +106,7 @@
                     >
                     <button type="submit"
                             class="w-full py-2.5 bg-gradient-to-r from-primary to-primary-light text-white text-sm font-bold rounded-xl hover:shadow-glow-sm transition-all duration-200">
-                        Subscribe
+                        <?php _e( 'Subscribe', 'vtuber-wiki' ); ?>
                     </button>
                 </form>
             </div>
@@ -116,11 +116,11 @@
         <!-- Bottom bar -->
         <div class="mt-12 pt-8 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p class="text-xs text-slate-400 dark:text-slate-500">
-                © <?php echo date('Y'); ?> VTWiki. All rights reserved. Not affiliated with any agency.
+                <?php printf( __( '© %d VTWiki. All rights reserved. Not affiliated with any agency.', 'vtuber-wiki' ), date('Y') ); ?>
             </p>
             <div class="flex items-center gap-6">
-                <a class="text-xs text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary-light transition-colors" href="#">Privacy Policy</a>
-                <a class="text-xs text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary-light transition-colors" href="#">Terms of Service</a>
+                <a class="text-xs text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary-light transition-colors" href="#"><?php _e( 'Privacy Policy', 'vtuber-wiki' ); ?></a>
+                <a class="text-xs text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary-light transition-colors" href="#"><?php _e( 'Terms of Service', 'vtuber-wiki' ); ?></a>
             </div>
         </div>
 

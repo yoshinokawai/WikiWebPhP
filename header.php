@@ -192,14 +192,14 @@ $active = vtwiki_active_page();
                     <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
                        class="relative px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-200
                               <?php echo ($active === 'home' || is_front_page()) ? 'text-primary bg-primary/8' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'; ?>">
-                        Home
+                        <?php _e( 'Home', 'vtuber-wiki' ); ?>
                     </a>
 
                     <!-- Explore dropdown -->
                     <div class="nav-dropdown-trigger relative">
                         <button class="flex items-center gap-1 px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-200
                                        <?php echo in_array($active, ['agencies','independent','fan-tools','explore']) ? 'text-primary bg-primary/8' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'; ?>">
-                            Explore
+                            <?php _e( 'Explore', 'vtuber-wiki' ); ?>
                             <span class="material-symbols-rounded text-[16px] transition-transform duration-200" style="font-variation-settings:'FILL' 0,'wght' 600">expand_more</span>
                         </button>
                         <div class="nav-dropdown absolute top-full left-0 pt-3 z-[80]">
@@ -208,11 +208,11 @@ $active = vtwiki_active_page();
                                 <div class="p-2 space-y-0.5">
                                     <?php
                                     $explore_links = [
-                                        ['slug'=>'agencies',    'icon'=>'business',     'label'=>'Agencies'],
-                                        ['slug'=>'independent', 'icon'=>'person_play',  'label'=>'Indie VTubers'],
-                                        ['slug'=>'explore',     'icon'=>'travel_explore','label'=>'Explore All'],
-                                        ['slug'=>'fan-tools',   'icon'=>'construction', 'label'=>'Fan Tools'],
-                                        ['slug'=>'random-profile','icon'=>'shuffle',    'label'=>'Random VTuber'],
+                                        ['slug'=>'agencies',    'icon'=>'business',     'label'=>__( 'Agencies', 'vtuber-wiki' )],
+                                        ['slug'=>'independent', 'icon'=>'person_play',  'label'=>__( 'Indie VTubers', 'vtuber-wiki' )],
+                                        ['slug'=>'explore',     'icon'=>'travel_explore','label'=>__( 'Explore All', 'vtuber-wiki' )],
+                                        ['slug'=>'fan-tools',   'icon'=>'construction', 'label'=>__( 'Fan Tools', 'vtuber-wiki' )],
+                                        ['slug'=>'random-profile','icon'=>'shuffle',    'label'=>__( 'Random VTuber', 'vtuber-wiki' )],
                                     ];
                                     foreach($explore_links as $l): ?>
                                     <a href="<?php echo vtwiki_page_url($l['slug']); ?>"
@@ -231,7 +231,7 @@ $active = vtwiki_active_page();
                     <div class="nav-dropdown-trigger relative">
                         <button class="flex items-center gap-1 px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-200
                                        <?php echo in_array($active, ['recent-changes','guidelines','editor-hub','wiki-forum','discord','community-forum']) ? 'text-primary bg-primary/8' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'; ?>">
-                            Community
+                            <?php _e( 'Community', 'vtuber-wiki' ); ?>
                             <span class="material-symbols-rounded text-[16px] transition-transform duration-200" style="font-variation-settings:'FILL' 0,'wght' 600">expand_more</span>
                         </button>
                         <div class="nav-dropdown absolute top-full left-0 pt-3 z-[80]">
@@ -240,12 +240,12 @@ $active = vtwiki_active_page();
                                 <div class="p-2 space-y-0.5">
                                     <?php
                                     $community_links = [
-                                        ['slug'=>'recent-changes',  'icon'=>'update',       'label'=>'Recent Changes'],
-                                        ['slug'=>'guidelines',      'icon'=>'rule',         'label'=>'Guidelines'],
-                                        ['slug'=>'editor-hub',      'icon'=>'edit_note',    'label'=>'Editors Hub'],
-                                        ['slug'=>'wiki-forum',      'icon'=>'forum',        'label'=>'Wiki Forum'],
-                                        ['slug'=>'community-forum', 'icon'=>'groups',       'label'=>'Community Forum'],
-                                        ['slug'=>'discord',         'icon'=>'tag',          'label'=>'Discord'],
+                                        ['slug'=>'recent-changes',  'icon'=>'update',       'label'=>__( 'Recent Changes', 'vtuber-wiki' )],
+                                        ['slug'=>'guidelines',      'icon'=>'rule',         'label'=>__( 'Guidelines', 'vtuber-wiki' )],
+                                        ['slug'=>'editor-hub',      'icon'=>'edit_note',    'label'=>__( 'Editors Hub', 'vtuber-wiki' )],
+                                        ['slug'=>'wiki-forum',      'icon'=>'forum',        'label'=>__( 'Wiki Forum', 'vtuber-wiki' )],
+                                        ['slug'=>'community-forum', 'icon'=>'groups',       'label'=>__( 'Community Forum', 'vtuber-wiki' )],
+                                        ['slug'=>'discord',         'icon'=>'tag',          'label'=>__( 'Discord', 'vtuber-wiki' )],
                                     ];
                                     foreach($community_links as $l): ?>
                                     <a href="<?php echo vtwiki_page_url($l['slug']); ?>"
@@ -264,7 +264,7 @@ $active = vtwiki_active_page();
                     <div class="nav-dropdown-trigger relative">
                         <button class="flex items-center gap-1 px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-200
                                        <?php echo in_array($active, ['about','translation','help-center','donate']) ? 'text-primary bg-primary/8' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'; ?>">
-                            Wiki
+                            <?php _e( 'Wiki', 'vtuber-wiki' ); ?>
                             <span class="material-symbols-rounded text-[16px] transition-transform duration-200" style="font-variation-settings:'FILL' 0,'wght' 600">expand_more</span>
                         </button>
                         <div class="nav-dropdown absolute top-full left-0 pt-3 z-[80]">
@@ -273,10 +273,10 @@ $active = vtwiki_active_page();
                                 <div class="p-2 space-y-0.5">
                                     <?php
                                     $wiki_links = [
-                                        ['slug'=>'about',       'icon'=>'info',      'label'=>'About Us'],
-                                        ['slug'=>'translation', 'icon'=>'translate', 'label'=>'Translation Project'],
-                                        ['slug'=>'help-center', 'icon'=>'help',      'label'=>'Help Center'],
-                                        ['slug'=>'donate',      'icon'=>'favorite',  'label'=>'Donate'],
+                                        ['slug'=>'about',       'icon'=>'info',      'label'=>__( 'About Us', 'vtuber-wiki' )],
+                                        ['slug'=>'translation', 'icon'=>'translate', 'label'=>__( 'Translation Project', 'vtuber-wiki' )],
+                                        ['slug'=>'help-center', 'icon'=>'help',      'label'=>__( 'Help Center', 'vtuber-wiki' )],
+                                        ['slug'=>'donate',      'icon'=>'favorite',  'label'=>__( 'Donate', 'vtuber-wiki' )],
                                     ];
                                     foreach($wiki_links as $l): ?>
                                     <a href="<?php echo vtwiki_page_url($l['slug']); ?>"
@@ -313,16 +313,16 @@ $active = vtwiki_active_page();
                     <?php if ( is_user_logged_in() ) : ?>
                         <a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>"
                            class="hidden sm:flex items-center h-9 px-4 text-sm font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 transition-all duration-200">
-                            Log Out
+                            <?php _e( 'Log Out', 'vtuber-wiki' ); ?>
                         </a>
                     <?php else : ?>
                         <a href="<?php echo vtwiki_page_url('login'); ?>"
                            class="hidden sm:flex items-center h-9 px-4 text-sm font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 transition-all duration-200">
-                            Log In
+                            <?php _e( 'Log In', 'vtuber-wiki' ); ?>
                         </a>
                         <a href="<?php echo vtwiki_page_url('register'); ?>"
                            class="flex items-center h-9 px-5 text-sm font-bold rounded-xl bg-gradient-to-r from-primary to-primary-light text-white shadow-glow-sm hover:shadow-glow hover:scale-[1.03] transition-all duration-200">
-                            Sign Up
+                            <?php _e( 'Sign Up', 'vtuber-wiki' ); ?>
                         </a>
                     <?php endif; ?>
 
@@ -352,16 +352,16 @@ $active = vtwiki_active_page();
                    class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl
                           <?php echo is_front_page() ? 'text-primary bg-primary/8' : 'text-slate-700 dark:text-slate-200 hover:text-primary hover:bg-primary/6'; ?> transition-all">
                     <span class="material-symbols-rounded text-[18px]" style="font-variation-settings:'FILL' 0,'wght' 400">home</span>
-                    Home
+                    <?php _e( 'Home', 'vtuber-wiki' ); ?>
                 </a>
 
                 <div class="h-px bg-slate-100 dark:bg-white/5 my-2"></div>
-                <p class="px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">Explore</p>
+                <p class="px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500"><?php _e( 'Explore', 'vtuber-wiki' ); ?></p>
                 <?php foreach([
-                    ['slug'=>'agencies',    'icon'=>'business',      'label'=>'Agencies'],
-                    ['slug'=>'independent', 'icon'=>'person_play',   'label'=>'Indie VTubers'],
-                    ['slug'=>'explore',     'icon'=>'travel_explore','label'=>'Explore All'],
-                    ['slug'=>'fan-tools',   'icon'=>'construction',  'label'=>'Fan Tools'],
+                    ['slug'=>'agencies',    'icon'=>'business',      'label'=>__( 'Agencies', 'vtuber-wiki' )],
+                    ['slug'=>'independent', 'icon'=>'person_play',   'label'=>__( 'Indie VTubers', 'vtuber-wiki' )],
+                    ['slug'=>'explore',     'icon'=>'travel_explore','label'=>__( 'Explore All', 'vtuber-wiki' )],
+                    ['slug'=>'fan-tools',   'icon'=>'construction',  'label'=>__( 'Fan Tools', 'vtuber-wiki' )],
                 ] as $l): ?>
                 <a href="<?php echo vtwiki_page_url($l['slug']); ?>"
                    class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/6 transition-all">
@@ -371,13 +371,13 @@ $active = vtwiki_active_page();
                 <?php endforeach; ?>
 
                 <div class="h-px bg-slate-100 dark:bg-white/5 my-2"></div>
-                <p class="px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">Community</p>
+                <p class="px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500"><?php _e( 'Community', 'vtuber-wiki' ); ?></p>
                 <?php foreach([
-                    ['slug'=>'recent-changes', 'icon'=>'update',  'label'=>'Recent Changes'],
-                    ['slug'=>'guidelines',     'icon'=>'rule',    'label'=>'Guidelines'],
-                    ['slug'=>'editor-hub',     'icon'=>'edit_note','label'=>'Editors Hub'],
-                    ['slug'=>'wiki-forum',     'icon'=>'forum',   'label'=>'Wiki Forum'],
-                    ['slug'=>'discord',        'icon'=>'tag',     'label'=>'Discord'],
+                    ['slug'=>'recent-changes', 'icon'=>'update',  'label'=>__( 'Recent Changes', 'vtuber-wiki' )],
+                    ['slug'=>'guidelines',     'icon'=>'rule',    'label'=>__( 'Guidelines', 'vtuber-wiki' )],
+                    ['slug'=>'editor-hub',     'icon'=>'edit_note','label'=>__( 'Editors Hub', 'vtuber-wiki' )],
+                    ['slug'=>'wiki-forum',     'icon'=>'forum',   'label'=>__( 'Wiki Forum', 'vtuber-wiki' )],
+                    ['slug'=>'discord',        'icon'=>'tag',     'label'=>__( 'Discord', 'vtuber-wiki' )],
                 ] as $l): ?>
                 <a href="<?php echo vtwiki_page_url($l['slug']); ?>"
                    class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/6 transition-all">
@@ -391,12 +391,12 @@ $active = vtwiki_active_page();
                 <div class="flex gap-2 pt-1">
                     <?php if ( is_user_logged_in() ) : ?>
                         <a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>"
-                           class="flex-1 text-center py-2.5 text-sm font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 transition-all">Log Out</a>
+                           class="flex-1 text-center py-2.5 text-sm font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 transition-all"><?php _e( 'Log Out', 'vtuber-wiki' ); ?></a>
                     <?php else : ?>
                         <a href="<?php echo vtwiki_page_url('login'); ?>"
-                           class="flex-1 text-center py-2.5 text-sm font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 transition-all">Log In</a>
+                           class="flex-1 text-center py-2.5 text-sm font-semibold rounded-xl border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 transition-all"><?php _e( 'Log In', 'vtuber-wiki' ); ?></a>
                         <a href="<?php echo vtwiki_page_url('register'); ?>"
-                           class="flex-1 text-center py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-primary to-primary-light text-white transition-all">Sign Up</a>
+                           class="flex-1 text-center py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-primary to-primary-light text-white transition-all"><?php _e( 'Sign Up', 'vtuber-wiki' ); ?></a>
                     <?php endif; ?>
                 </div>
             </div>
