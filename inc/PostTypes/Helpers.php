@@ -200,8 +200,6 @@ class Helpers {
             return $page ? get_permalink( $page->ID ) : home_url( '/dashboard' );
         }
         
-        if ( $slug === 'wiki-forum' || $slug === 'community-forum' ) return home_url( '/' );
-
         $page = get_page_by_path( $slug );
         if ( $page ) return get_permalink( $page->ID );
 

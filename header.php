@@ -16,15 +16,6 @@ $active = vtwiki_active_page();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-    <!-- Dark mode: init BEFORE Tailwind renders to avoid flash -->
-    <script>
-        (function(){
-            var s = localStorage.getItem('vtwiki-theme');
-            if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
     <script id="tailwind-config">
@@ -325,13 +316,6 @@ $active = vtwiki_active_page();
                             <?php _e( 'Sign Up', 'vtuber-wiki' ); ?>
                         </a>
                     <?php endif; ?>
-
-                    <!-- Dark mode toggle -->
-                    <button id="theme-toggle" aria-label="Toggle dark mode"
-                            class="hidden sm:flex items-center justify-center h-9 w-9 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/6 hover:text-primary transition-all duration-200">
-                        <span class="material-symbols-rounded text-[20px] block dark:hidden" style="font-variation-settings:'FILL' 0,'wght' 400">light_mode</span>
-                        <span class="material-symbols-rounded text-[20px] hidden dark:block" style="font-variation-settings:'FILL' 1,'wght' 400">dark_mode</span>
-                    </button>
 
                     <!-- Mobile hamburger -->
                     <button id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false"

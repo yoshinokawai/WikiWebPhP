@@ -14,285 +14,421 @@ get_header();
 <main class="min-h-screen bg-slate-50/50 dark:bg-slate-950/20 py-10 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header Banner -->
-        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-purple-700 via-purple-800 to-indigo-900 text-white p-8 md:p-12 shadow-lg mb-8">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_50%)]"></div>
-            <div class="relative z-10 max-w-2xl">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-bold uppercase tracking-wider mb-4">
-                    <span class="material-symbols-rounded text-sm">groups</span>
-                    Diễn đàn Giao lưu Cộng đồng
-                </div>
-                <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-none mb-4">VTuber Fan Community</h1>
-                <p class="text-white/80 text-sm md:text-base leading-relaxed">
-                    Nơi kết nối các VTuber fans—chia sẻ clip hay, thảo luận về liveshow, khoe fan art tự vẽ và tìm đồng đội chơi game chung.
-                </p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Header Banner (Vibrant Neon Community Style) -->
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-tr from-indigo-900 via-purple-800 to-pink-700 text-white p-8 md:p-12 shadow-lg mb-8">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_60%)]"></div>
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl"></div>
             
-            <!-- Left & Middle: Main View Area -->
-            <div class="lg:col-span-3 space-y-6">
+            <div class="relative z-10 max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/10 text-xs font-bold uppercase tracking-wider mb-4">
+                    <span class="material-symbols-rounded text-sm text-pink-400">celebration</span>
+                    Cộng Đồng Fan VTuber
+                </div>
+                <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-none mb-4">V-Space Community Hub</h1>
+                <p class="text-white/80 text-sm md:text-base leading-relaxed">
+                    Khám phá bảng feed cộng đồng: Khoe tranh fan art tự vẽ, chia sẻ video clip hot của Oshi, thảo luận và giao lưu trực tiếp.
+                </p>
                 
-                <!-- Controls: Search & Navigation -->
-                <div id="forum-controls" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
-                    <div class="flex items-center gap-3 w-full sm:w-auto">
-                        <button onclick="showView('categories')" class="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-primary transition-colors py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                            <span class="material-symbols-rounded text-sm">grid_view</span> Tất cả danh mục
-                        </button>
-                        <span class="text-slate-300 dark:text-slate-700">|</span>
-                        <div id="breadcrumb" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Danh sách chủ đề</div>
+                <div class="flex flex-wrap items-center gap-4 mt-6 text-xs text-white/90">
+                    <div class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        <strong>4,291</strong> Thành viên online
                     </div>
-                    
-                    <div class="relative w-full sm:w-72">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <span class="material-symbols-rounded text-lg">search</span>
-                        </span>
-                        <input type="text" id="forum-search" placeholder="Tìm kiếm bài đăng cộng đồng..." oninput="handleSearch()" class="w-full h-10 pl-10 pr-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all text-slate-950 dark:text-white">
+                    <div class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/5">
+                        <span class="material-symbols-rounded text-sm text-pink-400">favorite</span>
+                        <strong id="header-likes-count">12k</strong> lượt thả tim hôm nay
                     </div>
                 </div>
-
-                <!-- VIEW 1: Categories & Topics Grid -->
-                <div id="view-categories" class="space-y-6">
-                    
-                    <!-- Categories Carousel/Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="categories-list">
-                        <!-- Categories cards inserted dynamically -->
-                    </div>
-
-                    <!-- Threads Header -->
-                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <span class="material-symbols-rounded text-primary">chat_bubble</span>
-                            Bài viết mới từ các Fan
-                        </h2>
-                        <button onclick="showCreateTopicView()" class="h-10 bg-primary/10 text-primary dark:text-primary-light hover:bg-primary hover:text-white font-bold rounded-xl px-4 text-xs transition-all duration-200 flex items-center gap-1.5">
-                            <span class="material-symbols-rounded text-sm font-bold">add</span>
-                            Đăng bài mới
-                        </button>
-                    </div>
-
-                    <!-- Threads List -->
-                    <div class="space-y-3.5" id="threads-list">
-                        <!-- Thread item cards inserted dynamically -->
-                    </div>
-                </div>
-
-                <!-- VIEW 2: Thread Details -->
-                <div id="view-thread-detail" class="hidden bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
-                    <button onclick="showView('categories')" class="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-primary transition-colors mb-2">
-                        <span class="material-symbols-rounded text-sm">arrow_back</span> Quay lại danh sách
-                    </button>
-                    
-                    <!-- Main Post -->
-                    <div class="space-y-4" id="post-detail-container">
-                        <!-- Main Post markup inserted dynamically -->
-                    </div>
-
-                    <!-- Replies Section -->
-                    <div class="border-t border-slate-100 dark:border-white/5 pt-6 space-y-4">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                            <span class="material-symbols-rounded text-base text-primary">forum</span>
-                            Bình luận (<span id="replies-count">0</span>)
-                        </h3>
-                        
-                        <div class="space-y-4" id="replies-list">
-                            <!-- Replies inserted dynamically -->
-                        </div>
-                    </div>
-
-                    <!-- Add Reply Form -->
-                    <div class="border-t border-slate-100 dark:border-white/5 pt-6 space-y-4">
-                        <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Để lại bình luận của bạn</h4>
-                        <form onsubmit="handlePostReply(event)" class="space-y-4">
-                            <textarea id="reply-content" rows="4" placeholder="Nhập suy nghĩ của bạn, lời bình luận hoặc chia sẻ cảm nghĩ về bài viết..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all text-slate-950 dark:text-white resize-none" required></textarea>
-                            <div class="flex justify-end">
-                                <button type="submit" class="h-11 bg-primary text-white font-bold rounded-xl hover:shadow-glow transition-all duration-200 px-6 text-sm flex items-center gap-1.5">
-                                    <span class="material-symbols-rounded text-base">send</span>
-                                    Gửi bình luận
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- VIEW 3: Create Topic Form -->
-                <div id="view-create-topic" class="hidden bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
-                    <button onclick="showView('categories')" class="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-primary transition-colors mb-2">
-                        <span class="material-symbols-rounded text-sm">arrow_back</span> Quay lại danh sách
-                    </button>
-                    
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-rounded text-primary">add_box</span>
-                        Đăng chủ đề thảo luận mới
-                    </h2>
-
-                    <form onsubmit="handleCreateTopic(event)" class="space-y-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Tiêu đề bài viết</label>
-                                <input type="text" id="new-topic-title" placeholder="VD: Tìm clippers Việt Sub cho Gura" class="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all text-slate-950 dark:text-white" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Chuyên mục</label>
-                                <select id="new-topic-category" class="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all text-slate-950 dark:text-white" required>
-                                    <!-- Options inserted dynamically -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nội dung chi tiết</label>
-                            <textarea id="new-topic-content" rows="8" placeholder="Viết chia sẻ hoặc nội dung câu hỏi/bài viết của bạn tại đây..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all text-slate-950 dark:text-white resize-none" required></textarea>
-                        </div>
-
-                        <div class="flex justify-end gap-3 pt-2">
-                            <button type="button" onclick="showView('categories')" class="h-11 px-6 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-sm transition-all duration-200">
-                                Hủy bỏ
-                            </button>
-                            <button type="submit" class="h-11 bg-primary text-white font-bold rounded-xl hover:shadow-glow transition-all duration-200 px-6 text-sm flex items-center gap-1.5">
-                                <span class="material-symbols-rounded text-base" style="font-variation-settings: 'FILL' 1">add</span>
-                                Đăng bài ngay
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
             </div>
-
-            <!-- Right Column: Sidebar -->
-            <div class="space-y-6">
-                
-                <!-- Action CTA -->
-                <button onclick="showCreateTopicView()" class="w-full h-12 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-2xl hover:shadow-glow transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
-                    <span class="material-symbols-rounded text-lg">forum</span>
-                    Tạo bài viết mới
-                </button>
-
-                <!-- Top Contributors -->
-                <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                        <span class="material-symbols-rounded text-amber-500" style="font-variation-settings: 'FILL' 1">workspace_premium</span>
-                        Thành viên tích cực
-                    </h3>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARZLWNqRBV8ZHeP6L_VIJ5sdqes8S-Xk0qDofU5inZq1SWPiNOpoo0gorBZnEvsK2zRiHG7VmsrvXSP6Rr-DGwJrfHSsGvYIOzFKtk_BtHDbnT2zqSOdPzTu2aeWtHr-qpnLl2R9BcjRi7ANRyy0eoKhR4VEUQtisar4dTN-RVo-aQUszS2abQZeCtUxXeMZKTgHDnRv-vvL_4VOuwfhPTnYpT3eU9xX91wGxJSiV1_sxwa3RTvXeK8ehINr0aex_L3jm2I-lVtgo')"></div>
-                                <div class="text-xs font-bold text-slate-800 dark:text-slate-200">KizunaAI_Fan</div>
-                            </div>
-                            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full">Top Fan</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsEpkaz6OKCKDjlbzybG-8_lkDjfADpEjet_SAcUVQ4Goee4GhMEgX3yGxthH8jjIWm14Gz44knLbO9ieoXzOHAAxwYF96WGkmP_5rkn78Ey1Qpu2qvGX2-JCdmgDgdGNtu4ErbsEMdx4V2WOeeA3-tlaUPklrQvvJKL_ks9RDAgJyAtY2xaQf-PYH-HbMuGwgvWsr8awwgaX6eLXas-BSLOQaVx9IA539ArZDwGEFdzzVw_6aqbopEfNN7XVUQMjQyB6eDgFsoMQ')"></div>
-                                <div class="text-xs font-bold text-slate-800 dark:text-slate-200">Kobo_Clipper</div>
-                            </div>
-                            <span class="text-[10px] font-bold text-purple-600 bg-purple-500/10 px-2 py-0.5 rounded-full">Pro Clipper</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE_loWBfrT5GUg8Ovt8x55zYU-J3g8c7SaFiDL84R0iE88KhlrJmwf-wAh-FBsjcuAmGc6wcKjnEhMTKrNs7ZGdUbW5BfSNJ0Uk_KmGYsiXoYEslaizqX_6RDR5zM9n0gMGb0RscP1ymYDGr1Q_qB51Qs0wK3DszFF1sVVsXGkqvUZWPX6CBztNz-JMDcN7mQF7Pda2SQqHC3bnYnvCWySOt3sb5a2hD6vZnmt4kdX8Bm9VTZmkmuuGKBhHsV-l5AvLeyTv1iHHUs')"></div>
-                                <div class="text-xs font-bold text-slate-800 dark:text-slate-200">Gura_Shrimp</div>
-                            </div>
-                            <span class="text-[10px] font-bold text-sky-600 bg-sky-500/10 px-2 py-0.5 rounded-full">Artist</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Community Event banner -->
-                <div class="bg-gradient-to-br from-indigo-700 to-purple-800 rounded-2xl p-5 text-white shadow-sm space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                        <span class="material-symbols-rounded text-lg">celebration</span>
-                        Sự kiện nổi bật
-                    </h3>
-                    <p class="text-[11px] text-white/80 leading-normal">
-                        <strong>Hololive 3rd Concert:</strong> Lịch chiếu trực tiếp và chủ đề thảo luận về dàn ca sĩ biểu diễn. Xem và bình luận trực tiếp cùng cộng đồng!
-                    </p>
-                    <a href="#" class="block text-center text-xs font-bold bg-white text-primary py-2 rounded-xl hover:bg-slate-100 transition-colors">
-                        Tham gia phòng chờ
-                    </a>
-                </div>
-
-                <!-- Stats Card -->
-                <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl p-5 shadow-sm space-y-4">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                        <span class="material-symbols-rounded text-primary">analytics</span>
-                        Số liệu Cộng đồng
-                    </h3>
-                    
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl text-center">
-                            <span class="block text-lg font-black text-slate-900 dark:text-white" id="stat-topics-count">0</span>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase">Chủ đề</span>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl text-center">
-                            <span class="block text-lg font-black text-slate-900 dark:text-white" id="stat-replies-count">0</span>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase">Phản hồi</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
         </div>
+
+        <!-- Toolbar & Filter Tabs -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm mb-6">
+            
+            <!-- Filters Tabs -->
+            <div class="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+                <button onclick="filterFeed('all')" id="tab-all" class="h-9 px-4 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-primary text-white">
+                    <span class="material-symbols-rounded text-base">explore</span> Tất cả Feed
+                </button>
+                <button onclick="filterFeed('fanart')" id="tab-fanart" class="h-9 px-4 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <span class="material-symbols-rounded text-base">palette</span> Fan Art
+                </button>
+                <button onclick="filterFeed('clip')" id="tab-clip" class="h-9 px-4 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <span class="material-symbols-rounded text-base">videocam</span> Video & Clip
+                </button>
+                <button onclick="filterFeed('chat')" id="tab-chat" class="h-9 px-4 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <span class="material-symbols-rounded text-base">chat_bubble</span> Trò chuyện
+                </button>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                <div class="relative w-full md:w-60">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <span class="material-symbols-rounded text-base">search</span>
+                    </span>
+                    <input type="text" id="feed-search" placeholder="Tìm bài viết, fan art..." oninput="handleSearch()" class="w-full h-9 pl-9 pr-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+                </div>
+                <button onclick="openCreatePostModal()" class="h-9 bg-primary hover:bg-primary/95 text-white font-bold rounded-xl px-4 text-xs transition-all duration-200 flex items-center gap-1 shrink-0 shadow-md shadow-primary/20">
+                    <span class="material-symbols-rounded text-sm">add_circle</span>
+                    Đăng bài mới
+                </button>
+            </div>
+        </div>
+
+        <!-- FEED GRID CONTAINER (Reddit / Pinterest Style Masonry) -->
+        <div id="feed-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Feed cards will be dynamically injected here -->
+        </div>
+
     </div>
 </main>
 
+<!-- MODAL 1: CARD DETAIL OVERLAY (Lightbox Style) -->
+<div id="post-detail-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+        
+        <!-- Left: Image/Video Preview -->
+        <div class="md:w-3/5 bg-slate-950 flex items-center justify-center relative min-h-[300px] md:min-h-0">
+            <button onclick="closePostModal()" class="absolute top-4 left-4 z-20 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+                <span class="material-symbols-rounded text-sm">close</span>
+            </button>
+            <img id="modal-image" src="" alt="Post Preview" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=60'" class="max-w-full max-h-[75vh] object-contain">
+            <div id="modal-video-placeholder" class="hidden text-center text-white space-y-4 p-8">
+                <span class="material-symbols-rounded text-6xl text-pink-500" style="font-variation-settings: 'FILL' 1">play_circle</span>
+                <p class="text-sm font-medium text-slate-300">Nhấp để xem Clip trên YouTube</p>
+                <a id="modal-video-link" href="#" target="_blank" class="inline-block bg-primary text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-primary/95 transition-all">Xem ngay</a>
+            </div>
+        </div>
+        
+        <!-- Right: Content & Comments Sidebar -->
+        <div class="md:w-2/5 flex flex-col border-l border-slate-100 dark:border-white/5 h-[50vh] md:h-[75vh]">
+            
+            <!-- Header Author Info -->
+            <div class="p-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-3">
+                    <img id="modal-author-avatar" src="" alt="Avatar" class="w-9 h-9 rounded-full object-cover">
+                    <div>
+                        <p id="modal-author-name" class="text-xs font-bold text-slate-800 dark:text-white"></p>
+                        <p id="modal-category" class="text-[10px] text-primary font-bold uppercase"></p>
+                    </div>
+                </div>
+                <!-- Edit & Delete buttons inside modal -->
+                <div class="flex items-center gap-1 shrink-0">
+                    <button onclick="openEditPostModal(activePostId)" class="text-slate-400 hover:text-primary transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-850" title="Chỉnh sửa bài viết">
+                        <span class="material-symbols-rounded text-lg block">edit</span>
+                    </button>
+                    <button onclick="deleteActivePost()" class="text-slate-400 hover:text-red-500 transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-850" title="Xóa bài viết">
+                        <span class="material-symbols-rounded text-lg block">delete</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-5">
+                <div>
+                    <h2 id="modal-title" class="text-base font-bold text-slate-900 dark:text-white leading-tight mb-2"></h2>
+                    <p id="modal-content" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap"></p>
+                    <!-- Source Link Display -->
+                    <div id="modal-source-container" class="hidden mt-4 p-3 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-rounded text-primary text-base">link</span>
+                            <span class="text-[11px] font-bold text-slate-650 dark:text-slate-300">Nguồn bài viết gốc:</span>
+                        </div>
+                        <a id="modal-source-link" href="#" target="_blank" class="inline-flex items-center gap-0.5 text-[11px] font-bold text-primary hover:underline">
+                            Xem ngay
+                            <span class="material-symbols-rounded text-xs">open_in_new</span>
+                        </a>
+                    </div>
+                    
+                    <span id="modal-time" class="block text-[10px] text-slate-400 mt-2"></span>
+                </div>
+
+                <!-- Upvote/Engagement stats -->
+                <div class="flex items-center gap-4 py-2.5 border-y border-slate-100 dark:border-white/5 text-xs text-slate-500">
+                    <button onclick="likeActivePost()" class="flex items-center gap-1 text-slate-500 hover:text-pink-500 transition-colors">
+                        <span id="modal-like-icon" class="material-symbols-rounded text-base">favorite</span>
+                        <span id="modal-likes-count">0</span>
+                    </button>
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-rounded text-base">chat_bubble</span>
+                        <span id="modal-comments-count">0</span> bình luận
+                    </span>
+                </div>
+
+                <!-- Comments List -->
+                <div class="space-y-3.5" id="modal-comments-list">
+                    <!-- Comments injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Reply Box (Footer) -->
+            <div class="p-4 border-t border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-900 shrink-0">
+                <form onsubmit="handleModalComment(event)" class="flex gap-2">
+                    <input type="text" id="modal-comment-input" placeholder="Viết bình luận của bạn..." class="flex-1 h-9 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none text-slate-950 dark:text-white">
+                    <button type="submit" class="h-9 w-9 bg-primary text-white rounded-xl flex items-center justify-center hover:bg-primary/95 transition-all">
+                        <span class="material-symbols-rounded text-base">send</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL 3: CUSTOM CONFIRM DELETE OVERLAY -->
+<div id="confirm-delete-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-6 text-center transform scale-95 transition-all duration-200">
+        <div class="w-12 h-12 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto">
+            <span class="material-symbols-rounded text-2xl">delete_forever</span>
+        </div>
+        <div class="space-y-2">
+            <h3 class="text-base font-bold text-slate-800 dark:text-white">Xác nhận xóa bài viết</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Bạn có chắc chắn muốn xóa bài viết này không? Hành động này không thể hoàn tác.</p>
+        </div>
+        <div class="flex gap-3 justify-center">
+            <button onclick="closeConfirmDeleteModal()" class="h-9 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-colors">
+                Hủy bỏ
+            </button>
+            <button id="confirm-delete-btn" class="h-9 px-5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs transition-colors flex items-center gap-1">
+                <span class="material-symbols-rounded text-sm">delete</span>
+                Xóa bài
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2: CREATE POST FORM -->
+<div id="create-post-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-4">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-symbols-rounded text-primary">add_box</span>
+                Tạo bài đăng cộng đồng mới
+            </h2>
+            <button onclick="closeCreatePostModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-950 dark:hover:text-white flex items-center justify-center transition-colors">
+                <span class="material-symbols-rounded text-sm">close</span>
+            </button>
+        </div>
+
+        <form onsubmit="handleCreatePost(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Loại bài đăng</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <label class="cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 text-center transition-all bg-slate-50 dark:bg-slate-800/50" id="label-type-fanart">
+                        <input type="radio" name="post_type" value="fanart" checked onchange="togglePostTypeInputs()" class="hidden">
+                        <span class="material-symbols-rounded text-lg text-pink-500">palette</span>
+                        <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300">Fan Art</span>
+                    </label>
+                    <label class="cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 text-center transition-all" id="label-type-clip">
+                        <input type="radio" name="post_type" value="clip" onchange="togglePostTypeInputs()" class="hidden">
+                        <span class="material-symbols-rounded text-lg text-purple-500">videocam</span>
+                        <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300">Clip Hay</span>
+                    </label>
+                    <label class="cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 text-center transition-all" id="label-type-chat">
+                        <input type="radio" name="post_type" value="chat" onchange="togglePostTypeInputs()" class="hidden">
+                        <span class="material-symbols-rounded text-lg text-blue-500">chat_bubble</span>
+                        <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300">Trò chuyện</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Tiêu đề bài đăng</label>
+                <input type="text" id="new-post-title" placeholder="VD: Gura trong bộ đồ ngủ cực xinh..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white" required>
+            </div>
+
+            <!-- Conditional input: Image (for Fan Art / Clip) -->
+            <div id="group-image-link" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Link ảnh minh họa / Fan Art</label>
+                    <input type="text" id="new-post-image" placeholder="VD: https://images.unsplash.com/photo-..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Hoặc</span>
+                    <label class="flex-1 flex items-center justify-center gap-2 h-10 px-4 border border-dashed border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary rounded-xl cursor-pointer transition-colors bg-slate-50/50 dark:bg-slate-800/50">
+                        <span class="material-symbols-rounded text-base text-slate-500">upload_file</span>
+                        <span id="new-post-file-label" class="text-xs text-slate-500 font-medium">Tải ảnh lên từ máy tính</span>
+                        <input type="file" id="new-post-file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'new-post-image', 'new-post-file-label')">
+                    </label>
+                </div>
+                <span class="text-[10px] text-slate-400 block">Nếu không chọn ảnh hoặc nhập link, hệ thống sẽ tự chọn ảnh minh họa Anime tuyệt đẹp!</span>
+            </div>
+
+            <!-- Source Link (Optional, e.g. for Twitter/X) -->
+            <div id="group-source-link">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Link nguồn / Bài đăng gốc (Ví dụ: Link X, Facebook...)</label>
+                <input type="text" id="new-post-source" placeholder="VD: https://x.com/username/status/..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+            </div>
+
+            <!-- Conditional input: YouTube URL (for Clip) -->
+            <div id="group-video-link" class="hidden">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Link YouTube Clip</label>
+                <input type="text" id="new-post-video" placeholder="VD: https://www.youtube.com/watch?v=..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nội dung / Mô tả</label>
+                <textarea id="new-post-content" rows="4" placeholder="Viết vài dòng chia sẻ về tác phẩm nghệ thuật, clip hay hoặc chủ đề bạn muốn trò chuyện..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white resize-none" required></textarea>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2 border-t border-slate-100 dark:border-white/5 mt-4">
+                <button type="button" onclick="closeCreatePostModal()" class="h-10 px-5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-all duration-200">
+                    Hủy bỏ
+                </button>
+                <button type="submit" class="h-10 bg-primary text-white font-bold rounded-xl hover:shadow-glow transition-all duration-200 px-6 text-xs flex items-center gap-1">
+                    <span class="material-symbols-rounded text-sm">rocket_launch</span>
+                    Đăng lên Feed
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL 4: EDIT POST FORM -->
+<div id="edit-post-modal" class="hidden fixed inset-0 z-[55] overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-4">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-symbols-rounded text-primary text-xl">edit</span>
+                Chỉnh sửa bài đăng
+            </h2>
+            <button onclick="closeEditPostModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
+                <span class="material-symbols-rounded text-sm">close</span>
+            </button>
+        </div>
+
+        <form id="edit-post-form" onsubmit="handleEditPost(event)" class="space-y-4">
+            <!-- Title -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Tiêu đề bài đăng</label>
+                <input type="text" id="edit-post-title" placeholder="VD: Gura trong bộ đồ ngủ cực xinh..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white" required>
+            </div>
+
+            <!-- Image Link -->
+            <div id="edit-group-image-link" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Link ảnh minh họa / Fan Art</label>
+                    <input type="text" id="edit-post-image" placeholder="VD: https://images.unsplash.com/photo-..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Hoặc</span>
+                    <label class="flex-1 flex items-center justify-center gap-2 h-10 px-4 border border-dashed border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary rounded-xl cursor-pointer transition-colors bg-slate-50/50 dark:bg-slate-800/50">
+                        <span class="material-symbols-rounded text-base text-slate-500">upload_file</span>
+                        <span id="edit-post-file-label" class="text-xs text-slate-500 font-medium">Tải ảnh lên từ máy tính</span>
+                        <input type="file" id="edit-post-file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'edit-post-image', 'edit-post-file-label')">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Source Link (Optional, e.g. for Twitter/X) -->
+            <div id="edit-group-source-link">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Link nguồn / Bài đăng gốc (Ví dụ: Link X, Facebook...)</label>
+                <input type="text" id="edit-post-source" placeholder="VD: https://x.com/username/status/..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+            </div>
+
+            <!-- YouTube URL -->
+            <div id="edit-group-video-link" class="hidden">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Link YouTube Clip</label>
+                <input type="text" id="edit-post-video" placeholder="VD: https://www.youtube.com/watch?v=..." class="w-full h-10 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white">
+            </div>
+
+            <!-- Content -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nội dung / Mô tả</label>
+                <textarea id="edit-post-content" rows="4" placeholder="Nhập nội dung mô tả mới..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:border-primary outline-none transition-all text-slate-950 dark:text-white resize-none" required></textarea>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex justify-end gap-3 pt-2 border-t border-slate-100 dark:border-white/5 mt-4">
+                <button type="button" onclick="closeEditPostModal()" class="h-10 px-5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs transition-all">
+                    Hủy bỏ
+                </button>
+                <button type="submit" class="h-10 bg-primary text-white font-bold rounded-xl hover:shadow-glow transition-all px-6 text-xs flex items-center gap-1">
+                    <span class="material-symbols-rounded text-sm">save</span>
+                    Lưu thay đổi
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     // --- 1. CONFIGURATION & INITIAL MOCK DATA ---
-    const initialCategories = [
-        { id: "general", name: "💬 Thảo luận chung", desc: "Nơi bàn luận chung về VTuber, clip hài hước, phản ứng stream.", color: "text-blue-500 bg-blue-500/10" },
-        { id: "creations", name: "🎨 Góc Sáng Tạo", desc: "Đăng tải fan art, nhạc cover, các mô hình Live2D/3D fan-made.", color: "text-pink-500 bg-pink-500/10" },
-        { id: "news", name: "🚨 Tin tức & Sự kiện", desc: "Tổng hợp lịch debut, concert và các thông báo lớn từ Holo/Niji.", color: "text-purple-500 bg-purple-500/10" },
-        { id: "gaming", name: "🎮 Gaming & Streaming", desc: "Tìm bạn cùng chơi game (Apex, Valorant), rủ collab và stream chung.", color: "text-orange-500 bg-orange-500/10" }
+    const defaultAnimeImages = [
+        "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=600&auto=format&fit=crop&q=60"
     ];
 
-    const initialThreads = [
+    const initialPosts = [
         {
             id: 1,
-            title: "Mọi người nghĩ sao về màn debut của Gen mới Hololive?",
-            categoryId: "news",
-            author: "KizunaAI_Fan",
-            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyr_fxn9EYyi3m5w-rlkHnGswEAwOcjHt6wdZIANBTIaFzUuWOzfsP2lZEAljKEvBfECiyxbiohZEv8QQ3fDMlQ4L9RJPaDOEI98PB3_i4ULdSdrwpLOr_x1-RlFWCR5o8AB83VR5UkVGfe5Yr55Mbjsg721wobiRSEgNXkp6_IqYxvEuLgfxosGLB9nLXEyaEzM6u6j1-OaVGHK8qgPEkfBN5PQSVb-6UvXz-VbXuQQmEQZMKBMqqh7szKc0s3IxKyq9iFZlVU78",
-            content: "Gen mới thực sự có thiết kế rất đỉnh, đặc biệt là bạn chơi nhạc cụ. Màn debut stream hôm qua thu hút hơn 80k người xem cùng lúc. Có ai có ấn tượng đặc biệt với thành viên nào không?",
-            time: Date.now() - 3600000 * 3, // 3 hours ago
-            replies: [
-                { author: "Kobo_Clipper", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAsEpkaz6OKCKDjlbzybG-8_lkDyfADpEjet_SAcUVQ4Goee4GhMEgX3yGxthH8jjIWm14Gz44knLbO9ieoXzOHAAxwYF96WGkmP_5rkn78Ey1Qpu2qvGX2-JCdmgDgdGNtu4ErbsEMdx4V2WOeeA3-tlaUPklrQvvJKL_ks9RDAgJyAtY2xaQf-PYH-HbMuGwgvWsr8awwgaX6eLXas-BSLOQaVx9IA539ArZDwGEFdzzVw_6aqbopEfNN7XVUQMjQyB6eDgFsoMQ", content: "Mình ấn tượng với bạn Rigging Live2D cực kỳ mượt, biểu cảm tự nhiên dã man.", time: Date.now() - 3600000 * 2.5 },
-                { author: "Gura_Shrimp", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBE_loWBfrT5GUg8Ovt8x55zYU-J3g8c7SaFiDL84R0iE88KhlrJmwf-wAh-FBsjcuAmGc6wcKjnEhMTKrNs7ZGdUbW5BfSNJ0Uk_KmGYsiXoYEslaizqX_6RDR5zM9n0gMGb0RscP1ymYDGr1Q_qB51Qs0wK3DszFF1sVVsXGkqvUZWPX6CBztNz-JMDcN7mQF7Pda2SQqHC3bnYnvCWySOt3sb5a2hD6vZnmt4kdX8Bm9VTZmkmuuGKBhHsV-l5AvLeyTv1iHHUs", content: "Đã vẽ ngay một tấm fan art cho bạn ấy rồi, tý đăng lên Góc Sáng Tạo khoe mọi người nha!", time: Date.now() - 3600000 * 2 }
+            type: "fanart",
+            title: "Tranh fan art Gawr Gura vẽ mừng mốc 5 Triệu Subscribers!",
+            content: "Mình đã mất 8 tiếng để vẽ bức tranh này trên Clip Studio Paint. Bộ trang phục ngủ cá mập này Gura mặc lúc livestream trông cưng xỉu luôn! Mọi người thấy phối màu ok không ạ?",
+            image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=60",
+            author: "Gura_Shrimp",
+            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBE_loWBfrT5GUg8Ovt8x55zYU-J3g8c7SaFiDL84R0iE88KhlrJmwf-wAh-FBsjcuAmGc6wcKjnEhMTKrNs7ZGdUbW5BfSNJ0Uk_KmGYsiXoYEslaizqX_6RDR5zM9n0gMGb0RscP1ymYDGr1Q_qB51Qs0wK3DszFF1sVVsXGkqvUZWPX6CBztNz-JMDcN7mQF7Pda2SQqHC3bnYnvCWySOt3sb5a2hD6vZnmt4kdX8Bm9VTZmkmuuGKBhHsV-l5AvLeyTv1iHHUs",
+            likes: 248,
+            liked: false,
+            time: Date.now() - 3600000 * 2, // 2 hours ago
+            comments: [
+                { author: "KizunaAI_Fan", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyr_fxn9EYyi3m5w-rlkHnGswEAwOcjHt6wdZIANBTIaFzUuWOzfsP2lZEAljKEvBfECiyxbiohZEv8QQ3fDMlQ4L9RJPaDOEI98PB3_i4ULdSdrwpLOr_x1-RlFWCR5o8AB83VR5UkVGfe5Yr55Mbjsg721wobiRSEgNXkp6_IqYxvEuLgfxosGLB9nLXEyaEzM6u6j1-OaVGHK8qgPEkfBN5PQSVb-6UvXz-VbXuQQmEQZMKBMqqh7szKc0s3IxKyq9iFZlVU78", content: "Đẹp xuất sắc luôn bạn ơi! Phần đổ bóng và vẽ mắt Gura nhìn có hồn dã man.", time: Date.now() - 3600000 * 1.5 },
+                { author: "Kobo_Clipper", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAsEpkaz6OKCKDjlbzybG-8_lkDyfADpEjet_SAcUVQ4Goee4GhMEgX3yGxthH8jjIWm14Gz44knLbO9ieoXzOHAAxwYF96WGkmP_5rkn78Ey1Qpu2qvGX2-JCdmgDgdGNtu4ErbsEMdx4V2WOeeA3-tlaUPklrQvvJKL_ks9RDAgJyAtY2xaQf-PYH-HbMuGwgvWsr8awwgaX6eLXas-BSLOQaVx9IA539ArZDwGEFdzzVw_6aqbopEfNN7XVUQMjQyB6eDgFsoMQ", content: "Nét vẽ sạch thật sự. Có link Pixiv hay Twitter không mình qua follow với nha.", time: Date.now() - 3600000 * 1 }
             ]
         },
         {
             id: 2,
-            title: "Tìm đồng đội cày rank vàng Apex Legends tối nay 9h",
-            categoryId: "gaming",
-            author: "ApexMaster",
-            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuARZLWNqRBV8ZHeP6L_VIJ5sdqes8S-Xk0qDofU5inZq1SWPiNOpoo0gorBZnEvsK2zRiHG7VmsrvXSP6Rr-DGwJrfHSsGvYIOzFKtk_BtHDbnT2zqSOdPzTu2aeWtHr-qpnLl2R9BcjRi7ANRyy0eoKhR4VEUQtisar4dTN-RVo-aQUszS2abQZeCtUxXeMZKTgHDnRv-vvL_4VOuwfhPTnYpT3eU9xX91wGxJSiV1_sxwa3RTvXeK8ehINr0aex_L3jm2I-lVtgo",
-            content: "Có bạn nào rảnh tối nay tầm 9h làm vài trận Apex không? Mình đang ở Rank Vàng 2, chơi vui vẻ không toxic. Ưu tiên có mic Discord nói chuyện phối hợp cho dễ nhé.",
+            type: "clip",
+            title: "Tổng hợp khoảnh khắc hài hước nhất trong buổi Apex Legends Collab!",
+            content: "Link Clip cut stream buổi tối hôm qua. Pekora cầm lựu đạn tự huỷ cả đội cười đau cả ruột. Mọi người click xem nha!",
+            image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=60",
+            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            author: "PekoClip_VN",
+            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAsEpkaz6OKCKDjlbzybG-8_lkDyfADpEjet_SAcUVQ4Goee4GhMEgX3yGxthH8jjIWm14Gz44knLbO9ieoXzOHAAxwYF96WGkmP_5rkn78Ey1Qpu2qvGX2-JCdmgDgdGNtu4ErbsEMdx4V2WOeeA3-tlaUPklrQvvJKL_ks9RDAgJyAtY2xaQf-PYH-HbMuGwgvWsr8awwgaX6eLXas-BSLOQaVx9IA539ArZDwGEFdzzVw_6aqbopEfNN7XVUQMjQyB6eDgFsoMQ",
+            likes: 182,
+            liked: false,
             time: Date.now() - 3600000 * 6, // 6 hours ago
-            replies: [
-                { author: "KizunaAI_Fan", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyr_fxn9EYyi3m5w-rlkHnGswEAwOcjHt6wdZIANBTIaFzUuWOzfsP2lZEAljKEvBfECiyxbiohZEv8QQ3fDMlQ4L9RJPaDOEI98PB3_i4ULdSdrwpLOr_x1-RlFWCR5o8AB83VR5UkVGfe5Yr55Mbjsg721wobiRSEgNXkp6_IqYxvEuLgfxosGLB9nLXEyaEzM6u6j1-OaVGHK8qgPEkfBN5PQSVb-6UvXz-VbXuQQmEQZMKBMqqh7szKc0s3IxKyq9iFZlVU78", content: "Cho mình một slot nha, nick discord mình là KizunaFan#1234, tối hú mình.", time: Date.now() - 3600000 * 5 }
+            comments: [
+                { author: "Gura_Shrimp", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBE_loWBfrT5GUg8Ovt8x55zYU-J3g8c7SaFiDL84R0iE88KhlrJmwf-wAh-FBsjcuAmGc6wcKjnEhMTKrNs7ZGdUbW5BfSNJ0Uk_KmGYsiXoYEslaizqX_6RDR5zM9n0gMGb0RscP1ymYDGr1Q_qB51Qs0wK3DszFF1sVVsXGkqvUZWPX6CBztNz-JMDcN7mQF7Pda2SQqHC3bnYnvCWySOt3sb5a2hD6vZnmt4kdX8Bm9VTZmkmuuGKBhHsV-l5AvLeyTv1iHHUs", content: "Đoạn 02:15 Pekora la hét nghe buồn cười thật sự haha.", time: Date.now() - 3600000 * 4 }
             ]
         },
         {
             id: 3,
-            title: "Tranh fan art vẽ tay chúc mừng 5 triệu sub của Gawr Gura",
-            categoryId: "creations",
-            author: "Gura_Shrimp",
-            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBE_loWBfrT5GUg8Ovt8x55zYU-J3g8c7SaFiDL84R0iE88KhlrJmwf-wAh-FBsjcuAmGc6wcKjnEhMTKrNs7ZGdUbW5BfSNJ0Uk_KmGYsiXoYEslaizqX_6RDR5zM9n0gMGb0RscP1ymYDGr1Q_qB51Qs0wK3DszFF1sVVsXGkqvUZWPX6CBztNz-JMDcN7mQF7Pda2SQqHC3bnYnvCWySOt3sb5a2hD6vZnmt4kdX8Bm9VTZmkmuuGKBhHsV-l5AvLeyTv1iHHUs",
-            content: "Mình vừa hoàn thành bức fan art vẽ Gura trong bộ đồ ngủ cá mập siêu dễ thương. Mất tầm 6 tiếng để sketch và lên màu. Hy vọng mọi người thích bức tranh này!",
-            time: Date.now() - 3600000 * 24, // 1 day ago
-            replies: [
-                { author: "Kobo_Clipper", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAsEpkaz6OKCKDjlbzybG-8_lkDyfADpEjet_SAcUVQ4Goee4GhMEgX3yGxthH8jjIWm14Gz44knLbO9ieoXzOHAAxwYF96WGkmP_5rkn78Ey1Qpu2qvGX2-JCdmgDgdGNtu4ErbsEMdx4V2WOeeA3-tlaUPklrQvvJKL_ks9RDAgJyAtY2xaQf-PYH-HbMuGwgvWsr8awwgaX6eLXas-BSLOQaVx9IA539ArZDwGEFdzzVw_6aqbopEfNN7XVUQMjQyB6eDgFsoMQ", content: "Wow tranh vẽ xinh quá! Bạn phối màu bóng mờ nhìn nghệ thuật ghê á.", time: Date.now() - 3600000 * 22 }
+            type: "chat",
+            title: "Hôm nay ai có xem stream ca hát (Karaoke) của Aqua không?",
+            content: "Dọng hát hôm nay ngọt ngào kinh khủng, Aqua hát bài lofi đỉnh thật sự. Tiếc là bản lưu trữ (archive) sẽ bị xoá sau 24h. Ai chưa nghe thì ráng vào nghe gấp đi nhé!",
+            image: "",
+            author: "AquaMyOshi",
+            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuARZLWNqRBV8ZHeP6L_VIJ5sdqes8S-Xk0qDofU5inZq1SWPiNOpoo0gorBZnEvsK2zRiHG7VmsrvXSP6Rr-DGwJrfHSsGvYIOzFKtk_BtHDbnT2zqSOdPzTu2aeWtHr-qpnLl2R9BcjRi7ANRyy0eoKhR4VEUQtisar4dTN-RVo-aQUszS2abQZeCtUxXeMZKTgHDnRv-vvL_4VOuwfhPTnYpT3eU9xX91wGxJSiV1_sxwa3RTvXeK8ehINr0aex_L3jm2I-lVtgo",
+            likes: 95,
+            liked: false,
+            time: Date.now() - 3600000 * 12, // 12 hours ago
+            comments: [
+                { author: "KizunaAI_Fan", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyr_fxn9EYyi3m5w-rlkHnGswEAwOcjHt6wdZIANBTIaFzUuWOzfsP2lZEAljKEvBfECiyxbiohZEv8QQ3fDMlQ4L9RJPaDOEI98PB3_i4ULdSdrwpLOr_x1-RlFWCR5o8AB83VR5UkVGfe5Yr55Mbjsg721wobiRSEgNXkp6_IqYxvEuLgfxosGLB9nLXEyaEzM6u6j1-OaVGHK8qgPEkfBN5PQSVb-6UvXz-VbXuQQmEQZMKBMqqh7szKc0s3IxKyq9iFZlVU78", content: "Hên quá mình có thu âm (record) lại đoạn điệp khúc rồi, nghe đi nghe lại nãy giờ phê quá.", time: Date.now() - 3600000 * 10 }
             ]
+        },
+        {
+            id: 4,
+            type: "fanart",
+            title: "Sketch nhanh biểu cảm cực lầy của Kobo Kanaeru",
+            content: "Nét sketch nhanh tầm 45 phút tối qua khi đang xem Kobo chơi Minecraft. Cười chảy nước mắt vì bạn này cứ đi trêu troll các senpai.",
+            image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&auto=format&fit=crop&q=60",
+            author: "ArtClub_VT",
+            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBE_loWBfrT5GUg8Ovt8x55zYU-J3g8c7SaFiDL84R0iE88KhlrJmwf-wAh-FBsjcuAmGc6wcKjnEhMTKrNs7ZGdUbW5BfSNJ0Uk_KmGYsiXoYEslaizqX_6RDR5zM9n0gMGb0RscP1ymYDGr1Q_qB51Qs0wK3DszFF1sVVsXGkqvUZWPX6CBztNz-JMDcN7mQF7Pda2SQqHC3bnYnvCWySOt3sb5a2hD6vZnmt4kdX8Bm9VTZmkmuuGKBhHsV-l5AvLeyTv1iHHUs",
+            likes: 154,
+            liked: false,
+            time: Date.now() - 3600000 * 30, // 30 hours ago
+            comments: []
         }
     ];
 
     // --- 2. GLOBAL STATE ---
     let db = null;
-    let currentCategoryId = null; // null = show all
-    let activeThreadId = null;
+    let currentFilter = 'all'; // 'all', 'fanart', 'clip', 'chat'
+    let activePostId = null;
 
     // Load from LocalStorage
     function loadDB() {
@@ -300,11 +436,17 @@ get_header();
         if (stored) {
             try {
                 db = JSON.parse(stored);
+                // If it's the legacy database structure (no posts array), reset it to the new structure
+                if (!db || !db.posts) {
+                    db = { posts: initialPosts };
+                    saveDB();
+                }
             } catch(e) {
-                db = { categories: initialCategories, threads: initialThreads };
+                db = { posts: initialPosts };
+                saveDB();
             }
         } else {
-            db = { categories: initialCategories, threads: initialThreads };
+            db = { posts: initialPosts };
             saveDB();
         }
     }
@@ -313,298 +455,618 @@ get_header();
         localStorage.setItem('vtwiki_community_forum_data', JSON.stringify(db));
     }
 
-    // --- 3. VIEW CONTROLLER ---
-    function showView(viewName) {
-        document.getElementById('view-categories').classList.add('hidden');
-        document.getElementById('view-thread-detail').classList.add('hidden');
-        document.getElementById('view-create-topic').classList.add('hidden');
+    // --- 3. FILTER & SEARCH CONTROLLER ---
+    function filterFeed(filterType) {
+        currentFilter = filterType;
+        
+        // Update tabs styling
+        const tabs = ['all', 'fanart', 'clip', 'chat'];
+        tabs.forEach(t => {
+            const btn = document.getElementById('tab-' + t);
+            if (!btn) return;
+            if (t === filterType) {
+                btn.className = "h-9 px-4 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-primary text-white";
+            } else {
+                btn.className = "h-9 px-4 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800";
+            }
+        });
 
-        if (viewName === 'categories') {
-            document.getElementById('view-categories').classList.remove('hidden');
-            document.getElementById('breadcrumb').textContent = currentCategoryId 
-                ? 'Chuyên mục: ' + db.categories.find(c => c.id === currentCategoryId).name
-                : 'Danh sách chủ đề';
-            renderThreads();
-        } else if (viewName === 'thread-detail') {
-            document.getElementById('view-thread-detail').classList.remove('hidden');
-        } else if (viewName === 'create-topic') {
-            document.getElementById('view-create-topic').classList.remove('hidden');
-            document.getElementById('breadcrumb').textContent = 'Tạo chủ đề giao lưu mới';
-        }
+        renderFeed();
+    }
+
+    function handleSearch() {
+        renderFeed();
     }
 
     // --- 4. RENDERERS ---
     function initUI() {
         loadDB();
-        renderCategories();
-        renderThreads();
-        populateCategoriesSelect();
-        updateStats();
-        showView('categories');
+        renderFeed();
+        updateLikesTotal();
     }
 
-    function renderCategories() {
-        const container = document.getElementById('categories-list');
+    function renderFeed() {
+        const container = document.getElementById('feed-container');
         if (!container) return;
         container.innerHTML = '';
 
-        db.categories.forEach(cat => {
-            const count = db.threads.filter(t => t.categoryId === cat.id).length;
-            const el = document.createElement('div');
-            // Check if active
-            const isActive = currentCategoryId === cat.id;
-            el.className = `p-5 rounded-2xl border transition-all duration-200 cursor-pointer flex gap-4 ${
-                isActive 
-                    ? 'bg-primary/5 border-primary shadow-sm ring-1 ring-primary/20' 
-                    : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 hover:border-primary/30 hover:shadow-sm'
-            }`;
-            
-            // Icon code extraction
-            const emoji = cat.name.split(' ')[0];
-            const cleanName = cat.name.replace(/^\S+\s+/, '');
+        const searchQuery = document.getElementById('feed-search').value.toLowerCase().trim();
 
-            el.innerHTML = `
-                <div class="text-2xl w-12 h-12 rounded-xl flex items-center justify-center bg-slate-50 dark:bg-slate-800 shrink-0">
-                    ${emoji}
-                </div>
-                <div class="flex-1 space-y-1">
-                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">${cleanName}</h3>
-                    <p class="text-[11px] text-slate-400 leading-snug">${cat.desc}</p>
-                    <div class="text-[10px] font-bold text-primary mt-2 uppercase tracking-wide">${count} bài đăng</div>
-                </div>
-            `;
-            el.onclick = () => {
-                if (currentCategoryId === cat.id) {
-                    currentCategoryId = null; // Toggle
-                } else {
-                    currentCategoryId = cat.id;
-                }
-                renderCategories();
-                showView('categories');
-            };
-            container.appendChild(el);
-        });
-    }
-
-    function renderThreads() {
-        const container = document.getElementById('threads-list');
-        if (!container) return;
-        container.innerHTML = '';
-
-        const searchQuery = document.getElementById('forum-search').value.toLowerCase().trim();
-
-        // Filter threads
-        let threads = db.threads;
-        if (currentCategoryId) {
-            threads = threads.filter(t => t.categoryId === currentCategoryId);
+        // Filter posts
+        let posts = db.posts;
+        if (currentFilter !== 'all') {
+            posts = posts.filter(p => p.type === currentFilter);
         }
         if (searchQuery) {
-            threads = threads.filter(t => t.title.toLowerCase().includes(searchQuery) || t.content.toLowerCase().includes(searchQuery));
+            posts = posts.filter(p => p.title.toLowerCase().includes(searchQuery) || p.content.toLowerCase().includes(searchQuery) || p.author.toLowerCase().includes(searchQuery));
         }
 
         // Sort by time desc
-        threads.sort((a, b) => b.time - a.time);
+        posts.sort((a, b) => b.time - a.time);
 
-        if (!threads.length) {
+        if (!posts.length) {
             container.innerHTML = `
-                <div class="text-center py-12 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl">
-                    <span class="material-symbols-rounded text-5xl text-slate-300 dark:text-slate-700 mb-2">forum_missed</span>
-                    <p class="text-sm font-medium text-slate-400">Không tìm thấy bài viết nào trong chuyên mục này.</p>
+                <div class="col-span-full text-center py-16 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl">
+                    <span class="material-symbols-rounded text-6xl text-slate-300 dark:text-slate-700 mb-2">dashboard_customize</span>
+                    <p class="text-sm font-medium text-slate-400">Không tìm thấy bài viết cộng đồng nào phù hợp.</p>
                 </div>
             `;
             return;
         }
 
-        threads.forEach(thread => {
-            const cat = db.categories.find(c => c.id === thread.categoryId);
-            const catName = cat ? cat.name.replace(/^\S+\s+/, '') : 'Giao lưu';
-            const countReplies = thread.replies.length;
-            const timeAgo = formatTimeAgo(thread.time);
-            
-            const el = document.createElement('div');
-            el.className = "bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 hover:border-primary/30 p-5 rounded-2xl hover:shadow-sm transition-all duration-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 cursor-pointer";
-            
-            el.innerHTML = `
-                <div class="flex items-center gap-3.5 flex-1 min-w-0">
-                    <div class="w-10 h-10 rounded-full bg-cover shrink-0" style="background-image: url('${thread.avatar}')"></div>
-                    <div class="space-y-1 min-w-0">
-                        <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100 hover:text-primary transition-colors truncate max-w-xl">${escapeHTML(thread.title)}</h4>
-                        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400">
-                            <span class="font-bold text-primary">${escapeHTML(thread.author)}</span>
-                            <span>•</span>
-                            <span>Đăng ${timeAgo}</span>
-                            <span>•</span>
-                            <span class="bg-primary/5 text-primary px-2 py-0.5 rounded font-medium">${catName}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 self-end md:self-auto shrink-0">
-                    <div class="flex items-center gap-1 text-slate-400 text-xs font-bold">
-                        <span class="material-symbols-rounded text-base">forum</span>
-                        <span>${countReplies}</span>
-                    </div>
-                </div>
-            `;
-            el.onclick = () => showThreadDetail(thread.id);
-            container.appendChild(el);
-        });
-    }
+        posts.forEach(post => {
+            const timeAgo = formatTimeAgo(post.time);
+            const countComments = post.comments.length;
+            const isLiked = post.liked;
 
-    function populateCategoriesSelect() {
-        const select = document.getElementById('new-topic-category');
-        if (!select) return;
-        select.innerHTML = '';
-        db.categories.forEach(cat => {
-            const cleanName = cat.name.replace(/^\S+\s+/, '');
-            const opt = document.createElement('option');
-            opt.value = cat.id;
-            opt.textContent = cleanName;
-            select.appendChild(opt);
-        });
-    }
+            const card = document.createElement('div');
+            card.className = "bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col group";
 
-    function updateStats() {
-        const topicsCount = db.threads.length;
-        const totalReplies = db.threads.reduce((acc, t) => acc + t.replies.length, 0);
+            // Define type badge & color
+            let badgeIcon = 'palette';
+            let badgeText = 'Fan Art';
+            let badgeColor = 'bg-pink-500/10 text-pink-500';
+            if (post.type === 'clip') {
+                badgeIcon = 'videocam';
+                badgeText = 'Clip Hay';
+                badgeColor = 'bg-purple-500/10 text-purple-500';
+            } else if (post.type === 'chat') {
+                badgeIcon = 'chat_bubble';
+                badgeText = 'Trò chuyện';
+                badgeColor = 'bg-blue-500/10 text-blue-500';
+            }
 
-        const topicsEl = document.getElementById('stat-topics-count');
-        const repliesEl = document.getElementById('stat-replies-count');
-        
-        if (topicsEl) topicsEl.textContent = topicsCount;
-        if (repliesEl) repliesEl.textContent = totalReplies;
-    }
-
-    // --- 5. TOPIC DETAIL ACTIONS ---
-    function showThreadDetail(id) {
-        activeThreadId = id;
-        const thread = db.threads.find(t => t.id === id);
-        if (!thread) return;
-
-        const container = document.getElementById('post-detail-container');
-        const repliesCountEl = document.getElementById('replies-count');
-        const repliesList = document.getElementById('replies-list');
-
-        // Set breadcrumb
-        const cat = db.categories.find(c => c.id === thread.categoryId);
-        const catName = cat ? cat.name.replace(/^\S+\s+/, '') : 'Giao lưu';
-        document.getElementById('breadcrumb').textContent = 'Bài đăng: ' + thread.title;
-
-        // Render main post
-        container.innerHTML = `
-            <div class="flex items-center justify-between">
-                <span class="text-[10px] bg-primary/5 text-primary border border-primary/10 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">${catName}</span>
-                <span class="text-xs text-slate-400">${formatTimeAgo(thread.time)}</span>
-            </div>
-            
-            <h1 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-tight">${escapeHTML(thread.title)}</h1>
-            
-            <div class="flex items-center gap-3 py-1 border-b border-slate-100 dark:border-white/5 pb-4">
-                <div class="w-9 h-9 rounded-full bg-cover" style="background-image: url('${thread.avatar}')"></div>
-                <div>
-                    <p class="text-xs font-bold text-slate-800 dark:text-slate-100">${escapeHTML(thread.author)}</p>
-                    <p class="text-[10px] text-slate-400">Thành viên Cộng đồng</p>
-                </div>
-            </div>
-
-            <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">${escapeHTML(thread.content)}</p>
-        `;
-
-        // Render replies
-        repliesCountEl.textContent = thread.replies.length;
-        repliesList.innerHTML = '';
-
-        if (!thread.replies.length) {
-            repliesList.innerHTML = `
-                <div class="text-center py-8 text-slate-400 text-xs">
-                    Chưa có bình luận nào. Hãy bắt đầu cuộc trò chuyện!
-                </div>
-            `;
-        } else {
-            thread.replies.forEach(reply => {
-                const replyEl = document.createElement('div');
-                replyEl.className = "bg-slate-50/50 dark:bg-slate-800/20 border border-slate-100 dark:border-white/5 rounded-2xl p-4 md:p-5 flex gap-4 items-start";
-                replyEl.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-cover shrink-0" style="background-image: url('${reply.avatar}')"></div>
-                    <div class="space-y-1.5 flex-1 min-w-0">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-900 dark:text-white">${escapeHTML(reply.author)}</span>
-                            <span class="text-[10px] text-slate-400">${formatTimeAgo(reply.time || (Date.now() - 60000))}</span>
-                        </div>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">${escapeHTML(reply.content)}</p>
+            // Optional image layout
+            let imageSection = '';
+            if (post.image) {
+                // If it's a video, overlay play icon
+                const isVideo = post.type === 'clip';
+                const playOverlay = isVideo 
+                    ? `<div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
+                         <span class="material-symbols-rounded text-5xl text-white drop-shadow-md" style="font-variation-settings: 'FILL' 1">play_circle</span>
+                       </div>`
+                    : '';
+                
+                imageSection = `
+                    <div class="relative overflow-hidden aspect-video bg-slate-900 cursor-pointer" onclick="openPostModal(${post.id})">
+                        <img src="${post.image}" alt="Preview" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=60'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        ${playOverlay}
                     </div>
                 `;
-                repliesList.appendChild(replyEl);
-            });
-        }
+            }
 
-        // Reset reply textarea
-        document.getElementById('reply-content').value = '';
-        showView('thread-detail');
+            card.innerHTML = `
+                ${imageSection}
+                
+                <!-- Card Body -->
+                <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center gap-1 text-[10px] ${badgeColor} px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                <span class="material-symbols-rounded text-xs">${badgeIcon}</span>
+                                ${badgeText}
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] text-slate-400 font-medium">${timeAgo}</span>
+                                <div class="flex items-center gap-0.5">
+                                    <button onclick="event.stopPropagation(); openEditPostModal(${post.id})" class="text-slate-300 hover:text-primary transition-colors p-1" title="Sửa bài viết">
+                                        <span class="material-symbols-rounded text-sm block">edit</span>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); deletePost(${post.id})" class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Xóa bài viết">
+                                        <span class="material-symbols-rounded text-sm block">delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-primary transition-colors cursor-pointer leading-snug line-clamp-2" onclick="openPostModal(${post.id})">
+                            ${escapeHTML(post.title)}
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal line-clamp-3">
+                            ${escapeHTML(post.content)}
+                        </p>
+                    </div>
+
+                    <!-- Card Footer Engagement -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5 text-xs text-slate-500 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <img src="${post.avatar}" alt="Avatar" class="w-6 h-6 rounded-full object-cover">
+                            <span class="font-semibold text-[11px] text-slate-700 dark:text-slate-300 truncate max-w-[100px]">${escapeHTML(post.author)}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="likePost(event, ${post.id})" class="flex items-center gap-1 font-bold ${isLiked ? 'text-pink-500 animate-heart-pop' : 'text-slate-400 hover:text-pink-500'} transition-colors">
+                                <span class="material-symbols-rounded text-sm" style="${isLiked ? "font-variation-settings: 'FILL' 1" : ''}">favorite</span>
+                                <span>${post.likes}</span>
+                            </button>
+                            <button onclick="openPostModal(${post.id})" class="flex items-center gap-1 text-slate-400 hover:text-primary transition-colors font-bold">
+                                <span class="material-symbols-rounded text-sm">chat_bubble</span>
+                                <span>${countComments}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        updateLikesTotal();
     }
 
-    function handlePostReply(event) {
+    function updateLikesTotal() {
+        const totalLikes = db.posts.reduce((acc, p) => acc + p.likes, 0);
+        const headerLikes = document.getElementById('header-likes-count');
+        const statTopics = document.getElementById('stat-topics-count');
+        const statReplies = document.getElementById('stat-replies-count');
+
+        if (headerLikes) headerLikes.textContent = totalLikes + ' tim';
+        if (statTopics) statTopics.textContent = db.posts.length;
+        if (statReplies) statReplies.textContent = db.posts.reduce((acc, p) => acc + p.comments.length, 0);
+    }
+
+    // --- 5. LIKE & INTERACTION ---
+    function likePost(event, id) {
+        if (event) event.stopPropagation();
+        const post = db.posts.find(p => p.id === id);
+        if (!post) return;
+
+        if (post.liked) {
+            post.likes--;
+            post.liked = false;
+        } else {
+            post.likes++;
+            post.liked = true;
+        }
+
+        saveDB();
+        renderFeed();
+    }
+
+    function likeActivePost() {
+        if (!activePostId) return;
+        const post = db.posts.find(p => p.id === activePostId);
+        if (!post) return;
+
+        if (post.liked) {
+            post.likes--;
+            post.liked = false;
+        } else {
+            post.likes++;
+            post.liked = true;
+        }
+
+        saveDB();
+        
+        // Update active modal displays
+        const likeIcon = document.getElementById('modal-like-icon');
+        if (post.liked) {
+            likeIcon.style.fontVariationSettings = "'FILL' 1";
+            likeIcon.classList.add('text-pink-500');
+            likeIcon.classList.remove('text-slate-400');
+        } else {
+            likeIcon.style.fontVariationSettings = "";
+            likeIcon.classList.remove('text-pink-500');
+            likeIcon.classList.add('text-slate-400');
+        }
+        document.getElementById('modal-likes-count').textContent = post.likes;
+
+        renderFeed();
+    }
+
+    let deleteTargetId = null;
+
+    function deletePost(id) {
+        deleteTargetId = id;
+        const modal = document.getElementById('confirm-delete-modal');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.querySelector('div').classList.remove('scale-95');
+        }, 10);
+    }
+
+    function closeConfirmDeleteModal() {
+        const modal = document.getElementById('confirm-delete-modal');
+        modal.querySelector('div').classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            deleteTargetId = null;
+        }, 150);
+    }
+
+    function deleteActivePost() {
+        if (activePostId) {
+            deletePost(activePostId);
+        }
+    }
+
+    let editTargetId = null;
+
+    function openEditPostModal(id, event) {
+        if (event) event.stopPropagation();
+        
+        const post = db.posts.find(p => p.id === id);
+        if (!post) return;
+        
+        editTargetId = id;
+        
+        // Fill form fields
+        document.getElementById('edit-post-title').value = post.title || '';
+        document.getElementById('edit-post-content').value = post.content || '';
+        document.getElementById('edit-post-image').value = post.image || '';
+        document.getElementById('edit-post-video').value = post.videoUrl || '';
+        document.getElementById('edit-post-source').value = post.sourceUrl || '';
+        document.getElementById('edit-post-file-label').textContent = 'Tải ảnh lên từ máy tính';
+        document.getElementById('edit-post-file').value = '';
+        
+        // Conditional inputs
+        const imgGroup = document.getElementById('edit-group-image-link');
+        const videoGroup = document.getElementById('edit-group-video-link');
+        
+        if (post.type === 'fanart') {
+            imgGroup.classList.remove('hidden');
+            videoGroup.classList.add('hidden');
+        } else if (post.type === 'clip') {
+            imgGroup.classList.remove('hidden');
+            videoGroup.classList.remove('hidden');
+        } else {
+            imgGroup.classList.add('hidden');
+            videoGroup.classList.add('hidden');
+        }
+        
+        // Open modal
+        document.getElementById('edit-post-modal').classList.remove('hidden');
+    }
+
+    function closeEditPostModal() {
+        document.getElementById('edit-post-modal').classList.add('hidden');
+        document.getElementById('edit-post-file-label').textContent = 'Tải ảnh lên từ máy tính';
+        document.getElementById('edit-post-file').value = '';
+        editTargetId = null;
+    }
+
+    function handleEditPost(event) {
         event.preventDefault();
-        const contentInput = document.getElementById('reply-content');
-        const content = contentInput.value.trim();
-        if (!content || !activeThreadId) return;
+        if (editTargetId === null) return;
+        
+        const post = db.posts.find(p => p.id === editTargetId);
+        if (!post) return;
+        
+        const title = document.getElementById('edit-post-title').value.trim();
+        const content = document.getElementById('edit-post-content').value.trim();
+        let image = document.getElementById('edit-post-image').value.trim();
+        const videoUrl = document.getElementById('edit-post-video').value.trim();
+        let sourceUrl = document.getElementById('edit-post-source').value.trim();
+        
+        if (!title || !content) return;
+        
+        // Smart parse: If they put a Tweet/FB page link in the image field, convert to sourceUrl
+        const isLikelyWebPage = image && (
+            image.includes('x.com') || 
+            image.includes('twitter.com') || 
+            image.includes('facebook.com') || 
+            image.includes('/status/') ||
+            (!image.match(/\.(jpeg|jpg|gif|png|webp|svg)/i) && image.startsWith('http') && !image.startsWith('data:image'))
+        );
+        
+        if (isLikelyWebPage) {
+            if (!sourceUrl) {
+                sourceUrl = image;
+            }
+            image = "";
+        }
+        
+        // Auto-assign image if empty for fan art / clip
+        if (!image && (post.type === 'fanart' || post.type === 'clip')) {
+            const randomIndex = Math.floor(Math.random() * defaultAnimeImages.length);
+            image = defaultAnimeImages[randomIndex];
+        }
+        
+        // Update post data
+        post.title = title;
+        post.content = content;
+        post.image = image;
+        post.sourceUrl = sourceUrl || undefined;
+        if (post.type === 'clip') {
+            post.videoUrl = videoUrl;
+        }
+        
+        saveDB();
+        closeEditPostModal();
+        renderFeed();
+        
+        // If the edited post is currently open in details modal, refresh it
+        if (activePostId === post.id) {
+            openPostModal(post.id);
+        }
+    }
 
-        const thread = db.threads.find(t => t.id === activeThreadId);
-        if (!thread) return;
+    // --- 6. DETAIL LIGHTBOX MODAL ---
+    function openPostModal(id) {
+        activePostId = id;
+        const post = db.posts.find(p => p.id === id);
+        if (!post) return;
 
-        // Add reply object
-        thread.replies.push({
+        const modal = document.getElementById('post-detail-modal');
+        const modalImg = document.getElementById('modal-image');
+        const modalVideoPlace = document.getElementById('modal-video-placeholder');
+        const modalVideoLink = document.getElementById('modal-video-link');
+
+        // Render Media
+        if (post.type === 'clip') {
+            modalImg.classList.add('hidden');
+            modalVideoPlace.classList.remove('hidden');
+            modalVideoLink.href = post.videoUrl || '#';
+            if (post.image) {
+                modalVideoPlace.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${post.image}')`;
+                modalVideoPlace.style.backgroundSize = 'cover';
+                modalVideoPlace.style.backgroundPosition = 'center';
+            }
+        } else if (post.image) {
+            modalImg.src = post.image;
+            modalImg.classList.remove('hidden');
+            modalVideoPlace.classList.add('hidden');
+        } else {
+            // Text only status
+            modalImg.src = 'https://ui-avatars.com/api/?name=Chat&background=1e293b&color=fff&size=512&bold=true';
+            modalImg.classList.remove('hidden');
+            modalVideoPlace.classList.add('hidden');
+        }
+
+        // Render metadata
+        document.getElementById('modal-author-avatar').src = post.avatar;
+        document.getElementById('modal-author-name').textContent = post.author;
+        
+        let catText = 'Fan Art';
+        if (post.type === 'clip') catText = 'Clip Hay';
+        if (post.type === 'chat') catText = 'Trò chuyện';
+        document.getElementById('modal-category').textContent = catText;
+
+        document.getElementById('modal-title').textContent = post.title;
+        document.getElementById('modal-content').textContent = post.content;
+        document.getElementById('modal-time').textContent = 'Đăng ' + formatTimeAgo(post.time);
+
+        // Render Source URL
+        const sourceContainer = document.getElementById('modal-source-container');
+        const sourceLink = document.getElementById('modal-source-link');
+        if (post.sourceUrl) {
+            sourceContainer.classList.remove('hidden');
+            sourceLink.href = post.sourceUrl;
+            
+            // Customize button text depending on URL type
+            if (post.sourceUrl.includes('x.com') || post.sourceUrl.includes('twitter.com')) {
+                sourceLink.innerHTML = `Xem trên X / Twitter <span class="material-symbols-rounded text-xs">open_in_new</span>`;
+            } else if (post.sourceUrl.includes('facebook.com')) {
+                sourceLink.innerHTML = `Xem trên Facebook <span class="material-symbols-rounded text-xs">open_in_new</span>`;
+            } else if (post.sourceUrl.includes('youtube.com') || post.sourceUrl.includes('youtu.be')) {
+                sourceLink.innerHTML = `Xem trên YouTube <span class="material-symbols-rounded text-xs">open_in_new</span>`;
+            } else {
+                sourceLink.innerHTML = `Xem link nguồn <span class="material-symbols-rounded text-xs">open_in_new</span>`;
+            }
+        } else {
+            sourceContainer.classList.add('hidden');
+        }
+
+        // Engagement Like icons
+        const likeIcon = document.getElementById('modal-like-icon');
+        if (post.liked) {
+            likeIcon.style.fontVariationSettings = "'FILL' 1";
+            likeIcon.classList.add('text-pink-500');
+        } else {
+            likeIcon.style.fontVariationSettings = "";
+            likeIcon.classList.remove('text-pink-500');
+        }
+        document.getElementById('modal-likes-count').textContent = post.likes;
+        document.getElementById('modal-comments-count').textContent = post.comments.length;
+
+        // Render comments
+        renderModalComments(post);
+
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Stop page scroll
+    }
+
+    function closePostModal() {
+        document.getElementById('post-detail-modal').classList.add('hidden');
+        document.body.style.overflow = '';
+        activePostId = null;
+    }
+
+    function renderModalComments(post) {
+        const list = document.getElementById('modal-comments-list');
+        list.innerHTML = '';
+
+        if (!post.comments.length) {
+            list.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-4">Chưa có bình luận nào. Hãy bắt đầu cuộc trò chuyện!</p>`;
+            return;
+        }
+
+        post.comments.forEach(comment => {
+            const commentEl = document.createElement('div');
+            commentEl.className = "flex gap-2.5 items-start text-xs border-b border-slate-50 dark:border-slate-800 pb-3";
+            commentEl.innerHTML = `
+                <img src="${comment.avatar}" alt="Avatar" class="w-6.5 h-6.5 rounded-full object-cover shrink-0">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 dark:text-slate-200">${escapeHTML(comment.author)}</span>
+                        <span class="text-[10px] text-slate-400">${formatTimeAgo(comment.time || (Date.now() - 60000))}</span>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed mt-0.5">${escapeHTML(comment.content)}</p>
+                </div>
+            `;
+            list.appendChild(commentEl);
+        });
+    }
+
+    function handleModalComment(event) {
+        event.preventDefault();
+        const input = document.getElementById('modal-comment-input');
+        const content = input.value.trim();
+        if (!content || !activePostId) return;
+
+        const post = db.posts.find(p => p.id === activePostId);
+        if (!post) return;
+
+        post.comments.push({
             author: "Fan_GiaoLuu",
-            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuARZLWNqRBV8ZHeP6L_VIJ5sdqes8S-Xk0qDofU5inZq1SWPiNOpoo0gorBZnEvsK2zRiHG7VmsrvXSP6Rr-DGwJrfHSsGvYIOzFKtk_BtHDbnT2zqSOdPzTu2aeWtHr-qpnLl2R9BcjRi7ANRyy0eoKhR4VEUQtisar4dTN-RVo-aQUszS2abQZeCtUxXeMZKTgHDnRv-vvL_4VOuwfhPTnYpT3eU9xX91wGxJSiV1_sxwa3RTvXeK8ehINr0aex_L3jm2I-lVtgo", // Default fan avatar
+            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuARZLWNqRBV8ZHeP6L_VIJ5sdqes8S-Xk0qDofU5inZq1SWPiNOpoo0gorBZnEvsK2zRiHG7VmsrvXSP6Rr-DGwJrfHSsGvYIOzFKtk_BtHDbnT2zqSOdPzTu2aeWtHr-qpnLl2R9BcjRi7ANRyy0eoKhR4VEUQtisar4dTN-RVo-aQUszS2abQZeCtUxXeMZKTgHDnRv-vvL_4VOuwfhPTnYpT3eU9xX91wGxJSiV1_sxwa3RTvXeK8ehINr0aex_L3jm2I-lVtgo",
             content: content,
             time: Date.now()
         });
 
         saveDB();
-        updateStats();
-        showThreadDetail(activeThreadId);
+        input.value = '';
+        renderModalComments(post);
+        document.getElementById('modal-comments-count').textContent = post.comments.length;
+        renderFeed();
     }
 
-    // --- 6. CREATE TOPIC ACTIONS ---
-    function showCreateTopicView() {
-        showView('create-topic');
+    // --- 7. CREATE POST MODAL ACTIONS ---
+    function openCreatePostModal() {
+        document.getElementById('create-post-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
-    function handleCreateTopic(event) {
+    function closeCreatePostModal() {
+        document.getElementById('create-post-modal').classList.add('hidden');
+        document.body.style.overflow = '';
+        if (document.getElementById('new-post-file-label')) {
+            document.getElementById('new-post-file-label').textContent = 'Tải ảnh lên từ máy tính';
+        }
+        if (document.getElementById('new-post-file')) {
+            document.getElementById('new-post-file').value = '';
+        }
+    }
+
+    function togglePostTypeInputs() {
+        const type = document.querySelector('input[name="post_type"]:checked').value;
+        
+        // Highlight active radio card
+        const types = ['fanart', 'clip', 'chat'];
+        types.forEach(t => {
+            const label = document.getElementById('label-type-' + t);
+            if (t === type) {
+                label.className = "cursor-pointer border border-primary rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 text-center transition-all bg-primary/5 ring-1 ring-primary/20";
+            } else {
+                label.className = "cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 text-center transition-all";
+            }
+        });
+
+        // Toggle inputs
+        const imgGroup = document.getElementById('group-image-link');
+        const videoGroup = document.getElementById('group-video-link');
+        
+        if (type === 'fanart') {
+            imgGroup.classList.remove('hidden');
+            videoGroup.classList.add('hidden');
+        } else if (type === 'clip') {
+            imgGroup.classList.remove('hidden'); // Also support thumbnail link
+            videoGroup.classList.remove('hidden');
+        } else {
+            imgGroup.classList.add('hidden');
+            videoGroup.classList.add('hidden');
+        }
+    }
+
+    function handleCreatePost(event) {
         event.preventDefault();
-        const title = document.getElementById('new-topic-title').value.trim();
-        const catId = document.getElementById('new-topic-category').value;
-        const content = document.getElementById('new-topic-content').value.trim();
+        const type = document.querySelector('input[name="post_type"]:checked').value;
+        const title = document.getElementById('new-post-title').value.trim();
+        const content = document.getElementById('new-post-content').value.trim();
+        let image = document.getElementById('new-post-image').value.trim();
+        const videoUrl = document.getElementById('new-post-video').value.trim();
+        let sourceUrl = document.getElementById('new-post-source').value.trim();
+        
+        if (!title || !content) return;
 
-        if (!title || !catId || !content) return;
+        // Smart parse: If they put a Tweet/FB page link in the image field, convert to sourceUrl
+        const isLikelyWebPage = image && (
+            image.includes('x.com') || 
+            image.includes('twitter.com') || 
+            image.includes('facebook.com') || 
+            image.includes('/status/') ||
+            (!image.match(/\.(jpeg|jpg|gif|png|webp|svg)/i) && image.startsWith('http') && !image.startsWith('data:image'))
+        );
+        
+        if (isLikelyWebPage) {
+            if (!sourceUrl) {
+                sourceUrl = image;
+            }
+            image = "";
+        }
 
-        const newId = db.threads.length ? Math.max(...db.threads.map(t => t.id)) + 1 : 1;
-        const newThread = {
+        // Auto-assign anime art if empty for fan art / clip
+        if (!image && (type === 'fanart' || type === 'clip')) {
+            const randomIndex = Math.floor(Math.random() * defaultAnimeImages.length);
+            image = defaultAnimeImages[randomIndex];
+        }
+
+        const newId = db.posts.length ? Math.max(...db.posts.map(p => p.id)) + 1 : 1;
+        const newPost = {
             id: newId,
+            type: type,
             title: title,
-            categoryId: catId,
+            content: content,
+            image: image,
+            videoUrl: type === 'clip' ? videoUrl : undefined,
+            sourceUrl: sourceUrl || undefined,
             author: "Fan_GiaoLuu",
             avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuARZLWNqRBV8ZHeP6L_VIJ5sdqes8S-Xk0qDofU5inZq1SWPiNOpoo0gorBZnEvsK2zRiHG7VmsrvXSP6Rr-DGwJrfHSsGvYIOzFKtk_BtHDbnT2zqSOdPzTu2aeWtHr-qpnLl2R9BcjRi7ANRyy0eoKhR4VEUQtisar4dTN-RVo-aQUszS2abQZeCtUxXeMZKTgHDnRv-vvL_4VOuwfhPTnYpT3eU9xX91wGxJSiV1_sxwa3RTvXeK8ehINr0aex_L3jm2I-lVtgo",
-            content: content,
+            likes: 0,
+            liked: false,
             time: Date.now(),
-            replies: []
+            comments: []
         };
 
-        db.threads.push(newThread);
+        db.posts.unshift(newPost);
         saveDB();
+
+        // Reset fields
+        document.getElementById('new-post-title').value = '';
+        document.getElementById('new-post-content').value = '';
+        document.getElementById('new-post-image').value = '';
+        document.getElementById('new-post-video').value = '';
+        document.getElementById('new-post-source').value = '';
+        document.getElementById('new-post-file-label').textContent = 'Tải ảnh lên từ máy tính';
+        document.getElementById('new-post-file').value = '';
+
+        closeCreatePostModal();
+        renderFeed();
+    }
+
+    function handleImageUpload(inputEl, targetInputId, labelId) {
+        const file = inputEl.files[0];
+        if (!file) return;
         
-        // Reset inputs
-        document.getElementById('new-topic-title').value = '';
-        document.getElementById('new-topic-content').value = '';
-
-        initUI(); // Re-render everything
-        showThreadDetail(newId); // View newly created thread
+        // Show file name
+        document.getElementById(labelId).textContent = file.name;
+        
+        // Read file as Base64
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById(targetInputId).value = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
 
-    // --- 7. SEARCH & UTILS ---
-    function handleSearch() {
-        renderThreads();
-    }
-
+    // --- 8. UTILS ---
     function formatTimeAgo(timestamp) {
         const seconds = Math.floor((Date.now() - timestamp) / 1000);
         if (seconds < 60) return "vừa xong";
@@ -625,7 +1087,27 @@ get_header();
     }
 
     // Initialize on load
-    window.addEventListener('DOMContentLoaded', initUI);
+    window.addEventListener('DOMContentLoaded', () => {
+        initUI();
+        togglePostTypeInputs();
+        
+        // Custom delete confirmation action
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (deleteTargetId !== null) {
+                    const id = deleteTargetId;
+                    db.posts = db.posts.filter(p => p.id !== id);
+                    saveDB();
+                    renderFeed();
+                    closeConfirmDeleteModal();
+                    if (activePostId === id) {
+                        closePostModal();
+                    }
+                }
+            });
+        }
+    });
 </script>
 
 <?php get_footer(); ?>

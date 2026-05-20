@@ -138,23 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ── Dark Mode ─────────────────────────────────────── */
     var html = document.documentElement;
-
-    function applyTheme(isDark) {
-        isDark ? html.classList.add('dark') : html.classList.remove('dark');
-    }
-
-    var saved = localStorage.getItem('vtwiki-theme');
-    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        applyTheme(true);
-    }
-
-    var themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-            var isDark = html.classList.toggle('dark');
-            localStorage.setItem('vtwiki-theme', isDark ? 'dark' : 'light');
-        });
-    }
+    html.classList.remove('dark');
 
     /* ── Mobile Menu ───────────────────────────────────── */
     var mobileBtn  = document.getElementById('mobile-menu-btn');
