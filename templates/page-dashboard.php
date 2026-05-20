@@ -80,8 +80,27 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
                 $birthday_text = sanitize_text_field( $_POST['birthday_text'] );
                 $language      = sanitize_text_field( $_POST['language'] );
                 $youtube_url   = esc_url_raw( $_POST['youtube_url'] );
-                $artwork_link  = esc_url_raw( $_POST['artwork_link'] );
+                $artwork_value = null;
                 $generation    = sanitize_text_field( $_POST['generation'] );
+
+                if ( isset( $_FILES['artwork_file'] ) && ! empty( $_FILES['artwork_file']['name'] ) ) {
+                    require_once ABSPATH . 'wp-admin/includes/file.php';
+                    require_once ABSPATH . 'wp-admin/includes/media.php';
+                    require_once ABSPATH . 'wp-admin/includes/image.php';
+
+                    $attachment_id = media_handle_upload( 'artwork_file', $result_id );
+
+                    if ( is_wp_error( $attachment_id ) ) {
+                        $message = sprintf(
+                            __( 'Đã lưu thông tin VTuber, nhưng upload ảnh thất bại: %s', 'vtuber-wiki' ),
+                            $attachment_id->get_error_message()
+                        );
+                        $message_type = 'error';
+                    } else {
+                        $artwork_value = $attachment_id;
+                        set_post_thumbnail( $result_id, $attachment_id );
+                    }
+                }
                 
                 $fields = [
                     'is_featured'   => $is_featured,
@@ -91,9 +110,12 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
                     'birthday_text' => $birthday_text,
                     'language'      => $language,
                     'youtube_url'   => $youtube_url,
-                    'artwork_link'  => $artwork_link,
                     'generation'    => $generation,
                 ];
+
+                if ( $artwork_value ) {
+                    $fields['artwork_link'] = $artwork_value;
+                }
                 
                 foreach ( $fields as $key => $val ) {
                     if ( function_exists( 'update_field' ) ) {
@@ -103,7 +125,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
                     }
                 }
                 
-                $message = sprintf( __( '%s VTuber "%s" thành công.', 'vtuber-wiki' ), $action_text, $title );
+                if ( $message_type !== 'error' ) {
+                    $message = sprintf( __( '%s VTuber "%s" thành công.', 'vtuber-wiki' ), $action_text, $title );
+                }
             } else {
                 $message = __( 'Lỗi khi lưu thông tin VTuber.', 'vtuber-wiki' );
                 $message_type = 'error';
@@ -135,10 +159,29 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
             
             if ( $result_id && ! is_wp_error( $result_id ) ) {
                 // Save ACF custom fields
-                $logo_url     = esc_url_raw( $_POST['logo_url'] );
+                $logo_url     = isset( $_POST['current_logo_url'] ) ? esc_url_raw( $_POST['current_logo_url'] ) : '';
                 $region       = sanitize_text_field( $_POST['region'] );
                 $talent_count = intval( $_POST['talent_count'] );
                 $social_links = sanitize_textarea_field( $_POST['social_links'] );
+
+                if ( isset( $_FILES['logo_file'] ) && ! empty( $_FILES['logo_file']['name'] ) ) {
+                    require_once ABSPATH . 'wp-admin/includes/file.php';
+                    require_once ABSPATH . 'wp-admin/includes/media.php';
+                    require_once ABSPATH . 'wp-admin/includes/image.php';
+
+                    $attachment_id = media_handle_upload( 'logo_file', $result_id );
+
+                    if ( is_wp_error( $attachment_id ) ) {
+                        $message = sprintf(
+                            __( 'Đã lưu thông tin Agency, nhưng upload logo thất bại: %s', 'vtuber-wiki' ),
+                            $attachment_id->get_error_message()
+                        );
+                        $message_type = 'error';
+                    } else {
+                        $logo_url = wp_get_attachment_url( $attachment_id );
+                        set_post_thumbnail( $result_id, $attachment_id );
+                    }
+                }
                 
                 $fields = [
                     'logo_url'     => $logo_url,
@@ -155,7 +198,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
                     }
                 }
                 
-                $message = sprintf( __( '%s Agency "%s" thành công.', 'vtuber-wiki' ), $action_text, $title );
+                if ( $message_type !== 'error' ) {
+                    $message = sprintf( __( '%s Agency "%s" thành công.', 'vtuber-wiki' ), $action_text, $title );
+                }
             } else {
                 $message = __( 'Lỗi khi lưu thông tin Agency.', 'vtuber-wiki' );
                 $message_type = 'error';
@@ -751,7 +796,7 @@ get_header();
                 </button>
             </div>
 
-            <form method="post" action="" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form method="post" action="" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <?php wp_nonce_field( 'vtwiki_dashboard_action', 'vtwiki_nonce' ); ?>
                 <input type="hidden" name="action" value="save_vtuber">
                 <input type="hidden" name="post_id" id="vtuber-post-id" value="0">
@@ -845,9 +890,14 @@ get_header();
                         <input type="url" name="youtube_url" id="vt-youtube" class="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all" placeholder="https://www.youtube.com/@channel">
                     </div>
 
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="vt-artwork"><?php _e( 'Link Ảnh Artwork (URL)', 'vtuber-wiki' ); ?></label>
-                        <input type="url" name="artwork_link" id="vt-artwork" class="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all" placeholder="https://lh3.googleusercontent.com/...">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="vt-artwork-file"><?php _e( 'Ảnh Artwork', 'vtuber-wiki' ); ?></label>
+                        <input type="hidden" name="current_artwork_link" id="vt-artwork-current" value="">
+                        <div id="vt-artwork-preview-wrap" class="hidden overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                            <img id="vt-artwork-preview" src="" alt="" class="h-36 w-full object-cover">
+                        </div>
+                        <input type="file" name="artwork_file" id="vt-artwork-file" accept="image/*" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-primary-dark">
+                        <p id="vt-artwork-note" class="text-xs text-slate-400"><?php _e( 'Chọn file ảnh từ máy. Khi chỉnh sửa, để trống nếu muốn giữ ảnh hiện tại.', 'vtuber-wiki' ); ?></p>
                     </div>
 
                     <div class="space-y-1">
@@ -886,7 +936,7 @@ get_header();
                 </button>
             </div>
 
-            <form method="post" action="" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form method="post" action="" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <?php wp_nonce_field( 'vtwiki_dashboard_action', 'vtwiki_nonce' ); ?>
                 <input type="hidden" name="action" value="save_agency">
                 <input type="hidden" name="post_id" id="agency-post-id" value="0">
@@ -900,9 +950,14 @@ get_header();
                         <input type="text" name="title" id="ag-title" required class="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all" placeholder="Ví dụ: Hololive Production">
                     </div>
 
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="ag-logo"><?php _e( 'Logo URL', 'vtuber-wiki' ); ?></label>
-                        <input type="url" name="logo_url" id="ag-logo" class="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all" placeholder="https://lh3.googleusercontent.com/...">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="ag-logo-file"><?php _e( 'Logo Agency', 'vtuber-wiki' ); ?></label>
+                        <input type="hidden" name="current_logo_url" id="ag-logo-current" value="">
+                        <div id="ag-logo-preview-wrap" class="hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
+                            <img id="ag-logo-preview" src="" alt="" class="h-20 max-w-full object-contain">
+                        </div>
+                        <input type="file" name="logo_file" id="ag-logo-file" accept="image/*" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-primary-dark">
+                        <p class="text-xs text-slate-400"><?php _e( 'Chọn file logo từ máy. Khi chỉnh sửa, để trống nếu muốn giữ logo hiện tại.', 'vtuber-wiki' ); ?></p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -1112,7 +1167,9 @@ get_header();
             document.getElementById('vt-birthday').value = birthday;
             document.getElementById('vt-language').value = language;
             document.getElementById('vt-youtube').value = youtube;
-            document.getElementById('vt-artwork').value = artwork;
+            document.getElementById('vt-artwork-current').value = artwork || '';
+            document.getElementById('vt-artwork-file').value = '';
+            updateArtworkPreview(artwork);
             document.getElementById('vt-generation').value = generation || '';
 
             // Update UI titles/buttons
@@ -1139,7 +1196,9 @@ get_header();
         document.getElementById('vt-birthday').value = '';
         document.getElementById('vt-language').value = '';
         document.getElementById('vt-youtube').value = '';
-        document.getElementById('vt-artwork').value = '';
+        document.getElementById('vt-artwork-current').value = '';
+        document.getElementById('vt-artwork-file').value = '';
+        updateArtworkPreview('');
         document.getElementById('vt-generation').value = '';
 
         document.getElementById('vtuber-form-title').innerHTML = '<span class="material-symbols-rounded text-primary">person_add</span> <?php _e("Thêm VTuber Mới", "vtuber-wiki"); ?>';
@@ -1147,6 +1206,29 @@ get_header();
         document.getElementById('vtuber-form-tab-title').innerText = '<?php _e("Thêm VTuber", "vtuber-wiki"); ?>';
         document.getElementById('vtuber-cancel-btn').classList.add('hidden');
     }
+
+    function updateArtworkPreview(src) {
+        const wrap = document.getElementById('vt-artwork-preview-wrap');
+        const img = document.getElementById('vt-artwork-preview');
+
+        if (src) {
+            img.src = src;
+            wrap.classList.remove('hidden');
+        } else {
+            img.removeAttribute('src');
+            wrap.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('vt-artwork-file')?.addEventListener('change', function() {
+        const file = this.files && this.files[0] ? this.files[0] : null;
+        if (!file) {
+            updateArtworkPreview(document.getElementById('vt-artwork-current').value);
+            return;
+        }
+
+        updateArtworkPreview(URL.createObjectURL(file));
+    });
 
     // pre-fill Agency Edit Form
     document.querySelectorAll('.edit-agency-btn').forEach(function(btn) {
@@ -1166,7 +1248,9 @@ get_header();
             document.getElementById('ag-title').value = title;
             document.getElementById('ag-content').value = content;
             document.getElementById('ag-status').value = status;
-            document.getElementById('ag-logo').value = logo;
+            document.getElementById('ag-logo-current').value = logo || '';
+            document.getElementById('ag-logo-file').value = '';
+            updateAgencyLogoPreview(logo);
             document.getElementById('ag-region').value = region;
             document.getElementById('ag-talents').value = talentCount;
             document.getElementById('ag-social').value = socialLinks;
@@ -1197,7 +1281,9 @@ get_header();
         document.getElementById('ag-title').value = '';
         document.getElementById('ag-content').value = '';
         document.getElementById('ag-status').value = 'publish';
-        document.getElementById('ag-logo').value = '';
+        document.getElementById('ag-logo-current').value = '';
+        document.getElementById('ag-logo-file').value = '';
+        updateAgencyLogoPreview('');
         document.getElementById('ag-region').value = 'Japan';
         document.getElementById('ag-talents').value = '0';
         document.getElementById('ag-social').value = '';
@@ -1208,6 +1294,29 @@ get_header();
         document.getElementById('agency-form-tab-title').innerText = '<?php _e("Thêm Agency", "vtuber-wiki"); ?>';
         document.getElementById('agency-cancel-btn').classList.add('hidden');
     }
+
+    function updateAgencyLogoPreview(src) {
+        const wrap = document.getElementById('ag-logo-preview-wrap');
+        const img = document.getElementById('ag-logo-preview');
+
+        if (src) {
+            img.src = src;
+            wrap.classList.remove('hidden');
+        } else {
+            img.removeAttribute('src');
+            wrap.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('ag-logo-file')?.addEventListener('change', function() {
+        const file = this.files && this.files[0] ? this.files[0] : null;
+        if (!file) {
+            updateAgencyLogoPreview(document.getElementById('ag-logo-current').value);
+            return;
+        }
+
+        updateAgencyLogoPreview(URL.createObjectURL(file));
+    });
 
     // Load active tab from localStorage or default to overview
     document.addEventListener('DOMContentLoaded', function() {
