@@ -96,6 +96,14 @@ Tags: custom-menu, featured-images, full-width-template, theme-options, dark-mod
     transform: scale(1) translateY(0);
     pointer-events: auto;
 }
+.custom-dropdown.is-open .custom-dropdown-trigger {
+    border-color: #994ce6;
+    box-shadow: 0 0 0 3px rgba(153, 76, 230, 0.15);
+}
+.dark .custom-dropdown.is-open .custom-dropdown-trigger {
+    border-color: #b97ef0;
+    box-shadow: 0 0 0 3px rgba(153, 76, 230, 0.25);
+}
 .custom-dropdown-menu::-webkit-scrollbar {
     width: 4px;
 }

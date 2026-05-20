@@ -57,6 +57,9 @@ class Plugin {
 
         // Register Custom Table Setup
         DonationDB::get_instance()->register();
+
+        // Register Translation Service
+        TranslationService::get_instance()->register();
     }
 
     /**
@@ -146,6 +149,10 @@ class Plugin {
             "{$dir}/assets/js/lang.js",
             [], $v, true
         );
+
+        wp_localize_script( 'vtwiki-lang', 'vtwiki_ajax', [
+            'ajax_url' => admin_url( 'admin-ajax.php' )
+        ] );
     }
 
     /**
