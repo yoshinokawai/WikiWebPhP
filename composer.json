@@ -1,0 +1,18 @@
+{
+    "name": "vtwiki/vtuber-wiki-theme",
+    "description": "Custom WordPress theme for VTuber Wiki utilizing PSR-4 autoloading.",
+    "type": "wordpress-theme",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "VTWiki\\Theme\\": "inc/"
+        }
+    },
+    "authors": [
+        {
+            "name": "VTWiki Team"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

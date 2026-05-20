@@ -1,82 +1,33 @@
 <?php
 /**
- * helpers.php - Utility functions for exact UI replication
+ * helpers.php - Procedural wrappers for backwards-compatibility.
+ * Hooks old helper function calls to VTWiki\Theme\PostTypes\Helpers.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/**
- * Ported Agency Shortname logic from C#
- */
-function vtwiki_get_agency_shortname( $name ) {
-    if ( empty( $name ) ) return '????';
-    
-    $name = trim( $name );
-    
-    // If it contains a space, take first letters of first 2 words
-    if ( strpos( $name, ' ' ) !== false ) {
-        $parts = explode( ' ', $name );
-        $short = '';
-        $count = 0;
-        foreach ( $parts as $p ) {
-            if ( !empty( $p ) ) {
-                $short .= strtoupper( $p[0] );
-                $count++;
-            }
-            if ( $count >= 2 ) break;
-        }
-        
-        // If still too short, pad or use first word
-        if ( strlen( $short ) < 4 && !empty( $parts[0] ) ) {
-            return strtoupper( substr( $parts[0], 0, 4 ) );
-        }
-        return $short;
-    }
-    
-    // Otherwise take first 4 letters
-    return strtoupper( substr( $name, 0, 4 ) );
-}
+use VTWiki\Theme\PostTypes\Helpers;
 
-/**
- * Agency Colors matching C# array
- */
-function vtwiki_get_agency_color( $index ) {
-    $colors = [ "#2fb4d6", "#ff7300", "#ff0066", "#8a2be2", "#ffaccf" ];
-    return $colors[ $index % count( $colors ) ];
-}
-
-/**
- * Activity Icons Mapping
- */
-function vtwiki_get_activity_icon( $type, $action ) {
-    switch ( $type ) {
-        case 'Article':
-            return ( $action == 'Created' ) ? 'add_circle' : 'edit';
-        case 'Media':
-            return 'image';
-        case 'Community':
-            return ( $action == 'Commented' ) ? 'forum' : 'campaign';
-        case 'User':
-            return 'person_add';
-        default:
-            return 'history';
+if ( ! function_exists( 'vtwiki_get_agency_shortname' ) ) {
+    function vtwiki_get_agency_shortname( string $name ): string {
+        return Helpers::get_agency_shortname( $name );
     }
 }
 
-/**
- * Activity Background Classes
- */
-function vtwiki_get_activity_bg_class( $action ) {
-    switch ( $action ) {
-        case 'Created':
-            return 'bg-green-100 dark:bg-green-900/30 text-green-600';
-        case 'Updated':
-            return 'bg-blue-100 dark:bg-blue-900/30 text-blue-600';
-        case 'Deleted':
-            return 'bg-red-100 dark:bg-red-900/30 text-red-600';
-        case 'Commented':
-            return 'bg-purple-100 dark:bg-purple-900/30 text-purple-600';
-        default:
-            return 'bg-slate-100 dark:bg-slate-800 text-slate-600';
+if ( ! function_exists( 'vtwiki_get_agency_color' ) ) {
+    function vtwiki_get_agency_color( int $index ): string {
+        return Helpers::get_agency_color( $index );
+    }
+}
+
+if ( ! function_exists( 'vtwiki_get_activity_icon' ) ) {
+    function vtwiki_get_activity_icon( string $type, string $action ): string {
+        return Helpers::get_activity_icon( $type, $action );
+    }
+}
+
+if ( ! function_exists( 'vtwiki_get_activity_bg_class' ) ) {
+    function vtwiki_get_activity_bg_class( string $action ): string {
+        return Helpers::get_activity_bg_class( $action );
     }
 }
