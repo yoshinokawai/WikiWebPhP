@@ -22,14 +22,16 @@ get_header();
                                 Search our knowledge base for VTuber setup guides, wiki contribution tutorials, and community support.
                             </p>
 </div>
-<div class="w-full max-w-2xl relative">
-<div class="flex items-center bg-white dark:bg-slate-800 rounded-xl shadow-xl shadow-primary/5 border border-primary/20 p-2 group focus-within:ring-2 focus-within:ring-primary/30 transition-all">
-<span class="material-symbols-outlined text-primary ml-3">search</span>
-<input class="flex-1 bg-transparent border-none focus:ring-0 text-lg px-3 placeholder:text-slate-400" placeholder="Search for articles, guides, or FAQs..." type="text"/>
-<button class="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:brightness-110 transition-all">
-                                    Search
-                                </button>
-</div>
+            <div class="w-full max-w-2xl relative">
+                <form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="w-full">
+                    <div class="flex items-center bg-white dark:bg-slate-800 rounded-xl shadow-xl shadow-primary/5 border border-primary/20 p-2 group focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+                        <span class="material-symbols-outlined text-primary ml-3">search</span>
+                        <input class="flex-1 bg-transparent border-none focus:ring-0 text-lg px-3 placeholder:text-slate-400 text-slate-900 dark:text-white" name="s" placeholder="Search for articles, guides, or FAQs..." type="text"/>
+                        <button type="submit" class="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:brightness-110 transition-all">
+                            Search
+                        </button>
+                    </div>
+                </form>
 <div class="mt-4 flex flex-wrap justify-center gap-2 text-sm">
 <span class="text-slate-500">Popular:</span>
 <a class="text-primary hover:underline" href="<?php echo vtwiki_page_url('explore'); ?>">Model setup</a>

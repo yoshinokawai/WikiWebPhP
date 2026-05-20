@@ -198,7 +198,7 @@ get_header();
                                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="#">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary font-medium transition-colors" href="<?php echo esc_url( vtwiki_page_url('dashboard') ); ?>">
 <span class="material-symbols-outlined text-lg">security</span>
                                         Admin Dashboard
                                     </a>

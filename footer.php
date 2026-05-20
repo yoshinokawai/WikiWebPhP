@@ -183,6 +183,81 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /* ── Custom Dropdowns ──────────────────────────────── */
+    // Initialize custom dropdown states
+    document.querySelectorAll('.custom-dropdown').forEach(function(dropdown) {
+        const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+        if (hiddenInput) {
+            const val = hiddenInput.value;
+            const selectedItem = dropdown.querySelector(`.custom-dropdown-item[data-value="${val}"]`);
+            if (selectedItem) {
+                const label = selectedItem.querySelector('.item-label')?.innerText || selectedItem.innerText;
+                const triggerLabel = dropdown.querySelector('.selected-label');
+                if (triggerLabel) triggerLabel.innerText = label;
+                
+                dropdown.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+                    i.classList.toggle('is-selected', i === selectedItem);
+                    const check = i.querySelector('.check-icon');
+                    if (check) check.classList.toggle('hidden', i !== selectedItem);
+                });
+            }
+        }
+    });
+
+    // Toggle and select events
+    document.addEventListener('click', function(e) {
+        // Toggle dropdown open state when clicking the trigger
+        const trigger = e.target.closest('.custom-dropdown-trigger');
+        if (trigger) {
+            const dropdown = trigger.closest('.custom-dropdown');
+            if (dropdown) {
+                e.stopPropagation();
+                // Close all other dropdowns
+                document.querySelectorAll('.custom-dropdown').forEach(function(d) {
+                    if (d !== dropdown) d.classList.remove('is-open');
+                });
+                dropdown.classList.toggle('is-open');
+            }
+            return;
+        }
+
+        // Handle item selection
+        const item = e.target.closest('.custom-dropdown-item');
+        if (item) {
+            const dropdown = item.closest('.custom-dropdown');
+            if (dropdown) {
+                e.stopPropagation();
+                const val = item.getAttribute('data-value');
+                const label = item.querySelector('.item-label')?.innerText || item.innerText;
+                const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+                const triggerLabel = dropdown.querySelector('.selected-label');
+                
+                // Update selected text and value
+                if (triggerLabel) triggerLabel.innerText = label;
+                if (hiddenInput) {
+                    hiddenInput.value = val;
+                    // Trigger filter functions
+                    hiddenInput.dispatchEvent(new Event('change'));
+                }
+                
+                // Toggle is-selected class on options
+                dropdown.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+                    i.classList.toggle('is-selected', i === item);
+                    const check = i.querySelector('.check-icon');
+                    if (check) check.classList.toggle('hidden', i !== item);
+                });
+
+                dropdown.classList.remove('is-open');
+            }
+            return;
+        }
+
+        // Close all dropdowns when clicking outside
+        document.querySelectorAll('.custom-dropdown').forEach(function(d) {
+            d.classList.remove('is-open');
+        });
+    });
+
     /* ── Scroll shadow ─────────────────────────────────── */
     var header = document.getElementById('site-header');
     if (header) {

@@ -3,223 +3,286 @@
  * Template Name: Independent VTubers
  * Template Post Type: page
  *
- * Source: independent_vtubers_final_navigation_fix/code.html
+ * Displays a list of all independent (agency-free) VTubers with dynamic search and filtering.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
-wp_enqueue_style( 'vtwiki-independent', get_template_directory_uri() . '/assets/css/independent.css', [], wp_get_theme()->get('Version') );
+
 get_header();
+
+// Query all VTubers
+$vtuber_query = new WP_Query([
+    'post_type'      => 'vtuber_wiki',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+]);
+
+$indie_list = [];
+$languages_list = [];
+
+if ( $vtuber_query->have_posts() ) {
+    while ( $vtuber_query->have_posts() ) {
+        $vtuber_query->the_post();
+        
+        // If agency_ref is set, then it is NOT independent
+        $ag_obj = get_field('agency_ref');
+        if ( ! $ag_obj ) {
+            $vid = get_the_ID();
+            $lang = get_field('language') ?: 'N/A';
+            $debut = get_field('debut_date') ?: '';
+            
+            if ( ! empty($lang) && $lang !== 'N/A' ) {
+                $split_langs = array_map('trim', explode(',', $lang));
+                foreach ($split_langs as $sl) {
+                    if ( ! in_array($sl, $languages_list) ) {
+                        $languages_list[] = $sl;
+                    }
+                }
+            }
+
+            $indie_list[] = [
+                'id'         => $vid,
+                'title'      => get_the_title(),
+                'url'        => get_permalink(),
+                'artwork'    => get_field('artwork_link') ?: get_the_post_thumbnail_url($vid, 'large'),
+                'debut'      => $debut,
+                'language'   => $lang,
+                'generation' => get_field('generation') ?: '',
+            ];
+        }
+    }
+    wp_reset_postdata();
+}
 ?>
 
-<main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
-<!-- Hero Section -->
-<section class="mb-12">
-<div class="relative overflow-hidden rounded-3xl bg-primary/10 p-8 md:p-12">
-<div class="relative z-10 max-w-2xl">
-<h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                            Independent VTubers
-                        </h1>
-<p class="text-lg text-slate-600 dark:text-slate-300 mb-8">
-                            Discover the incredible talents carving their own paths. From rising stars to industry veterans, explore the diverse world of indie VTubing.
-                        </p>
-<div class="flex flex-wrap gap-4">
-<button onclick="window.location.href='<?php echo vtwiki_page_url('about'); ?>'" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold transition-all transform hover:scale-105">
-                                Learn More
-                            </button>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('guidelines'); ?>'" class="bg-white/50 dark:bg-slate-800/50 backdrop-blur px-8 py-3 rounded-xl font-bold border border-primary/20 hover:bg-white transition-all">
-                                How to Start
-                            </button>
-</div>
-</div>
-<div class="absolute right-0 bottom-0 top-0 w-1/3 opacity-20 hidden md:block">
-<div class="h-full w-full bg-gradient-to-br from-primary to-transparent" style="mask-image: radial-gradient(circle, white, transparent 70%)"></div>
-</div>
-</div>
-</section>
-<!-- Search & Filters -->
-<section class="mb-10 space-y-6">
-<div class="flex flex-col md:flex-row gap-4">
-<div class="flex-grow relative">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">search</span>
-<input class="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-primary/10 rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="Search independent VTubers..." type="text"/>
-</div>
-<div class="flex gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-<!-- Region Filter -->
-<div class="relative group">
-<button class="flex items-center gap-2 px-6 py-4 bg-white dark:bg-slate-900 border border-primary/10 rounded-2xl whitespace-nowrap hover:bg-primary/5 transition-colors font-medium">
-<span class="material-symbols-outlined !text-lg text-primary">public</span>
-                                Region
-                                <span class="material-symbols-outlined !text-lg text-primary group-hover:rotate-180 transition-transform">expand_more</span>
-</button>
-<div class="absolute top-full right-0 md:left-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-primary/5 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">North America</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">Europe</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">Asia</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">South America</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">Oceania</a>
-</div>
-</div>
-<!-- Language Filter -->
-<div class="relative group">
-<button class="flex items-center gap-2 px-6 py-4 bg-white dark:bg-slate-900 border border-primary/10 rounded-2xl whitespace-nowrap hover:bg-primary/5 transition-colors font-medium">
-<span class="material-symbols-outlined !text-lg text-primary">language</span>
-                                Language
-                                <span class="material-symbols-outlined !text-lg text-primary group-hover:rotate-180 transition-transform">expand_more</span>
-</button>
-<div class="absolute top-full right-0 md:left-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-primary/5 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">English</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">Japanese</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">Spanish</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">Korean</a>
-<a class="block px-4 py-2 text-sm hover:bg-primary/10" href="#">French</a>
-</div>
-</div>
-<!-- Debut Year (Date Selector) Filter -->
-<div class="relative group">
-<button class="flex items-center gap-2 px-6 py-4 bg-white dark:bg-slate-900 border border-primary/10 rounded-2xl whitespace-nowrap hover:bg-primary/5 transition-colors font-medium">
-<span class="material-symbols-outlined !text-lg text-primary">calendar_month</span>
-                                Debut Year
-                                <span class="material-symbols-outlined !text-lg text-primary group-hover:rotate-180 transition-transform">expand_more</span>
-</button>
-<div class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-primary/5 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
-<div class="grid grid-cols-3 gap-3">
-<div class="space-y-2">
-<label class="text-[10px] font-bold uppercase text-slate-400">Year</label>
-<select class="w-full text-sm bg-slate-50 dark:bg-slate-900 border-primary/10 rounded-lg focus:ring-primary/20">
-<option>2024</option>
-<option>2023</option>
-<option>2022</option>
-<option>2021</option>
-<option>Earlier</option>
-</select>
-</div>
-<div class="space-y-2">
-<label class="text-[10px] font-bold uppercase text-slate-400">Month</label>
-<select class="w-full text-sm bg-slate-50 dark:bg-slate-900 border-primary/10 rounded-lg focus:ring-primary/20">
-<option>Jan</option>
-<option>Feb</option>
-<option>Mar</option>
-<option>Apr</option>
-<option>May</option>
-<option>Jun</option>
-<option>Jul</option>
-<option>Aug</option>
-<option>Sep</option>
-<option>Oct</option>
-<option>Nov</option>
-<option>Dec</option>
-</select>
-</div>
-<div class="space-y-2">
-<label class="text-[10px] font-bold uppercase text-slate-400">Date</label>
-<select class="w-full text-sm bg-slate-50 dark:bg-slate-900 border-primary/10 rounded-lg focus:ring-primary/20">
-<option>01</option>
-<option>02</option>
-<option>03</option>
-<option>...</option>
-<option>31</option>
-</select>
-</div>
-</div>
-<button class="w-full mt-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/90 transition-colors">Apply Filter</button>
-</div>
-</div>
-</div>
-</div>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">Popular Tags:</span>
-<a class="px-3 py-1 bg-white dark:bg-slate-800 border border-primary/5 rounded-full text-xs hover:border-primary transition-colors" href="#">Gaming</a>
-<a class="px-3 py-1 bg-white dark:bg-slate-800 border border-primary/5 rounded-full text-xs hover:border-primary transition-colors" href="#">Singing</a>
-<a class="px-3 py-1 bg-white dark:bg-slate-800 border border-primary/5 rounded-full text-xs hover:border-primary transition-colors" href="#">ASMR</a>
-<a class="px-3 py-1 bg-white dark:bg-slate-800 border border-primary/5 rounded-full text-xs hover:border-primary transition-colors" href="#">Variety</a>
-</div>
-</section>
-<!-- Talent Grid -->
-<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-<!-- Shylily -->
-<div class="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all">
-<div class="aspect-square relative overflow-hidden">
-<img alt="Shylily Avatar" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Anime style white-haired girl with blue eyes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcwqJmvI6QRhBoLIvALsqquG49TuN0g7UBVPkcoSNKKy9vCM6dN1_VrD4lpd7U7We5VcrAh0xyQ_pF7ZRJWi9xRe8pGEIncoMe78B52USIo5eq2dLHcBLuwQnGtyHU8D72b_9E38dspsL3CjHGaANusFkBvfszldyi6RRlEtSikuNm-3uo1iLiB8rsBRVu4OLrXFtBNSTOLkpM5nOLYuI9Gy3NJhrtjwM8Y0D1FbZ8Ql6_6Tu4OtbFSTWFM7Wrl_dk-1yA5gTxYzE"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-<span class="text-white text-xs font-bold bg-primary px-2 py-1 rounded">DEBUT: 2022</span>
-</div>
-</div>
-<div class="p-5">
-<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Shylily</h3>
-<p class="text-primary text-sm font-medium mb-4 flex items-center gap-1">
-<span class="material-symbols-outlined !text-sm">translate</span>
-                            English / German
-                        </p>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
-                            View Profile
+<main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-pink-900 via-purple-900 to-indigo-900 p-8 lg:p-12 text-white shadow-xl shadow-primary/10">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_50%)] pointer-events-none"></div>
+        <div class="relative z-10 space-y-4 max-w-2xl">
+            <span class="inline-flex px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
+                Independent Hub
+            </span>
+            <h1 class="text-4xl lg:text-5xl font-black tracking-tight leading-none">
+                VTuber Tự Do <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-pink-300">(Indies)</span>
+            </h1>
+            <p class="text-white/80 text-base lg:text-lg font-medium">
+                Khám phá các VTuber hoạt động độc lập, tự chủ sáng tạo và phát triển cộng đồng mà không chịu sự quản lý của doanh nghiệp.
+            </p>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="bg-white dark:bg-surface-dark border border-slate-200/80 dark:border-white/8 rounded-2xl p-6 shadow-glow-sm space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <!-- Search bar -->
+            <div class="relative">
+                <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input type="text" id="indie-search" oninput="filterIndieGrid()" placeholder="Tìm theo tên VTuber..." class="w-full h-11 pl-10 pr-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-slate-900 dark:text-white">
+            </div>
+
+            <!-- Language filter -->
+            <div class="custom-dropdown select-none">
+                <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                    <span class="selected-label">Tất cả ngôn ngữ</span>
+                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                </button>
+                <div class="custom-dropdown-menu">
+                    <button type="button" data-value="all" class="custom-dropdown-item">
+                        <span class="item-label">Tất cả ngôn ngữ</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <?php foreach ($languages_list as $lang_item) : ?>
+                        <button type="button" data-value="<?php echo esc_attr($lang_item); ?>" class="custom-dropdown-item">
+                            <span class="item-label"><?php echo esc_html($lang_item); ?></span>
+                            <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
                         </button>
-</div>
-</div>
-<!-- Filian -->
-<div class="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all">
-<div class="aspect-square relative overflow-hidden">
-<img alt="Filian Avatar" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Anime style energetic white-haired character" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLcFhjHtjvzfH9HT0uyxEO4mplc9JkEGXfi1MnszXpPgz-H-1CS4K9FZax9I9083Zckab7YXk20adSR7Q_5LfKmPviKvXCVeYL9RtOKNnz8fI3XXho5RWpEodVI02yigAjGlCjh342VeCiWWpylsw-uU5pCvPgUIplbQUCvgPpQj6fuctbDVW5_6exvXAzN-mts65aHDeZbcBazd057xYaMteCOujQcZKiWf2qaw-0Anezonht6bnpCJJIk1SjqXciVc3Am2Srpus"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-<span class="text-white text-xs font-bold bg-primary px-2 py-1 rounded">DEBUT: 2021</span>
-</div>
-</div>
-<div class="p-5">
-<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Filian</h3>
-<p class="text-primary text-sm font-medium mb-4 flex items-center gap-1">
-<span class="material-symbols-outlined !text-sm">translate</span>
-                            English
-                        </p>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
-                            View Profile
-                        </button>
-</div>
-</div>
-<!-- Vedal987 -->
-<div class="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all">
-<div class="aspect-square relative overflow-hidden">
-<img alt="Vedal987 Avatar" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Abstract turtle logo representing an AI VTuber" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuKdCFM3Po6IOBQLkX5C5nhglCN9PCNst_WHSVv_ZyY4GmWrDod9p_K9bQ88eMPXudthSD8KlIp86ziWXHliFZor3rghfxtxDc3Qu_oWSfXd3XHESGSgdu80JiYlIqopAUpZnd6CR0Ypzlo6RXm2HA8yJqtmWoIxgmqD6s_owOYIlJTNWANMQDJ3IiOOxETlSlrxAOLa6blI56FCJ37pbx0US4C0Cs8BVjgLCWztFLB-VKVvqNNBAnLlEg7pNxQlVzV8N37LaJizI"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-<span class="text-white text-xs font-bold bg-primary px-2 py-1 rounded">DEBUT: 2022</span>
-</div>
-</div>
-<div class="p-5">
-<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Vedal987</h3>
-<p class="text-primary text-sm font-medium mb-4 flex items-center gap-1">
-<span class="material-symbols-outlined !text-sm">translate</span>
-                            English
-                        </p>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
-                            View Profile
-                        </button>
-</div>
-</div>
-<!-- Saruei -->
-<div class="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all">
-<div class="aspect-square relative overflow-hidden">
-<img alt="Saruei Avatar" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Anime style character with grey hair and sunglasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnDVC6BsqkBhuyYJ2kxvNRzMuz2BoVcrDDRYoZ-XDrUcuUCjUjIwKH_IrTPr-vvyhbapDPqoxn9oNy8WNPEhGV17Ky7l8VWAtiGzmyNQ6bxxiZdjpnCnhASG4JFBD2WNOvlNMW6kXEzSXaimOBfa3fNBfZfLWGS5fqYGvXJMweu829GGAZFVMOSbgs1pHVeUmsL3N7yr1WISZiQKBToiJ_oX9PjaZu7-b2YweBF_BrHnQm8GmRK7_pK8yT1g9tNKSdhCqyhQpGib8"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-<span class="text-white text-xs font-bold bg-primary px-2 py-1 rounded">DEBUT: 2021</span>
-</div>
-</div>
-<div class="p-5">
-<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Saruei</h3>
-<p class="text-primary text-sm font-medium mb-4 flex items-center gap-1">
-<span class="material-symbols-outlined !text-sm">translate</span>
-                            English / French
-                        </p>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-xl font-bold transition-all">
-                            View Profile
-                        </button>
-</div>
-</div>
-</section>
-<!-- Pagination/Load More -->
-<div class="mt-12 flex justify-center">
-<button class="flex items-center gap-2 px-10 py-4 bg-white dark:bg-slate-900 border border-primary/20 rounded-2xl font-bold hover:bg-primary/5 transition-all">
-                    Load More Talents
-                    <span class="material-symbols-outlined">expand_more</span>
-</button>
-</div>
+                    <?php endforeach; ?>
+                </div>
+                <input type="hidden" id="indie-lang" value="all" onchange="filterIndieGrid()">
+            </div>
+
+            <!-- Sorting filter -->
+            <div class="custom-dropdown select-none">
+                <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                    <span class="selected-label">Tên (A -> Z)</span>
+                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                </button>
+                <div class="custom-dropdown-menu">
+                    <button type="button" data-value="name_asc" class="custom-dropdown-item">
+                        <span class="item-label">Tên (A -> Z)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="name_desc" class="custom-dropdown-item">
+                        <span class="item-label">Tên (Z -> A)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="debut_desc" class="custom-dropdown-item">
+                        <span class="item-label">Debut (Mới nhất)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="debut_asc" class="custom-dropdown-item">
+                        <span class="item-label">Debut (Cũ nhất)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                </div>
+                <input type="hidden" id="indie-sort" value="name_asc" onchange="filterIndieGrid()">
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-1">
+                <span class="material-symbols-rounded text-base text-slate-400">info</span>
+                <span>Tìm thấy <strong id="indie-counter" class="text-primary font-bold">0</strong> VTubers phù hợp.</span>
+            </div>
+            <button onclick="resetIndieFilters()" class="text-primary hover:underline font-bold flex items-center gap-0.5">
+                <span class="material-symbols-rounded text-sm">restart_alt</span> Khôi phục bộ lọc
+            </button>
+        </div>
+    </div>
+
+    <!-- Talent Grid -->
+    <div id="indie-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <?php foreach ($indie_list as $vt) : ?>
+            <article class="vt-indie-card group relative bg-white dark:bg-surface-dark rounded-2xl border border-slate-200/80 dark:border-white/8 overflow-hidden hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                     data-title="<?php echo esc_attr(strtolower($vt['title'])); ?>"
+                     data-languages="<?php echo esc_attr(strtolower($vt['language'])); ?>"
+                     data-debut="<?php echo esc_attr($vt['debut']); ?>">
+                <a href="<?php echo esc_url($vt['url']); ?>" class="absolute inset-0 z-10" aria-label="<?php echo esc_attr($vt['title']); ?>"></a>
+                
+                <div class="aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-900 relative">
+                    <?php if ($vt['artwork']) : ?>
+                        <img src="<?php echo esc_url($vt['artwork']); ?>" alt="<?php echo esc_attr($vt['title']); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <?php else : ?>
+                        <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
+                            <span class="material-symbols-rounded text-6xl">account_circle</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="p-5 space-y-3 relative">
+                    <div>
+                        <span class="text-[10px] font-bold text-primary uppercase tracking-wider">Independent (Tự do)</span>
+                        <h2 class="text-xl font-black text-slate-955 dark:text-white line-clamp-1 group-hover:text-primary transition-colors">
+                            <?php echo esc_html($vt['title']); ?>
+                        </h2>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-rounded text-sm">calendar_today</span>
+                            <?php echo $vt['debut'] ? date('d/m/Y', strtotime($vt['debut'])) : 'N/A'; ?>
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-rounded text-sm">translate</span>
+                            <span class="line-clamp-1 max-w-[80px]"><?php echo esc_html($vt['language']); ?></span>
+                        </span>
+                    </div>
+                </div>
+            </article>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- Empty State -->
+    <div id="indie-empty" class="hidden text-center py-20 bg-slate-50 dark:bg-slate-800/20 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+        <span class="material-symbols-rounded text-6xl text-slate-300 mb-4 animate-bounce">person_search</span>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Không tìm thấy VTuber tự do nào</h3>
+        <p class="text-slate-500 text-sm">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm của bạn xem sao nhé.</p>
+    </div>
 </main>
+
+<script>
+    function filterIndieGrid() {
+        const query = document.getElementById('indie-search').value.toLowerCase().trim();
+        const lang = document.getElementById('indie-lang').value.toLowerCase();
+        const sort = document.getElementById('indie-sort').value;
+
+        const cards = Array.from(document.querySelectorAll('.vt-indie-card'));
+        let visibleCount = 0;
+
+        cards.forEach(function(card) {
+            const title = card.getAttribute('data-title');
+            const cardLangs = card.getAttribute('data-languages');
+
+            const matchesQuery = query === '' || title.includes(query);
+            const matchesLang = lang === 'all' || cardLangs.includes(lang);
+
+            if (matchesQuery && matchesLang) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Sorting
+        const grid = document.getElementById('indie-grid');
+        const sortedCards = cards.filter(c => !c.classList.contains('hidden'));
+
+        sortedCards.sort(function(a, b) {
+            if (sort === 'name_asc') {
+                return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+            } else if (sort === 'name_desc') {
+                return b.getAttribute('data-title').localeCompare(a.getAttribute('data-title'));
+            } else if (sort === 'debut_desc') {
+                const dateA = a.getAttribute('data-debut') || '1970-01-01';
+                const dateB = b.getAttribute('data-debut') || '1970-01-01';
+                return dateB.localeCompare(dateA);
+            } else if (sort === 'debut_asc') {
+                const dateA = a.getAttribute('data-debut') || '9999-12-31';
+                const dateB = b.getAttribute('data-debut') || '9999-12-31';
+                return dateA.localeCompare(dateB);
+            }
+            return 0;
+        });
+
+        sortedCards.forEach(card => grid.appendChild(card));
+
+        // Update count & empty state
+        document.getElementById('indie-counter').innerText = visibleCount;
+        const emptyState = document.getElementById('indie-empty');
+        if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+        }
+    }
+
+    function resetIndieFilters() {
+        document.getElementById('indie-search').value = '';
+        
+        // Reset custom dropdown values
+        document.querySelectorAll('.custom-dropdown').forEach(function(dropdown) {
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+            if (hiddenInput) {
+                if (hiddenInput.id === 'indie-lang') {
+                    hiddenInput.value = 'all';
+                } else if (hiddenInput.id === 'indie-sort') {
+                    hiddenInput.value = 'name_asc';
+                }
+                
+                // Re-sync labels
+                const selectedItem = dropdown.querySelector(`.custom-dropdown-item[data-value="${hiddenInput.value}"]`);
+                if (selectedItem) {
+                    const label = selectedItem.querySelector('.item-label')?.innerText || selectedItem.innerText;
+                    const triggerLabel = dropdown.querySelector('.selected-label');
+                    if (triggerLabel) triggerLabel.innerText = label;
+                    
+                    dropdown.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+                        i.classList.toggle('is-selected', i === selectedItem);
+                        const check = i.querySelector('.check-icon');
+                        if (check) check.classList.toggle('hidden', i !== selectedItem);
+                    });
+                }
+            }
+        });
+
+        filterIndieGrid();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        filterIndieGrid();
+    });
+</script>
 
 <?php get_footer(); ?>

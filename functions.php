@@ -46,6 +46,7 @@ function vtwiki_enqueue_assets() {
         'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap',
         [], null
     );
+    wp_enqueue_style( 'vtwiki-style', get_stylesheet_uri(), [ 'google-fonts', 'material-symbols' ], $v );
 
     // Page-specific CSS — loaded based on body class / template
     $template_css_map = [
@@ -62,6 +63,7 @@ function vtwiki_enqueue_assets() {
         'page-template-page-recent-changes'  => 'recent-changes',
         'page-template-page-translation'     => 'translation',
         'page-template-page-wiki-forum'      => 'wiki-forum',
+        'page-template-page-dashboard'       => 'dashboard',
     ];
 
     foreach ( $template_css_map as $body_class => $css_name ) {
@@ -92,23 +94,6 @@ require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/custom-functions.php';
 require_once get_template_directory() . '/inc/navigation-setup.php';
 
-// ─── ACF Compatibility Layer ──────────────────────────────────────────────────
-// Prevents Fatal Errors if Advanced Custom Fields is missing/deactivated.
-if ( ! function_exists( 'get_field' ) ) {
-    function get_field( $selector, $post_id = false, $format_value = true ) {
-        return false;
-    }
-}
-if ( ! function_exists( 'the_field' ) ) {
-    function the_field( $selector, $post_id = false, $format_value = true ) {
-        echo get_field( $selector, $post_id, $format_value );
-    }
-}
-if ( ! function_exists( 'update_field' ) ) {
-    function update_field( $selector, $value, $post_id = false ) {
-        return false;
-    }
-}
 
 /**
  * Admin notice if ACF is missing.

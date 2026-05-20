@@ -77,6 +77,13 @@ function vtwiki_register_acf_fields() {
                 'name' => 'artwork_link',
                 'type' => 'url',
             ),
+            array(
+                'key' => 'field_vtuber_generation',
+                'label' => 'Thế hệ / Nhóm (Generation/Unit)',
+                'name' => 'generation',
+                'type' => 'text',
+                'placeholder' => 'Ví dụ: Gen 1, Myth, Promise, Gamers',
+            ),
         ),
         'location' => array(
             array(

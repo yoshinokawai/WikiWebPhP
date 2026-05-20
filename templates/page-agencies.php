@@ -3,258 +3,300 @@
  * Template Name: Agencies Overview
  * Template Post Type: page
  *
- * Source: agencies_overview_background_updated/code.html
+ * Displays all registered VTuber agencies with search, region filter, and talent counts.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
-wp_enqueue_style( 'vtwiki-agencies', get_template_directory_uri() . '/assets/css/agencies.css', [], wp_get_theme()->get('Version') );
+
 get_header();
+
+// Query all agencies
+$agencies_query = new WP_Query([
+    'post_type'      => 'vtuber_agency',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+]);
+
+$agencies_list = [];
+$regions_list = [];
+
+if ( $agencies_query->have_posts() ) {
+    while ( $agencies_query->have_posts() ) {
+        $agencies_query->the_post();
+        $aid = get_the_ID();
+        
+        $region = get_field('region') ?: 'Global';
+        if ( ! in_array($region, $regions_list) ) {
+            $regions_list[] = $region;
+        }
+
+        // Count talents in this agency
+        $talents = new WP_Query([
+            'post_type'      => 'vtuber_wiki',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => [
+                [
+                    'key'     => 'agency_ref',
+                    'value'   => $aid,
+                    'compare' => '='
+                ]
+            ]
+        ]);
+        $talent_count = $talents->found_posts;
+
+        $agencies_list[] = [
+            'id'           => $aid,
+            'title'        => get_the_title(),
+            'url'          => get_permalink(),
+            'description'  => get_the_excerpt() ?: wp_trim_words(get_the_content(), 15),
+            'logo'         => get_field('logo_url') ?: '',
+            'region'       => $region,
+            'talent_count' => $talent_count,
+            'socials'      => get_field('social_links') ?: '',
+        ];
+    }
+    wp_reset_postdata();
+}
 ?>
 
-<main class="flex flex-1 justify-center py-5">
-<div class="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 lg:px-10">
-<div class="@container">
-<div class="@[480px]:py-4">
-<div class="flex min-h-[360px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 rounded-xl items-center justify-center p-8 relative overflow-hidden group shadow-2xl shadow-primary/10" data-alt="Abstract purple and blue digital background pattern" style='background-image: linear-gradient(rgba(25, 17, 33, 0.7) 0%, rgba(153, 76, 230, 0.4) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCW5qV6oO-FbZCzkG8lJFjCUFA6d7C5qheRi7wTIlxOTKGrkQuyvqstCrN_1m800t-hiKaZFuZ4stXuhV6PJMzlmZ0fJKIYIdRWt5Z9QpThwj6VqppNrpvKXf2pMiARX4x1zPRqb1gAlW-3CYpabGwLAjGZ0jGfxE447N6DT2-EHJbeqIIj5cPQu9SleHGnFkssI6oVK3iN4-7KBP0WcKJMhQ3a-cjb0nEPoHa44yHJ4hIo4bgFWfm2UF8xuv5DUcDI3-7GBn9jDnw");'>
-<div class="flex flex-col gap-4 text-center max-w-2xl z-10">
-<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-6xl">
-                                        VTuber Agencies
-                                    </h1>
-<p class="text-white/90 text-base font-normal leading-relaxed @[480px]:text-lg">
-                                        Discover the powerhouses behind the virtual stars. From industry giants to emerging labels, explore the organizations providing management, technical innovation, and global branding for VTubers.
-                                    </p>
-</div>
-<div class="flex gap-3 z-10">
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:brightness-110 transition-all shadow-lg shadow-primary/30">
-                                        Explore All
-                                    </button>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('help-center'); ?>'" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-white/10 backdrop-blur-md text-white border border-white/20 text-base font-bold hover:bg-white/20 transition-all">
-                                        Agency FAQ
-                                    </button>
-</div>
-</div>
-</div>
-</div>
-<div class="sticky top-[73px] z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md py-4 -mx-4 px-4">
-<div class="flex flex-col md:flex-row gap-3">
-<label class="flex flex-col flex-1 h-12">
-<div class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-sm border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
-<div class="text-primary flex border-none bg-white dark:bg-slate-800 items-center justify-center pl-4 border-r-0">
-<span class="material-symbols-outlined">search</span>
-</div>
-<input class="form-input flex w-full min-w-0 flex-1 border-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-0 h-full placeholder:text-slate-400 px-4" placeholder="Search agencies by name, talent, or keyword..." value=""/>
-</div>
-</label>
-<div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
-<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 px-4 text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50 hover:border-primary/30 transition-all shadow-sm">
-<span class="text-sm font-semibold">Region: All</span>
-<span class="material-symbols-outlined text-lg">expand_more</span>
-</button>
-<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 px-4 text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50 hover:border-primary/30 transition-all shadow-sm">
-<span class="text-sm font-semibold">Focus: All</span>
-<span class="material-symbols-outlined text-lg">expand_more</span>
-</button>
-<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary px-4 text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110">
-<span class="material-symbols-outlined text-lg">tune</span>
-<span class="text-sm font-semibold">Filters</span>
-</button>
-</div>
-</div>
-</div>
-<div class="flex flex-col gap-6 pt-4">
-<div class="flex items-center justify-between">
-<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold tracking-tight">Major Agencies</h2>
-<span class="text-primary text-sm font-semibold cursor-pointer hover:underline">View All (42)</span>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
-<div class="h-40 w-full relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Vibrant digital art with blue and pink patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8OeEiECbxBMCzmVnvYD7-RlVhP3pQwFLMcL32o8JQjsa7RHTk8yM64H6--M3hCH-IQiRwpDyx3def2PgKv_oo66RsbsgP7IX-jGRgFoiZ5lkiQIoMA1jDXrjqJpTRD-5ul8KFVNbzSH1rxRPk0pu6H4MxVxod8rpuG6Xs6EX8WpF6C2adLCMq5yDgKVbCfd35THKbnSxt5ENTTX_K1FENQF-wLcZbYHtDfpzhVUbDZ1n3HfveWw0es1HdvshAt-J5pYCU_BuxkXA"/>
-<div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 p-2 rounded-lg shadow-lg">
-<div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center font-bold text-primary">H</div>
-</div>
-<div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Top Tier</div>
-</div>
-<div class="p-6 flex flex-col gap-4">
-<div>
-<h3 class="text-xl font-bold text-slate-900 dark:text-white">Hololive Production</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Owned by Cover Corp. Pioneers of the idol-centric VTuber model.</p>
-</div>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">Japan</span>
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">EN</span>
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">ID</span>
-</div>
-<div class="grid grid-cols-2 gap-4 py-4 border-y border-slate-100 dark:border-slate-700">
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Talents</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">80+</p>
-</div>
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Focus</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">Idol, Gaming</p>
-</div>
-</div>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
-</div>
-</div>
-<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
-<div class="h-40 w-full relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Sleek abstract geometry in dark tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuYNM6diV0xqUilhs0-X83HUslPvDCpacHkk6OOsS_4I5N_RkpRW3ZHBiF-hlwa1Jlt9rSVmnCDhkoU53HMCiTDoSQY2eQVo4lY0IKTjDvjhjgHH5FzSaj5CKGzFk_jRdzuYulVAhGiRR9U2vmCc18-Yuqd3Vb9kNG_D19tmPQe7PhVMbkquoJJVK1I4xFr4XKSMuuGMt4M3D9zSUC-4_y3roqfUQGES5W3qZc28cDbw03kbK69sk2xgGnVGLCl2X8xl608_9OfQU"/>
-<div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 p-2 rounded-lg shadow-lg">
-<div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center font-bold text-primary">N</div>
-</div>
-<div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Top Tier</div>
-</div>
-<div class="p-6 flex flex-col gap-4">
-<div>
-<h3 class="text-xl font-bold text-slate-900 dark:text-white">NIJISANJI</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Managed by ANYCOLOR Inc. Known for its massive roster and variety.</p>
-</div>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">Japan</span>
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">EN</span>
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">KR</span>
-</div>
-<div class="grid grid-cols-2 gap-4 py-4 border-y border-slate-100 dark:border-slate-700">
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Talents</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">200+</p>
-</div>
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Focus</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">Variety, Chat</p>
-</div>
-</div>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
-</div>
-</div>
-<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
-<div class="h-40 w-full relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dark aesthetic neon light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB25sYQfkgHeh5dOi7HC6mSVxt9mU68BVhCPBvMsA-Up7SSdoazPKmjg_mITEOkXWK1mJwS3G_pWMt2gL81Dxp54oRhdCNE7gq3YgL0TodmHjO8sohOPD0kefb1KqGi_xYQUPVBNNsv9c-mSzum-eVzIPb4rMB2ScbBMzlwF29PEi7r9sLl61dhMPOfgr46ZViCByTcDndSuT6Q4IEgLm8w6pPKmONIS54EwBnvrZ5csF65ALsrNyCxH3Ebu8TjYdgnKhnCGV6N6JE"/>
-<div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 p-2 rounded-lg shadow-lg">
-<div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center font-bold text-primary">V</div>
-</div>
-<div class="absolute top-4 right-4 bg-primary/80 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">EN Leader</div>
-</div>
-<div class="p-6 flex flex-col gap-4">
-<div>
-<h3 class="text-xl font-bold text-slate-900 dark:text-white">VShojo</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">A talent-first agency focusing on creator freedom and IP ownership.</p>
-</div>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">US</span>
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">Japan</span>
-</div>
-<div class="grid grid-cols-2 gap-4 py-4 border-y border-slate-100 dark:border-slate-700">
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Talents</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">14</p>
-</div>
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Focus</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">Streamer-led</p>
-</div>
-</div>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
-</div>
-</div>
-<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
-<div class="h-40 w-full relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Abstract fluid design with purple accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVHyULL3HGVssYuD7DxS5hrdgnCJH28XtQ01U6rYy9m5mhcpdTkY1Wy-_3yMm7e6WcRRm_8ETB9TLi-Z2mJZmYSEAVHQH_UjsLhsZfoLdVNIW4kbr_MO-mxVP_q7RPncAKQGMeVLMWF808WcgY4tNrcMrccfyvsCu9ILn2oOt1zNwgQQWeO_F6Zo3suFM0J2GmTnwk2gM7I50SaR4QHjtWhU_n_2RzJxYZIDCkd9LShM6tRiFU6Sa3Xq5g4MYYzJlTK6OaTMsc9nw"/>
-<div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 p-2 rounded-lg shadow-lg">
-<div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center font-bold text-primary">P</div>
-</div>
-</div>
-<div class="p-6 flex flex-col gap-4">
-<div>
-<h3 class="text-xl font-bold text-slate-900 dark:text-white">Phase Connect</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">A coffee-loving agency known for its quirky and high-energy talents.</p>
-</div>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">Canada</span>
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">EN</span>
-</div>
-<div class="grid grid-cols-2 gap-4 py-4 border-y border-slate-100 dark:border-slate-700">
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Talents</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">25+</p>
-</div>
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Focus</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">Gaming, Variety</p>
-</div>
-</div>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
-</div>
-</div>
-<div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
-<div class="h-40 w-full relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Smooth colorful gradient mesh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMiDk1z1AZASVeDYacX0MqhhNljYFUjS9fRTh7oFUKf8WfCkg6GKXrr35ZxJ6AqaFpIvryQSu6JphqbBeJ30E5j3pc4op5LKZeEZ3a3gnTRdtKBjSQjX480TTuSz0ngyxAAAmZAo0ts1tS2xVSjfSwpkZMHO_MS-oK8cy_lXc39VerrNdH54sP5NivIAAf180jT8RCIFSPGuMmv1VASFWU-qbW2asfVlv-iXYYSd8KbfdMNmay_NBbzr-wtIniWtjn_RhHoSQHIhQ"/>
-<div class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 p-2 rounded-lg shadow-lg">
-<div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center font-bold text-primary">7</div>
-</div>
-</div>
-<div class="p-6 flex flex-col gap-4">
-<div>
-<h3 class="text-xl font-bold text-slate-900 dark:text-white">774 inc.</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Multi-group agency including AniMare and HoneyStrap.</p>
-</div>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">Japan</span>
-</div>
-<div class="grid grid-cols-2 gap-4 py-4 border-y border-slate-100 dark:border-slate-700">
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Talents</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">30+</p>
-</div>
-<div>
-<p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-widest">Focus</p>
-<p class="text-lg font-bold text-slate-800 dark:text-slate-200">Entertainment</p>
-</div>
-</div>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('explore'); ?>'" class="w-full py-2 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition-all rounded-lg font-bold text-sm">View Directory</button>
-</div>
-</div>
-<div class="flex flex-col items-center justify-center bg-primary/5 border-2 border-dashed border-primary/30 rounded-xl p-8 text-center gap-4 hover:bg-primary/10 transition-colors group cursor-pointer">
-<div class="size-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-3xl text-primary">add_circle</span>
-</div>
-<div>
-<h3 class="text-lg font-bold text-slate-900 dark:text-white">Submit Agency</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Help us grow our database by submitting a missing agency.</p>
-</div>
-<button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="mt-2 text-primary font-bold text-sm underline decoration-2 underline-offset-4">Contribution Portal</button>
-</div>
-</div>
-</div>
-<div class="mt-16 bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 relative overflow-hidden group">
-<!-- Inner card pattern -->
-<div class="absolute inset-0 bg-dots opacity-[0.03] pointer-events-none"></div>
-<div class="max-w-3xl relative z-10">
-<h2 class="text-2xl font-bold mb-4">Why do agencies matter?</h2>
-<p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                                Agencies provide the infrastructure that allows VTubers to reach global audiences. This includes everything from providing the 3D/2D models, motion capture studios, legal support, marketing campaigns, and merchandise production. While "indie" VTubers maintain full control, agency VTubers benefit from a collective brand identity and professional management.
-                            </p>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="flex gap-3">
-<span class="material-symbols-outlined text-primary">verified</span>
-<div>
-<p class="font-bold text-sm">Professional Support</p>
-<p class="text-xs text-slate-500">Tech, legal, and scheduling help.</p>
-</div>
-</div>
-<div class="flex gap-3">
-<span class="material-symbols-outlined text-primary">groups</span>
-<div>
-<p class="font-bold text-sm">Community &amp; Collaboration</p>
-<p class="text-xs text-slate-500">Easier collabs with gen-mates.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <!-- Agencies Header Hero -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-900 via-indigo-900 to-primary p-8 lg:p-12 text-white shadow-xl shadow-primary/10">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_50%)] pointer-events-none"></div>
+        <div class="relative z-10 space-y-4 max-w-3xl">
+            <span class="inline-flex px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
+                Agency Hub
+            </span>
+            <h1 class="text-4xl lg:text-6xl font-black tracking-tight leading-none">
+                Công ty Quản lý <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-teal-200">VTuber</span>
+            </h1>
+            <p class="text-white/80 text-base lg:text-lg font-medium">
+                Khám phá các tổ chức, tập đoàn và đội nhóm đứng sau các ngôi sao ảo. Tìm hiểu các chính sách hỗ trợ kỹ thuật, bản quyền và truyền thông.
+            </p>
+        </div>
+    </div>
+
+    <!-- Filter Control Panel -->
+    <div class="bg-white dark:bg-surface-dark border border-slate-200/80 dark:border-white/8 rounded-2xl p-6 shadow-glow-sm space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Search bar -->
+            <div class="relative">
+                <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input type="text" id="agency-search" oninput="filterAgenciesGrid()" placeholder="Tìm theo tên công ty..." class="w-full h-11 pl-10 pr-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-slate-900 dark:text-white">
+            </div>
+
+            <!-- Region Filter -->
+            <div class="custom-dropdown select-none">
+                <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                    <span class="selected-label">Tất cả khu vực (Regions)</span>
+                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                </button>
+                <div class="custom-dropdown-menu">
+                    <button type="button" data-value="all" class="custom-dropdown-item">
+                        <span class="item-label">Tất cả khu vực (Regions)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <?php foreach ($regions_list as $reg) : ?>
+                        <button type="button" data-value="<?php echo esc_attr($reg); ?>" class="custom-dropdown-item">
+                            <span class="item-label"><?php echo esc_html($reg); ?></span>
+                            <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                        </button>
+                    <?php endforeach; ?>
+                </div>
+                <input type="hidden" id="agency-region" value="all" onchange="filterAgenciesGrid()">
+            </div>
+
+            <!-- Sorting -->
+            <div class="custom-dropdown select-none">
+                <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                    <span class="selected-label">Tên (A -> Z)</span>
+                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                </button>
+                <div class="custom-dropdown-menu">
+                    <button type="button" data-value="name_asc" class="custom-dropdown-item">
+                        <span class="item-label">Tên (A -> Z)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="name_desc" class="custom-dropdown-item">
+                        <span class="item-label">Tên (Z -> A)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="talents_desc" class="custom-dropdown-item">
+                        <span class="item-label">Nhiều tài năng nhất</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="talents_asc" class="custom-dropdown-item">
+                        <span class="item-label">Ít tài năng nhất</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                </div>
+                <input type="hidden" id="agency-sort" value="name_asc" onchange="filterAgenciesGrid()">
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-1">
+                <span class="material-symbols-rounded text-base text-slate-400">info</span>
+                <span>Tìm thấy <strong id="agency-counter" class="text-primary font-bold">0</strong> công ty phù hợp.</span>
+            </div>
+            <button onclick="resetAgencyFilters()" class="text-primary hover:underline font-bold flex items-center gap-0.5">
+                <span class="material-symbols-rounded text-sm">restart_alt</span> Khôi phục bộ lọc
+            </button>
+        </div>
+    </div>
+
+    <!-- Agency Grid Display -->
+    <div id="agencies-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <?php foreach ($agencies_list as $ag) : ?>
+            <article class="agency-card group flex flex-col bg-white dark:bg-surface-dark border border-slate-200/80 dark:border-white/8 rounded-2xl overflow-hidden hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-xl transition-all duration-300"
+                     data-title="<?php echo esc_attr(strtolower($ag['title'])); ?>"
+                     data-region="<?php echo esc_attr($ag['region']); ?>"
+                     data-talents="<?php echo $ag['talent_count']; ?>">
+                
+                <!-- Logo & Banner area -->
+                <div class="h-40 w-full bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center p-6 border-b border-slate-100 dark:border-slate-800 relative">
+                    <?php if ($ag['logo']) : ?>
+                        <img src="<?php echo esc_url($ag['logo']); ?>" alt="<?php echo esc_attr($ag['title']); ?>" class="max-h-24 max-w-[80%] object-contain group-hover:scale-105 transition-transform duration-300">
+                    <?php else : ?>
+                        <span class="text-5xl font-black text-slate-300 dark:text-slate-700"><?php echo substr($ag['title'], 0, 1); ?></span>
+                    <?php endif; ?>
+
+                    <span class="absolute top-4 right-4 bg-primary/10 text-primary text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                        <?php echo esc_html($ag['region']); ?>
+                    </span>
+                </div>
+
+                <!-- Body -->
+                <div class="p-6 flex-1 flex flex-col justify-between space-y-6">
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-black text-slate-950 dark:text-white group-hover:text-primary transition-colors">
+                            <?php echo esc_html($ag['title']); ?>
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                            <?php echo esc_html($ag['description']); ?>
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-4 border-y border-slate-100 dark:border-slate-800/60 text-xs">
+                        <div>
+                            <p class="text-[10px] text-slate-450 dark:text-slate-500 uppercase font-bold tracking-widest mb-0.5">Tài năng</p>
+                            <p class="text-base font-black text-slate-900 dark:text-white"><?php echo $ag['talent_count']; ?> VTubers</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-450 dark:text-slate-500 uppercase font-bold tracking-widest mb-0.5">Khu vực</p>
+                            <p class="text-base font-black text-slate-900 dark:text-white"><?php echo esc_html($ag['region']); ?></p>
+                        </div>
+                    </div>
+
+                    <a href="<?php echo esc_url($ag['url']); ?>" class="block w-full text-center h-10 leading-10 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-primary hover:text-white dark:hover:bg-primary transition-all text-xs font-bold text-slate-700 dark:text-slate-350">
+                        Xem chi tiết & thế hệ
+                    </a>
+                </div>
+            </article>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- Empty State -->
+    <div id="agencies-empty" class="hidden text-center py-20 bg-slate-50 dark:bg-slate-800/20 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+        <span class="material-symbols-rounded text-6xl text-slate-300 mb-4 animate-bounce">business_messages</span>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Không tìm thấy công ty nào</h3>
+        <p class="text-slate-500 text-sm">Thử thay đổi từ khóa hoặc bộ lọc khu vực xem sao nhé.</p>
+    </div>
 </main>
+
+<script>
+    function filterAgenciesGrid() {
+        const query = document.getElementById('agency-search').value.toLowerCase().trim();
+        const region = document.getElementById('agency-region').value;
+        const sort = document.getElementById('agency-sort').value;
+
+        const cards = Array.from(document.querySelectorAll('.agency-card'));
+        let visibleCount = 0;
+
+        cards.forEach(function(card) {
+            const title = card.getAttribute('data-title');
+            const cardRegion = card.getAttribute('data-region');
+
+            const matchesQuery = query === '' || title.includes(query);
+            const matchesRegion = region === 'all' || cardRegion === region;
+
+            if (matchesQuery && matchesRegion) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Sorting
+        const grid = document.getElementById('agencies-grid');
+        const sortedCards = cards.filter(c => !c.classList.contains('hidden'));
+
+        sortedCards.sort(function(a, b) {
+            if (sort === 'name_asc') {
+                return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+            } else if (sort === 'name_desc') {
+                return b.getAttribute('data-title').localeCompare(a.getAttribute('data-title'));
+            } else if (sort === 'talents_desc') {
+                const talentsA = parseInt(a.getAttribute('data-talents') || 0);
+                const talentsB = parseInt(b.getAttribute('data-talents') || 0);
+                return talentsB - talentsA;
+            } else if (sort === 'talents_asc') {
+                const talentsA = parseInt(a.getAttribute('data-talents') || 0);
+                const talentsB = parseInt(b.getAttribute('data-talents') || 0);
+                return talentsA - talentsB;
+            }
+            return 0;
+        });
+
+        sortedCards.forEach(card => grid.appendChild(card));
+
+        // Update counter and empty state
+        document.getElementById('agency-counter').innerText = visibleCount;
+        const emptyState = document.getElementById('agencies-empty');
+        if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+        }
+    }
+
+    function resetAgencyFilters() {
+        document.getElementById('agency-search').value = '';
+        
+        // Reset custom dropdown values
+        document.querySelectorAll('.custom-dropdown').forEach(function(dropdown) {
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+            if (hiddenInput) {
+                if (hiddenInput.id === 'agency-region') {
+                    hiddenInput.value = 'all';
+                } else if (hiddenInput.id === 'agency-sort') {
+                    hiddenInput.value = 'name_asc';
+                }
+                
+                // Re-sync labels
+                const selectedItem = dropdown.querySelector(`.custom-dropdown-item[data-value="${hiddenInput.value}"]`);
+                if (selectedItem) {
+                    const label = selectedItem.querySelector('.item-label')?.innerText || selectedItem.innerText;
+                    const triggerLabel = dropdown.querySelector('.selected-label');
+                    if (triggerLabel) triggerLabel.innerText = label;
+                    
+                    dropdown.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+                        i.classList.toggle('is-selected', i === selectedItem);
+                        const check = i.querySelector('.check-icon');
+                        if (check) check.classList.toggle('hidden', i !== selectedItem);
+                    });
+                }
+            }
+        });
+
+        filterAgenciesGrid();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        filterAgenciesGrid();
+    });
+</script>
 
 <?php get_footer(); ?>

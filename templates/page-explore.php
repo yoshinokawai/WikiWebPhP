@@ -3,300 +3,358 @@
  * Template Name: Explore
  * Template Post Type: page
  *
- * Source: explore_updated_nav/code.html
+ * Displays a dynamic search and discovery directory of all VTubers.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
-wp_enqueue_style( 'vtwiki-explore', get_template_directory_uri() . '/assets/css/explore.css', [], wp_get_theme()->get('Version') );
+
 get_header();
+
+// Fetch all VTubers
+$vtuber_query = new WP_Query([
+    'post_type'      => 'vtuber_wiki',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+]);
+
+$vtubers_list = [];
+$total_vtubers = 0;
+
+if ( $vtuber_query->have_posts() ) {
+    $total_vtubers = $vtuber_query->found_posts;
+    while ( $vtuber_query->have_posts() ) {
+        $vtuber_query->the_post();
+        $vid = get_the_ID();
+        
+        $ag_obj = get_field('agency_ref');
+        $agency_name = 'Independent';
+        if ( $ag_obj ) {
+            $agency_name = $ag_obj->post_title;
+        }
+
+        $vtubers_list[] = [
+            'id'          => $vid,
+            'title'       => get_the_title(),
+            'url'         => get_permalink(),
+            'artwork'     => get_field('artwork_link') ?: get_the_post_thumbnail_url($vid, 'large'),
+            'agency'      => $agency_name,
+            'debut'       => get_field('debut_date') ?: '1970-01-01',
+            'language'    => get_field('language') ?: 'N/A',
+            'generation'  => get_field('generation') ?: '',
+        ];
+    }
+    wp_reset_postdata();
+}
+
+// Fetch stats
+$total_agencies = wp_count_posts('vtuber_agency')->publish;
+$total_articles = wp_count_posts('vtuber_wiki')->publish + wp_count_posts('vtuber_agency')->publish + wp_count_posts('post')->publish;
+$active_editors = count_users()['total_users'] + 12; // Base offset to represent team/active users
 ?>
 
 <main class="max-w-[1200px] mx-auto px-4 md:px-10 py-8">
-<!-- Search & Discovery Section -->
-<section class="mb-10">
-<h2 class="text-3xl font-bold mb-6 text-slate-900 dark:text-white">Discover Talents</h2>
-<div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-primary/5">
-<div class="relative w-full mb-4">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary text-2xl">search</span>
-<input class="w-full h-14 bg-background-light dark:bg-slate-800 border-none rounded-xl pl-14 pr-6 text-lg focus:ring-2 focus:ring-primary/40 transition-all shadow-inner" placeholder="Search VTubers, agencies, or news..." type="text"/>
-</div>
-<div class="flex flex-wrap gap-2 items-center">
-<span class="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2">Popular:</span>
-<button class="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/40"><span class="material-symbols-outlined text-sm">tag</span> Indie</button>
-<button class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/40">
-<span class="material-symbols-outlined text-sm">tag</span> 3DModel
+    <!-- Search & Discovery Section -->
+    <section class="mb-10">
+        <h2 class="text-3xl font-bold mb-6 text-slate-900 dark:text-white">Discover Talents</h2>
+        
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-primary/5">
+            <div class="relative w-full mb-4">
+                <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-primary text-2xl">search</span>
+                <input id="explore-search-input" oninput="filterExploreGrid()" class="w-full h-14 bg-slate-50 dark:bg-slate-800 border-none rounded-xl pl-14 pr-6 text-lg focus:ring-2 focus:ring-primary/40 transition-all shadow-inner text-slate-900 dark:text-white" placeholder="Tìm kiếm tên VTuber, nhóm hoặc công ty..." type="text"/>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 items-center">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2">Gợi ý:</span>
+                <button onclick="setSearchQuery('Hololive')" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-rounded text-sm">tag</span> Hololive
+                </button>
+                <button onclick="setSearchQuery('Nijisanji')" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-rounded text-sm">tag</span> Nijisanji
+                </button>
+                <button onclick="setSearchQuery('Independent')" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-rounded text-sm">tag</span> Tự do
+                </button>
+                <button onclick="setSearchQuery('Myth')" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-rounded text-sm">tag</span> Myth
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Bar -->
+    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-primary/10 shadow-sm mb-8 flex flex-wrap items-center gap-6">
+        <!-- Sort By -->
+        <div class="flex flex-col gap-1.5 min-w-[180px]">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 ml-1">Sắp xếp theo</label>
+            <div class="custom-dropdown select-none">
+                <button type="button" class="custom-dropdown-trigger w-full h-9 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg text-xs text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                    <span class="selected-label">Debut (Mới nhất)</span>
+                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                </button>
+                <div class="custom-dropdown-menu">
+                    <button type="button" data-value="debut_desc" class="custom-dropdown-item">
+                        <span class="item-label">Debut (Mới nhất)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
                     </button>
-<button class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/40">
-<span class="material-symbols-outlined text-sm">tag</span> ASMR
+                    <button type="button" data-value="debut_asc" class="custom-dropdown-item">
+                        <span class="item-label">Debut (Cũ nhất)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
                     </button>
-<button class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/40">
-<span class="material-symbols-outlined text-sm">tag</span> Karaoke
+                    <button type="button" data-value="name_asc" class="custom-dropdown-item">
+                        <span class="item-label">Tên (A-Z)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
                     </button>
-<button class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/40">
-<span class="material-symbols-outlined text-sm">tag</span> Debut
+                    <button type="button" data-value="name_desc" class="custom-dropdown-item">
+                        <span class="item-label">Tên (Z-A)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
                     </button>
-</div>
-</div>
-</section><div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-primary/10 shadow-sm mb-8 flex flex-wrap items-center gap-6">
-<!-- Sort By -->
-<div class="flex flex-col gap-1.5 min-w-[180px]">
-<label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 ml-1">Sort By</label>
-<div class="relative">
-<select class="w-full appearance-none bg-background-light dark:bg-slate-800 border-none rounded-lg py-2 pl-3 pr-10 text-sm font-medium focus:ring-2 focus:ring-primary/20 hover:bg-primary/5 focus:ring-primary transition-colors cursor-pointer">
-<option selected="selected">Newest Debut</option>
-<option>Most Followers</option>
-<option>Name A-Z</option>
-<option>Name Z-A</option>
-</select>
-<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
-</div>
-</div>
-<!-- Content Type -->
-<div class="flex flex-col gap-1.5 min-w-[200px]">
-<label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 ml-1">Content Type</label>
-<div class="relative">
-<select class="w-full appearance-none bg-background-light dark:bg-slate-800 border-none rounded-lg py-2 pl-3 pr-10 text-sm font-medium focus:ring-2 focus:ring-primary/20 hover:bg-primary/5 focus:ring-primary transition-colors cursor-pointer">
-<option selected="selected">All Types</option>
-<option>Gaming</option>
-<option>ASMR</option>
-<option>Music</option>
-<option>Variety</option>
-<option>Education</option>
-</select>
-<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
-</div>
-</div>
-<!-- Status -->
-<div class="flex flex-col gap-1.5 min-w-[160px]">
-<label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 ml-1">Status</label>
-<div class="flex bg-background-light dark:bg-slate-800 rounded-lg p-1">
-<button class="flex-1 py-1 px-3 text-xs font-bold bg-white dark:bg-slate-700 rounded-md shadow-sm text-primary ring-2 ring-primary/20 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all">Active</button>
-<button class="flex-1 py-1 px-3 text-xs font-medium text-slate-500 hover:text-primary transition-colors focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all">Graduated</button>
-<button class="flex-1 py-1 px-3 text-xs font-medium text-slate-500 hover:text-primary transition-colors focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all">Hiatus</button>
-</div>
-</div>
-<!-- Clear Filters -->
-<button class="ml-auto self-end mb-1 text-slate-400 hover:text-primary text-xs font-bold transition-colors flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">restart_alt</span> Reset
-    </button>
-</div>
-<!-- Main Content Area -->
-<div class="flex flex-col lg:flex-row gap-8">
-<!-- Left Grid & Navigation -->
-<div class="flex-1 space-y-10">
-<!-- Filters & Categorized Browsing -->
-<div class="border-b border-primary/10">
-<div class="flex gap-8 overflow-x-auto no-scrollbar">
-<button class="border-b-2 border-primary text-primary font-bold pb-4 whitespace-nowrap">All VTubers</button>
-<button class="border-b-2 border-transparent text-slate-500 hover:text-primary font-medium pb-4 transition-colors whitespace-nowrap">Agencies</button>
-<button class="border-b-2 border-transparent text-slate-500 hover:text-primary font-medium pb-4 transition-colors whitespace-nowrap">Generations</button>
-<button class="border-b-2 border-transparent text-slate-500 hover:text-primary font-medium pb-4 transition-colors whitespace-nowrap">Languages</button>
-</div>
-</div>
-<!-- Language Selector Pill -->
-<div class="flex items-center justify-between">
-<div class="inline-flex bg-primary/5 p-1 rounded-xl">
-<button class="px-6 py-2 rounded-lg text-sm font-bold bg-white dark:bg-slate-800 shadow-sm text-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">EN</button>
-<button class="px-6 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-primary transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">JP</button>
-<button class="px-6 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-primary transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">ID</button>
-<button class="px-6 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-primary transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">KR</button>
-</div>
-<div class="text-sm text-slate-500">Showing 420 Indie Results</div>
-</div>
-<!-- Trending Now Section -->
-<section>
-<div class="flex items-center justify-between mb-4">
-<h3 class="text-xl font-bold flex items-center gap-2">
-<span class="material-symbols-outlined text-orange-500">trending_up</span> Trending Now
-                        </h3>
-<a class="text-primary text-sm font-bold hover:underline" href="<?php echo vtwiki_page_url('recent-changes'); ?>">View All</a>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div class="group relative overflow-hidden rounded-xl aspect-[16/9] cursor-pointer">
-<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Abstract vibrant gradient purple background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxC5kIlWSwQTQeoqkQWXuXYl-xN4m-GhfzCz8rQmpLaiacj0G-8Vpvwl0k4Bu0hxPpH7Ha7cQfw9DDvdeburCCXtMl72aNedZ8yzgI8DO_CLGjPcq0p22BLRaQmnxa3pI-xmulRqoI3lV5ELpSaa5lbzXGbUdVaYvlvWqikjpO9k-8EmmNzEzn3AMXzu87OakV7d98XRYPQrhz1S0Eomdni8xahVNNz3ZNsVsGRDoCdrcxPYmpPC5CnBAuF-m68Owollh31wVjdFE"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
-<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded w-fit mb-2 uppercase tracking-widest">Major News</span>
-<h4 class="text-white text-xl font-bold leading-tight">Hololive English -Advent- celebrate 6 months since debut!</h4>
-</div>
-</div>
-<div class="group relative overflow-hidden rounded-xl aspect-[16/9] cursor-pointer">
-<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Dark abstract geometric background with purple accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8-kkKkEPh8XYSeleT15Px8x73dxLrJwdVv2th0Qi6EaOrUrE1Nowi6_FQw__rSwBQPoDJv-fXQsn71VLnLMbFVdf_0YmITnKxXUai6cQxfTz1VrdrIxqRv7CpTiKS2pVRpkU3aXxbisXnNFCYLaSSjwyCJjzAMBv4kbS0dgn9YBrTC9wASIXEx6dpv_d9pxqAtD9svO3tCSl4L_P1lXtJpQRRieYHxM2nAMIRXiUUb8Rw6neTT9StRDnX55Rq4DKl9BhrLeZ_5YM"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
-<span class="bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded w-fit mb-2 uppercase tracking-widest">New Outfit</span>
-<h4 class="text-white text-xl font-bold leading-tight">Kuzuha reveals stunning new street-wear outfit 3D model</h4>
-</div>
-</div>
-</div>
-</section>
-<!-- VTuber Grid -->
-<section>
-<div class="flex items-center justify-between mb-6">
-<h3 class="text-xl font-bold">Recommended Talents</h3>
-<div class="flex gap-2">
-<button class="size-8 rounded-lg border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/10 hover:scale-110 active:scale-90 transition-transform focus:outline-none focus:ring-2 focus:ring-primary/40"><span class="material-symbols-outlined text-sm">filter_list</span></button>
-<button class="size-8 rounded-lg border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/10 hover:scale-110 active:scale-90 transition-transform focus:outline-none focus:ring-2 focus:ring-primary/40"><span class="material-symbols-outlined text-sm">grid_view</span></button>
-</div>
-</div>
-<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
-<!-- Profile Card 1 -->
-<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 transition-all hover:shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer" tabindex="0">
-<div class="aspect-square relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Stylized anime girl character art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8nLJYEIysL3pfG5GMmbo2c6hKVH7MROW_vR0VqvCuf-82IL3q4hJvFa3voZ806PDyFf5NL-wCAV_xPqYQWiW4ZMlDTk-6hPjzR-XgTSNRkPSsZ7RIBKTAKF3nRd9RpuXDfFpGq8MRAMqu217ECNVKkyDrASYvV9pD_pHk66nG3ecnx8_8cOZreSmoe7Vk749vMik3QAvmaUwEXZUy-4Em0ByQwjUm6pyvf4jukcDPHsobBuZ77lSCswyZBqBfyWkwiH2EXSKT1D8"/>
-<div class="absolute top-2 right-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white uppercase">Active</div>
-</div>
-<div class="p-4">
-<h5 class="font-bold text-slate-900 dark:text-white mb-1">Gawr Gura</h5>
-<div class="flex items-center gap-1.5 mb-3">
-<div class="size-3 rounded-full bg-blue-400"></div>
-<span class="text-xs text-slate-500 font-medium">Hololive EN</span>
-</div>
-<div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-50 pt-3 dark:border-slate-800">
-<span>Debuted:</span>
-<span class="font-semibold text-slate-600 dark:text-slate-300">Sept 13, 2020</span>
-</div>
-</div>
-</div>
-<!-- Profile Card 2 -->
-<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 transition-all hover:shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer" tabindex="0">
-<div class="aspect-square relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Anime style illustration of a boy with white hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_NbVAHdxpATFGKIMz7zyuE-OL9fWabBpzNTcBOBiHJ-uBv3Tuhi3pUG3tlXT4s9pDyIV8rs8wdOfi8zU3WbhCLb7OBAhYVJUxzwGwyYvnPc5Z80FWT_q26_9mI6vg19DpG-cZs8cHaPN4bkHy_FVgYCKDDhRRzj-d5akOdsLUnZa7Sn_VTKCqny2KlQ8AgU03a9QmeDp3bnoHxI_FKLQ-XWN0Q-OcPKRnZSXSAbf61ssJn7N1D6q8ezMOysv-EGKqWTbfb8p9Ku0"/>
-<div class="absolute top-2 right-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white uppercase">Active</div>
-</div>
-<div class="p-4">
-<h5 class="font-bold text-slate-900 dark:text-white mb-1">Vox Akuma</h5>
-<div class="flex items-center gap-1.5 mb-3">
-<div class="size-3 rounded-full bg-red-400"></div>
-<span class="text-xs text-slate-500 font-medium">Nijisanji EN</span>
-</div>
-<div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-50 pt-3 dark:border-slate-800">
-<span>Debuted:</span>
-<span class="font-semibold text-slate-600 dark:text-slate-300">Dec 20, 2021</span>
-</div>
-</div>
-</div>
-<!-- Profile Card 3 -->
-<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 transition-all hover:shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer" tabindex="0">
-<div class="aspect-square relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Abstract anime character portrait with bright colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1sP67bTpdquCOiMcJGaoEMYt5HbUEcQ-JpjfH3YRHpkL0v8kndOam8Kh7pzTZHr7uezucC2xBMV8okcl-x4C2Q-YFmV3wiRrnEERPLxl_c7bzB22Gtjz_ivNatF2KMIozDNvhBWAkwkdkU4ze_nf4eX9AezmP5yOL5JXIesCFRvLneW3lEo3iEyhfUdZHtxnEr0D-gRPEVO4KCLl7h7yvl5mja7DK2QuCpLnzNYWV6iBBggLhjvzWf6aIRa_0djIn0USx9CNGFL4"/>
-<div class="absolute top-2 right-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white uppercase">Active</div>
-</div>
-<div class="p-4">
-<h5 class="font-bold text-slate-900 dark:text-white mb-1">Ironmouse</h5>
-<div class="flex items-center gap-1.5 mb-3">
-<div class="size-3 rounded-full bg-pink-400"></div>
-<span class="text-xs text-slate-500 font-medium">VShojo</span>
-</div>
-<div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-50 pt-3 dark:border-slate-800">
-<span>Debuted:</span>
-<span class="font-semibold text-slate-600 dark:text-slate-300">Aug 5, 2017</span>
-</div>
-</div>
-</div>
-<!-- Profile Card 4 -->
-<div class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 transition-all hover:shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer" tabindex="0">
-<div class="aspect-square relative overflow-hidden">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Minimalist anime character sketch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAykRH2EDh_VVl_YXojTgdkKyQku-6qiMHeWCUv3rE4Vk2zioPO0XMQdjydqxmKQt93rL2-pSEhUTRRv9nGavPn3tAGjWs3hlT8jpGk2TuiDkx6I9Uq89Z0aenHsHF5OOnhgcs3jKG0nPCXjXrq2ht1YUi-2gm09oDAYhlvwisxJDkWCP371Pepy1VUMVzfs39rrgU0yiWVVa4qtDxJ_f3g6NhyUx294s2yRw4eUqROHiKYU7QpSjyaXjnwS3pScDLGjAFEG8CB3uQ"/>
-<div class="absolute top-2 right-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white uppercase">Active</div>
-</div>
-<div class="p-4">
-<h5 class="font-bold text-slate-900 dark:text-white mb-1">Houshou Marine</h5>
-<div class="flex items-center gap-1.5 mb-3">
-<div class="size-3 rounded-full bg-blue-600"></div>
-<span class="text-xs text-slate-500 font-medium">Hololive JP</span>
-</div>
-<div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-50 pt-3 dark:border-slate-800">
-<span>Debuted:</span>
-<span class="font-semibold text-slate-600 dark:text-slate-300">Aug 11, 2019</span>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-10 flex justify-center">
-<button class="bg-primary/10 hover:bg-primary/20 text-primary font-bold px-8 py-3 rounded-xl transition-all flex items-center gap-2">
-                            Load More Results <span class="material-symbols-outlined">expand_more</span>
-</button>
-</div>
-</section>
-</div>
-<!-- Sidebar -->
-<aside class="w-full lg:w-80 space-y-8">
-<!-- Wiki Statistics -->
-<div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-primary/5 shadow-sm">
-<h4 class="text-lg font-bold mb-5 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">analytics</span> Wiki Statistics
-                    </h4>
-<div class="space-y-4">
-<div class="flex items-center justify-between p-3 bg-background-light dark:bg-slate-800 rounded-lg">
-<span class="text-sm font-medium text-slate-500">Total Articles</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">12,584</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-background-light dark:bg-slate-800 rounded-lg">
-<span class="text-sm font-medium text-slate-500">Active Editors</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">842</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-background-light dark:bg-slate-800 rounded-lg">
-<span class="text-sm font-medium text-slate-500">Total Media</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">45.2k</span>
-</div>
-<div class="flex items-center justify-between p-3 bg-background-light dark:bg-slate-800 rounded-lg">
-<span class="text-sm font-medium text-slate-500">Talents Tracked</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">3,120</span>
-</div>
-</div>
-<button class="w-full mt-6 py-2.5 rounded-lg border-2 border-primary/20 text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all">
-                        Contribute Now
+                </div>
+                <input type="hidden" id="explore-sort-select" value="debut_desc" onchange="filterExploreGrid()">
+            </div>
+        </div>
+
+        <!-- Language Filter -->
+        <div class="flex flex-col gap-1.5 min-w-[180px]">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 ml-1">Ngôn ngữ</label>
+            <div class="custom-dropdown select-none">
+                <button type="button" class="custom-dropdown-trigger w-full h-9 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg text-xs text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                    <span class="selected-label">Tất cả ngôn ngữ</span>
+                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                </button>
+                <div class="custom-dropdown-menu">
+                    <button type="button" data-value="all" class="custom-dropdown-item">
+                        <span class="item-label">Tất cả ngôn ngữ</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
                     </button>
-</div>
-<!-- Top Contributors -->
-<div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-primary/5 shadow-sm">
-<h4 class="text-lg font-bold mb-5 flex items-center gap-2">
-<span class="material-symbols-outlined text-yellow-500">workspace_premium</span> Top Contributors
-                    </h4>
-<div class="space-y-4">
-<div class="flex items-center gap-4">
-<div class="relative">
-<img class="size-10 rounded-full object-cover" data-alt="User profile photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYjopi_CI4xUImzpJlSrecy_yfozZfbZWr6qnItG0JGUDOlrXgH7KPwWEHNWo5NHE99fy1aFycIx0ykM_pbsNZW_H7tM0RUb-61Vq5OwPvCLD65igubYv8sfD7esf_7FEHfd1boxDiZEnA9HpqdQGKagZFF-ZkIDaOGaAFiPbF4OxJG3Ea0ALbugnjJg6GC9v9CQVu-z9TLNfFmZIkMrlB6-FlCOSGEJfTjpcecpisS6TsgQebQQoqE1mHQTN5CtfTbNGuQ_qjaBw"/>
-<div class="absolute -bottom-1 -right-1 bg-yellow-400 text-[8px] font-bold text-white size-4 rounded-full flex items-center justify-center border-2 border-white">1</div>
-</div>
-<div class="flex-1">
-<div class="text-sm font-bold">LoreMaster99</div>
-<div class="text-xs text-slate-400">4,210 edits this month</div>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<div class="relative">
-<img class="size-10 rounded-full object-cover" data-alt="User profile photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmvYQkkzWoLDxaSlFj99x0KMIr-4KQduXPTh4wcgXTBJX8uBeVk-ykFKxXJCFmZFz5Kbj1HADuO8fHv0NKKpy1EVDT1KbZMlq1LCCSkNKqOJ-GhjwcSwVNwiDA2sKqDyQk3UyVf74jKy971lS2PGVkbrTXCyhkm_tsr8gAQXjXo-1mjzRA_dUBf0xXGwZwvEpJcDVorsmn5J-_9qvNQ_OV1Wbr_7uQl6mswDhwAIpvIc06L8dJdlA1qiQpkW7Po5vhUHLTnL1HW5Q"/>
-<div class="absolute -bottom-1 -right-1 bg-slate-300 text-[8px] font-bold text-white size-4 rounded-full flex items-center justify-center border-2 border-white">2</div>
-</div>
-<div class="flex-1">
-<div class="text-sm font-bold">Kawaaii_Editor</div>
-<div class="text-xs text-slate-400">3,850 edits this month</div>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<div class="relative">
-<img class="size-10 rounded-full object-cover" data-alt="User profile photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-aYWGXgdPfIKM-ehaIo7JK-QPEYfIcopTT4Ly5xQd06Rvk2jJVwlmrCUmV2jokgY5G8EGDvk3r3X5YQFd5Y8Y0vXfTsUzXwBoZ9kDKHYD1yiZ7WK6ctm7Y8p7DqyZkFwBO014LlRyHF8BGy0LPZ9ULj9-ynxvGNMAJZxoYlO1y-mtGKGohIsiAhKjDOQ1AGuoQS5YF24B-L3seiX8a8fPiW9eDbiD9eoYco1Bh5TGrxw31IQZq0Rguc3P2AxVbsC5hQi1IldyLAQ"/>
-<div class="absolute -bottom-1 -right-1 bg-orange-400 text-[8px] font-bold text-white size-4 rounded-full flex items-center justify-center border-2 border-white">3</div>
-</div>
-<div class="flex-1">
-<div class="text-sm font-bold">V-Archive_Zero</div>
-<div class="text-xs text-slate-400">2,912 edits this month</div>
-</div>
-</div>
-</div>
-<a class="block text-center mt-6 text-sm font-bold text-primary hover:underline" href="<?php echo vtwiki_page_url('editor-hub'); ?>">View Leaderboard</a>
-</div>
-<!-- Ad/Promotional -->
-<div class="rounded-xl overflow-hidden relative group cursor-pointer h-48">
-<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="Nebula space cosmic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjB1ljcrnq0EeiQjF2KSWryNRKrEUA3KX6tl54QbpJW60NjDnesmD_9vEl7pLm8-Xp0XvQ9HTDVG-yY7Q1LoKxvJb012PBq3uJZEpm-ay9J9olYCKhcA42MQeZjsj6WK7fn5UVuU6ovJrLBuO1i8bN7RNrB4fYpWbWBG9iYG7aW4H-bg0M6rLsndiNg9rVKGsytxIxh9HR0k_2MvRGy-W4rgP4KxqWTOSfcrxxRzKYpSOIEnnt5UzrTX_Tyo_6r9PMXGd_8HO28i8"/>
-<div class="absolute inset-0 bg-primary/40 backdrop-blur-[2px] p-6 flex flex-col justify-center items-center text-center">
-<p class="text-white text-xs font-bold uppercase tracking-widest mb-1">New Agency</p>
-<h5 class="text-white text-xl font-bold mb-3">Nebula Corp Debut!</h5>
-<button class="bg-white text-primary px-4 py-1.5 rounded-lg text-xs font-bold shadow-lg">View Profiles</button>
-</div>
-</div>
-</aside>
-</div>
+                    <button type="button" data-value="vietnamese" class="custom-dropdown-item">
+                        <span class="item-label">Tiếng Việt</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="english" class="custom-dropdown-item">
+                        <span class="item-label">Tiếng Anh (EN)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                    <button type="button" data-value="japanese" class="custom-dropdown-item">
+                        <span class="item-label">Tiếng Nhật (JP)</span>
+                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                    </button>
+                </div>
+                <input type="hidden" id="explore-lang-select" value="all" onchange="filterExploreGrid()">
+            </div>
+        </div>
+
+        <!-- Clear Filters -->
+        <button onclick="resetExploreFilters()" class="ml-auto self-end mb-1 text-slate-400 hover:text-primary text-xs font-bold transition-colors flex items-center gap-1">
+            <span class="material-symbols-rounded text-sm">restart_alt</span> Reset bộ lọc
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Left Grid -->
+        <div class="flex-1 space-y-8">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold">Danh sách đề xuất</h3>
+                <div class="text-sm text-slate-500">Tìm thấy <span id="explore-count" class="font-bold text-primary"><?php echo $total_vtubers; ?></span> kết quả</div>
+            </div>
+
+            <!-- Grid -->
+            <div id="explore-grid" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+                <?php foreach ($vtubers_list as $vt) : ?>
+                    <article class="vt-explore-card group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/45 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                             data-title="<?php echo esc_attr(strtolower($vt['title'])); ?>"
+                             data-agency="<?php echo esc_attr(strtolower($vt['agency'])); ?>"
+                             data-lang="<?php echo esc_attr(strtolower($vt['language'])); ?>"
+                             data-debut="<?php echo esc_attr($vt['debut']); ?>"
+                             data-generation="<?php echo esc_attr(strtolower($vt['generation'])); ?>"
+                             onclick="window.location.href='<?php echo esc_url($vt['url']); ?>'">
+                        
+                        <div class="aspect-square relative overflow-hidden bg-slate-50 dark:bg-slate-800">
+                            <?php if ($vt['artwork']) : ?>
+                                <img src="<?php echo esc_url($vt['artwork']); ?>" alt="<?php echo esc_attr($vt['title']); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <?php else : ?>
+                                <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
+                                    <span class="material-symbols-rounded text-5xl">account_circle</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="p-4">
+                            <h5 class="font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors line-clamp-1">
+                                <?php echo esc_html($vt['title']); ?>
+                            </h5>
+                            <div class="flex items-center gap-1.5 mb-3">
+                                <span class="text-xs text-slate-500 font-bold uppercase tracking-wider"><?php echo esc_html($vt['agency']); ?></span>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-50 dark:border-slate-800 pt-3">
+                                <span>Debut:</span>
+                                <span class="font-semibold text-slate-650 dark:text-slate-300"><?php echo $vt['debut'] !== '1970-01-01' ? date('d/m/Y', strtotime($vt['debut'])) : 'N/A'; ?></span>
+                            </div>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Empty State -->
+            <div id="explore-empty" class="hidden text-center py-20 bg-slate-50 dark:bg-slate-850 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+                <span class="material-symbols-rounded text-5xl text-slate-300 mb-3">person_search</span>
+                <p class="text-slate-500 font-bold">Không tìm thấy VTuber nào phù hợp bộ lọc.</p>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-80 space-y-8">
+            <!-- Wiki Statistics -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-primary/5 shadow-sm">
+                <h4 class="text-lg font-bold mb-5 flex items-center gap-2">
+                    <span class="material-symbols-rounded text-primary">analytics</span> Wiki Statistics
+                </h4>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                        <span class="text-sm font-medium text-slate-500">Bài viết</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white"><?php echo $total_articles; ?></span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                        <span class="text-sm font-medium text-slate-500">VTuber quản lý</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white"><?php echo $total_vtubers; ?></span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                        <span class="text-sm font-medium text-slate-500">Công ty</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white"><?php echo $total_agencies; ?></span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                        <span class="text-sm font-medium text-slate-500">Biên tập viên</span>
+                        <span class="text-sm font-bold text-slate-900 dark:text-white"><?php echo $active_editors; ?></span>
+                    </div>
+                </div>
+                <button onclick="window.location.href='<?php echo vtwiki_page_url('editor-hub'); ?>'" class="w-full mt-6 py-2.5 rounded-lg border-2 border-primary/20 text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all">
+                    Đóng góp ngay
+                </button>
+            </div>
+
+            <!-- Ad/Promotional -->
+            <div class="rounded-xl overflow-hidden relative group cursor-pointer h-48" onclick="window.location.href='<?php echo vtwiki_page_url('agencies'); ?>'">
+                <img class="w-full h-full object-cover transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjB1ljcrnq0EeiQjF2KSWryNRKrEUA3KX6tl54QbpJW60NjDnesmD_9vEl7pLm8-Xp0XvQ9HTDVG-yY7Q1LoKxvJb012PBq3uJZEpm-ay9J9olYCKhcA42MQeZjsj6WK7fn5UVuU6ovJrLBuO1i8bN7RNrB4fYpWbWBG9iYG7aW4H-bg0M6rLsndiNg9rVKGsytxIxh9HR0k_2MvRGy-W4rgP4KxqWTOSfcrxxRzKYpSOIEnnt5UzrTX_Tyo_6r9PMXGd_8HO28i8"/>
+                <div class="absolute inset-0 bg-primary/45 backdrop-blur-[1px] p-6 flex flex-col justify-center items-center text-center">
+                    <p class="text-white text-xs font-bold uppercase tracking-widest mb-1">Hệ thống Agency</p>
+                    <h5 class="text-white text-lg font-bold mb-3">Xem danh sách các công ty lớn</h5>
+                    <button class="bg-white text-primary px-4 py-1.5 rounded-lg text-xs font-bold shadow-lg">Xem chi tiết</button>
+                </div>
+            </div>
+        </aside>
+    </div>
 </main>
+
+<script>
+    function filterExploreGrid() {
+        const query = document.getElementById('explore-search-input').value.toLowerCase().trim();
+        const sort = document.getElementById('explore-sort-select').value;
+        const lang = document.getElementById('explore-lang-select').value;
+
+        const cards = Array.from(document.querySelectorAll('.vt-explore-card'));
+        let visibleCount = 0;
+
+        cards.forEach(function(card) {
+            const title = card.getAttribute('data-title');
+            const agency = card.getAttribute('data-agency');
+            const cardLangs = card.getAttribute('data-lang');
+            const generation = card.getAttribute('data-generation');
+
+            const matchesQuery = query === '' || 
+                                 title.includes(query) || 
+                                 agency.includes(query) || 
+                                 generation.includes(query);
+            
+            let matchesLang = true;
+            if (lang === 'vietnamese') {
+                matchesLang = cardLangs.includes('vi') || cardLangs.includes('viet');
+            } else if (lang === 'english') {
+                matchesLang = cardLangs.includes('en') || cardLangs.includes('eng');
+            } else if (lang === 'japanese') {
+                matchesLang = cardLangs.includes('jp') || cardLangs.includes('jap');
+            }
+
+            if (matchesQuery && matchesLang) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Sorting
+        const grid = document.getElementById('explore-grid');
+        const sortedCards = cards.filter(c => !c.classList.contains('hidden'));
+
+        sortedCards.sort(function(a, b) {
+            if (sort === 'name_asc') {
+                return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+            } else if (sort === 'name_desc') {
+                return b.getAttribute('data-title').localeCompare(a.getAttribute('data-title'));
+            } else if (sort === 'debut_desc') {
+                const dateA = a.getAttribute('data-debut') || '1970-01-01';
+                const dateB = b.getAttribute('data-debut') || '1970-01-01';
+                return dateB.localeCompare(dateA);
+            } else if (sort === 'debut_asc') {
+                const dateA = a.getAttribute('data-debut') || '9999-12-31';
+                const dateB = b.getAttribute('data-debut') || '9999-12-31';
+                return dateA.localeCompare(dateB);
+            }
+            return 0;
+        });
+
+        sortedCards.forEach(card => grid.appendChild(card));
+
+        // Update count & empty state
+        document.getElementById('explore-count').innerText = visibleCount;
+        const emptyState = document.getElementById('explore-empty');
+        if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+        }
+    }
+
+    function setSearchQuery(val) {
+        document.getElementById('explore-search-input').value = val;
+        filterExploreGrid();
+    }
+
+    function resetExploreFilters() {
+        document.getElementById('explore-search-input').value = '';
+        
+        // Reset custom dropdown values
+        document.querySelectorAll('.custom-dropdown').forEach(function(dropdown) {
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+            if (hiddenInput) {
+                if (hiddenInput.id === 'explore-sort-select') {
+                    hiddenInput.value = 'debut_desc';
+                } else if (hiddenInput.id === 'explore-lang-select') {
+                    hiddenInput.value = 'all';
+                }
+                
+                // Re-sync labels
+                const selectedItem = dropdown.querySelector(`.custom-dropdown-item[data-value="${hiddenInput.value}"]`);
+                if (selectedItem) {
+                    const label = selectedItem.querySelector('.item-label')?.innerText || selectedItem.innerText;
+                    const triggerLabel = dropdown.querySelector('.selected-label');
+                    if (triggerLabel) triggerLabel.innerText = label;
+                    
+                    dropdown.querySelectorAll('.custom-dropdown-item').forEach(function(i) {
+                        i.classList.toggle('is-selected', i === selectedItem);
+                        const check = i.querySelector('.check-icon');
+                        if (check) check.classList.toggle('hidden', i !== selectedItem);
+                    });
+                }
+            }
+        });
+
+        filterExploreGrid();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        filterExploreGrid();
+    });
+</script>
 
 <?php get_footer(); ?>
