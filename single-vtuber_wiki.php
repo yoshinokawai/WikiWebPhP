@@ -16,7 +16,7 @@ while ( have_posts() ) : the_post();
     $birthday = get_field('birthday_text');
     $language = get_field('language');
     $youtube_url = get_field('youtube_url');
-    $artwork = get_field('artwork_link') ?: get_the_post_thumbnail_url($vtuber_id, 'large');
+    $artwork = vtwiki_get_avatar( $vtuber_id, 'large' );
     $generation = get_field('generation');
     
     // Resolve agency link
@@ -102,7 +102,7 @@ while ( have_posts() ) : the_post();
             <!-- Hero artwork -->
             <div class="lg:col-span-5 relative h-[380px] lg:h-full w-full flex items-end justify-center">
                 <?php if ($artwork) : ?>
-                    <img src="<?php echo esc_url($artwork); ?>" alt="<?php the_title(); ?>" class="max-h-[350px] lg:max-h-[380px] w-auto object-contain drop-shadow-2xl z-20">
+                    <img src="<?php echo $artwork; ?>" alt="<?php the_title(); ?>" class="max-h-[350px] lg:max-h-[380px] w-auto object-contain drop-shadow-2xl z-20" <?php vtwiki_img_fallback_attr( $vtuber_id ); ?>>
                 <?php endif; ?>
                 <div class="absolute bottom-0 right-1/2 translate-x-1/2 lg:right-10 lg:translate-x-0 w-[280px] h-[280px] bg-gradient-to-tr from-indigo-500/20 to-primary/20 rounded-full blur-2xl z-10"></div>
             </div>
@@ -282,13 +282,13 @@ while ( have_posts() ) : the_post();
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php while ( $colleagues_query->have_posts() ) : $colleagues_query->the_post();
-                    $colleague_artwork = get_field('artwork_link') ?: get_the_post_thumbnail_url(get_the_ID(), 'medium');
+                    $colleague_artwork = vtwiki_get_avatar( get_the_ID(), 'medium' );
                 ?>
                     <article class="group relative bg-white dark:bg-surface-dark border border-slate-200/80 dark:border-white/8 rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300">
                         <a href="<?php the_permalink(); ?>" class="absolute inset-0 z-10" aria-label="<?php the_title(); ?>"></a>
                         <div class="aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-900 relative">
                             <?php if ($colleague_artwork) : ?>
-                                <img src="<?php echo esc_url($colleague_artwork); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="<?php echo $colleague_artwork; ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" <?php vtwiki_img_fallback_attr(); ?>>
                             <?php else : ?>
                                 <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
                                     <span class="material-symbols-rounded text-4xl">account_circle</span>

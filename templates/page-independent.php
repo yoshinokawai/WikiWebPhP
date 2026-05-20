@@ -44,7 +44,7 @@ if ( $vtuber_query->have_posts() ) {
                 'id'         => $vid,
                 'title'      => get_the_title(),
                 'url'        => get_permalink(),
-                'artwork'    => get_field('artwork_link') ?: get_the_post_thumbnail_url($vid, 'large'),
+                'artwork'    => vtwiki_get_avatar( $vid->ID, 'large' ),
                 'debut'      => $debut,
                 'language'   => $lang,
                 'generation' => get_field('generation') ?: '',

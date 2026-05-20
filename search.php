@@ -76,7 +76,7 @@ $total_results = $vtubers->found_posts + $agencies->found_posts;
                             $vid = get_the_ID();
                             $ag_obj = get_field('agency_ref');
                             $agency_name = $ag_obj ? $ag_obj->post_title : 'Independent';
-                            $artwork = get_field('artwork_link') ?: get_the_post_thumbnail_url($vid, 'large');
+                            $artwork = vtwiki_get_avatar( $vid->ID, 'large' );
                         ?>
                             <article class="group relative bg-white dark:bg-surface-dark border border-slate-200/80 dark:border-white/8 rounded-2xl overflow-hidden hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-xl transition-all duration-300">
                                 <a href="<?php the_permalink(); ?>" class="absolute inset-0 z-10" aria-label="<?php the_title(); ?>"></a>

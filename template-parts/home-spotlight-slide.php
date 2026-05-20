@@ -5,7 +5,7 @@
 $is_active = $args['is_active'] ?? false;
 $index = $args['index'] ?? 0;
 $agency_obj = get_field('agency_ref');
-$artwork = get_field('artwork_link') ?: get_the_post_thumbnail_url(get_the_ID(), 'full');
+$artwork = vtwiki_get_avatar( get_the_ID(), 'full' );
 $lore = get_field('lore');
 $debut = get_field('debut_date');
 ?>
@@ -49,7 +49,7 @@ $debut = get_field('debut_date');
         </div>
         <div class="lg:col-span-5 relative h-[500px] lg:h-full w-full flex items-end justify-center lg:justify-end overflow-visible">
             <div class="absolute bottom-0 right-0 lg:-right-8 w-auto h-[115%] z-20 transition-transform duration-700 ease-out origin-bottom">
-                <img alt="<?php the_title(); ?>" class="h-full w-auto object-contain drop-shadow-2xl hero-mask" src="<?php echo esc_url($artwork); ?>" />
+                <img alt="<?php the_title(); ?>" class="h-full w-auto object-contain drop-shadow-2xl hero-mask" src="<?php echo $artwork; ?>" <?php vtwiki_img_fallback_attr(); ?> />
             </div>
             <div class="absolute bottom-0 right-0 lg:right-10 w-[450px] h-[450px] bg-gradient-to-tr from-indigo-500/20 to-primary/20 rounded-full blur-2xl z-10"></div>
         </div>

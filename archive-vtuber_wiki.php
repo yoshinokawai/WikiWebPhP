@@ -43,7 +43,7 @@ if ( $vtuber_query->have_posts() ) {
             $agency_id = $ag_obj->ID;
         }
         
-        $artwork = get_field('artwork_link') ?: get_the_post_thumbnail_url($vid, 'large');
+        $artwork = vtwiki_get_avatar( $vid, 'large' );
         $debut = get_field('debut_date') ?: '';
         $lang = get_field('language') ?: 'N/A';
         $generation = get_field('generation') ?: '';

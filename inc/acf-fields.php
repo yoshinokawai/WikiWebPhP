@@ -72,10 +72,14 @@ function vtwiki_register_acf_fields() {
                 'type' => 'url',
             ),
             array(
-                'key' => 'field_vtuber_artwork',
-                'label' => 'Link Artwork',
-                'name' => 'artwork_link',
-                'type' => 'url',
+                'key'           => 'field_vtuber_artwork',
+                'label'         => 'Ảnh Artwork (chọn từ thư viện)',
+                'name'          => 'artwork_link',
+                'type'          => 'image',
+                'return_format' => 'url',   // get_field() vẫn trả về URL — không đổi code templates
+                'preview_size'  => 'medium',
+                'library'       => 'all',   // cho phép upload mới hoặc chọn từ Media Library
+                'instructions'  => 'Upload hoặc chọn ảnh artwork chính của VTuber. Nếu để trống, sẽ dùng Featured Image.',
             ),
             array(
                 'key' => 'field_vtuber_generation',

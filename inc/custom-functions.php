@@ -38,11 +38,55 @@ function vtwiki_breadcrumbs() {
 }
 
 /**
- * Get the theme asset URL.
+ * Return the best available avatar/artwork URL for a VTuber post.
  *
- * @param string $path Relative path under assets/, e.g. 'imgs/logo.png'.
- * @return string Full URL to the asset.
+ * Priority chain:
+ *   1. ACF 'artwork_link' (now an Image field → always a real WP media URL)
+ *   2. WordPress Featured Image (post thumbnail)
+ *   3. ui-avatars.com placeholder generated from the post title
+ *
+ * @param int|null $post_id  Post ID. Defaults to current post.
+ * @param string   $size     Image size for featured image. Default 'large'.
+ * @return string  Always returns a usable URL — never empty.
  */
+function vtwiki_get_avatar( $post_id = null, string $size = 'large' ): string {
+    $post_id = $post_id ?? get_the_ID();
+
+    // 1. ACF Image field (return_format = 'url')
+    $artwork = get_field( 'artwork_link', $post_id );
+    if ( ! empty( $artwork ) && filter_var( $artwork, FILTER_VALIDATE_URL ) ) {
+        return esc_url( $artwork );
+    }
+
+    // 2. Featured image
+    $thumb = get_the_post_thumbnail_url( $post_id, $size );
+    if ( $thumb ) {
+        return esc_url( $thumb );
+    }
+
+    // 3. Generated placeholder
+    $name = urlencode( get_the_title( $post_id ) ?: 'VTuber' );
+    return 'https://ui-avatars.com/api/?name=' . $name . '&background=994ce6&color=fff&size=256&bold=true';
+}
+
+/**
+ * Output an onerror attribute for <img> tags as a runtime safety net.
+ * If an image fails to load (e.g. broken external URL), it is replaced
+ * with a ui-avatars placeholder derived from the post title.
+ *
+ * Usage in templates:
+ *   <img src="..." <?php vtwiki_img_fallback_attr(); ?>>
+ *
+ * @param int|null $post_id Post ID for the title. Defaults to current post.
+ */
+function vtwiki_img_fallback_attr( $post_id = null ): void {
+    $post_id = $post_id ?? get_the_ID();
+    $name    = urlencode( get_the_title( $post_id ) ?: 'VTuber' );
+    $fallback = 'https://ui-avatars.com/api/?name=' . $name . '&background=994ce6&color=fff&size=256&bold=true';
+    echo ' onerror="this.onerror=null;this.src=\'' . esc_js( $fallback ) . '\'"';
+}
+
+
 function vtwiki_asset( string $path ): string {
     return get_template_directory_uri() . '/assets/' . ltrim( $path, '/' );
 }
