@@ -767,12 +767,25 @@ get_header();
 
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="vt-agency"><?php _e( 'Agency (Công ty quản lý)', 'vtuber-wiki' ); ?></label>
-                        <select name="agency_ref" id="vt-agency" class="w-full h-11 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all">
-                            <option value="0"><?php _e( 'Independent (Hoạt động tự do)', 'vtuber-wiki' ); ?></option>
-                            <?php foreach ( $agencies as $a ) : ?>
-                                <option value="<?php echo $a->ID; ?>"><?php echo esc_html( $a->post_title ); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="custom-dropdown select-none" id="vt-agency-wrap">
+                            <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                                <span class="selected-label"><?php _e( 'Independent (Hoạt động tự do)', 'vtuber-wiki' ); ?></span>
+                                <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                            </button>
+                            <div class="custom-dropdown-menu">
+                                <button type="button" data-value="0" class="custom-dropdown-item">
+                                    <span class="item-label"><?php _e( 'Independent (Hoạt động tự do)', 'vtuber-wiki' ); ?></span>
+                                    <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                </button>
+                                <?php foreach ( $agencies as $a ) : ?>
+                                    <button type="button" data-value="<?php echo $a->ID; ?>" class="custom-dropdown-item">
+                                        <span class="item-label"><?php echo esc_html( $a->post_title ); ?></span>
+                                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
+                            <input type="hidden" name="agency_ref" id="vt-agency" value="0">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -798,10 +811,23 @@ get_header();
 
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="vt-status"><?php _e( 'Trạng thái Xuất bản', 'vtuber-wiki' ); ?></label>
-                        <select name="status" id="vt-status" class="w-full h-11 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all">
-                            <option value="publish"><?php _e( 'Công khai (Public)', 'vtuber-wiki' ); ?></option>
-                            <option value="draft"><?php _e( 'Nháp (Draft)', 'vtuber-wiki' ); ?></option>
-                        </select>
+                        <div class="custom-dropdown select-none">
+                            <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                                <span class="selected-label"><?php _e( 'Công khai (Public)', 'vtuber-wiki' ); ?></span>
+                                <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                            </button>
+                            <div class="custom-dropdown-menu">
+                                <button type="button" data-value="publish" class="custom-dropdown-item">
+                                    <span class="item-label"><?php _e( 'Công khai (Public)', 'vtuber-wiki' ); ?></span>
+                                    <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                </button>
+                                <button type="button" data-value="draft" class="custom-dropdown-item">
+                                    <span class="item-label"><?php _e( 'Nháp (Draft)', 'vtuber-wiki' ); ?></span>
+                                    <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                </button>
+                            </div>
+                            <input type="hidden" name="status" id="vt-status" value="publish">
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-2 pt-2">
@@ -882,12 +908,31 @@ get_header();
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1">
                             <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="ag-region"><?php _e( 'Khu vực', 'vtuber-wiki' ); ?></label>
-                            <select name="region" id="ag-region" class="w-full h-11 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all">
-                                <option value="Japan">Japan</option>
-                                <option value="US">US</option>
-                                <option value="Canada">Canada</option>
-                                <option value="Global">Global</option>
-                            </select>
+                            <div class="custom-dropdown select-none">
+                                <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                                    <span class="selected-label">Japan</span>
+                                    <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                                </button>
+                                <div class="custom-dropdown-menu">
+                                    <button type="button" data-value="Japan" class="custom-dropdown-item">
+                                        <span class="item-label">Japan</span>
+                                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                    </button>
+                                    <button type="button" data-value="US" class="custom-dropdown-item">
+                                        <span class="item-label">US</span>
+                                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                    </button>
+                                    <button type="button" data-value="Canada" class="custom-dropdown-item">
+                                        <span class="item-label">Canada</span>
+                                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                    </button>
+                                    <button type="button" data-value="Global" class="custom-dropdown-item">
+                                        <span class="item-label">Global</span>
+                                        <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="region" id="ag-region" value="Japan">
+                            </div>
                         </div>
                         <div class="space-y-1">
                             <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="ag-talents"><?php _e( 'Số lượng tài năng (ước tính)', 'vtuber-wiki' ); ?></label>
@@ -897,10 +942,23 @@ get_header();
 
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-600 dark:text-slate-400" for="ag-status"><?php _e( 'Trạng thái Xuất bản', 'vtuber-wiki' ); ?></label>
-                        <select name="status" id="ag-status" class="w-full h-11 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:border-primary outline-none transition-all">
-                            <option value="publish"><?php _e( 'Công khai (Public)', 'vtuber-wiki' ); ?></option>
-                            <option value="draft"><?php _e( 'Nháp (Draft)', 'vtuber-wiki' ); ?></option>
-                        </select>
+                        <div class="custom-dropdown select-none">
+                            <button type="button" class="custom-dropdown-trigger w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-left flex items-center justify-between text-slate-900 dark:text-white hover:border-primary/50 transition-all outline-none">
+                                <span class="selected-label"><?php _e( 'Công khai (Public)', 'vtuber-wiki' ); ?></span>
+                                <span class="material-symbols-rounded text-base text-slate-400 pointer-events-none">expand_more</span>
+                            </button>
+                            <div class="custom-dropdown-menu">
+                                <button type="button" data-value="publish" class="custom-dropdown-item">
+                                    <span class="item-label"><?php _e( 'Công khai (Public)', 'vtuber-wiki' ); ?></span>
+                                    <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                </button>
+                                <button type="button" data-value="draft" class="custom-dropdown-item">
+                                    <span class="item-label"><?php _e( 'Nháp (Draft)', 'vtuber-wiki' ); ?></span>
+                                    <span class="material-symbols-rounded text-sm hidden check-icon text-primary dark:text-primary-light">check</span>
+                                </button>
+                            </div>
+                            <input type="hidden" name="status" id="ag-status" value="publish">
+                        </div>
                     </div>
                 </div>
 
